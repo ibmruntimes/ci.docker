@@ -17,8 +17,9 @@ FROM ubuntu:14.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
+# Install some 32bit compatibility libraries to run 32bit Java
 RUN apt-get update \
-    && apt-get install -y wget unzip \
+    && apt-get install -y wget unzip lib32z1 lib32ncurses5 lib32bz2-1.0 lib32gcc1 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VER=8 \
