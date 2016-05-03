@@ -205,11 +205,19 @@ EOI
 }
 
 print_java_env() {
+if [ "$pack" == "sdk" ]; then
+	cat >> $1 <<'EOI'
+
+ENV JAVA_HOME=/opt/ibm/java/jre \
+    PATH=/opt/ibm/java/bin:$PATH
+EOI
+else
 	cat >> $1 <<'EOI'
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH
 EOI
+fi
 }
 
 # Iterate through all the Java versions for each of the supported packages,

@@ -42,4 +42,4 @@ RUN ESUM="bbfea245c371bdeee18564214e7468f15d372cc9e38f1c8189350a81c3386b19" \
     && rm -f /tmp/ibm-java.bin
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/jre/bin:$PATH
+    PATH=/opt/ibm/java/bin:$PATH
