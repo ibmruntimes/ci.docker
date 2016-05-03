@@ -13,13 +13,13 @@
 # limitations under the License.
 #
 
-FROM alpine:3.3
+FROM alpine:latest
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
 RUN apk --update add curl wget ca-certificates tar \
     && ln -s /lib /lib64 \
-    && curl -Ls https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64//glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \
+    && curl -Ls https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \
     && apk --update add xz \
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \

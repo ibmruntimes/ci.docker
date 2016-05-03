@@ -87,7 +87,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.3
+	FROM alpine:latest
 
 	EOI
 }
@@ -121,7 +121,7 @@ EOI
 	fi
 }
 
-alpine_glibc_repo="https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/"
+alpineGlibcRepo="https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64"
 
 # Select the alpine OS packages
 print_alpine_pkg() {
@@ -129,7 +129,7 @@ print_alpine_pkg() {
 
 RUN apk --update add curl wget ca-certificates tar \\
     && ln -s /lib /lib64 \\
-    && curl -Ls $alpine_glibc_repo/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \\
+    && curl -Ls $alpineGlibcRepo/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \\
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \\
     && apk --update add xz \\
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \\
