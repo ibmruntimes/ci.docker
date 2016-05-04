@@ -1,4 +1,4 @@
-# IBM Runtimes and Docker
+# IBM Runtimes and Docker [![Build Status](https://travis-ci.org/ibmruntimes/ci.docker.svg?branch=master)](https://travis-ci.org/ibmruntimes/ci.docker)
 Dockerfiles and build scripts for generating various Docker Images related to IBM Runtimes
 
 # License
