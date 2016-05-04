@@ -1,5 +1,11 @@
 # (C) Copyright IBM Corporation 2016.
 #
+# ------------------------------------------------------------------------------
+#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
+#
+#                       PLEASE DO NOT EDIT IT DIRECTLY.
+# ------------------------------------------------------------------------------
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -23,7 +29,7 @@ RUN apk --update add curl wget ca-certificates tar \
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \
     && apk --update add xz \
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \
-    && tar -xvf /tmp/gcc-libs.tar.gz -C /
+    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so
 
 ENV JAVA_VERSION 1.8.0_sr3
 
