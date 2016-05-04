@@ -133,7 +133,7 @@ RUN apk --update add curl wget ca-certificates tar \\
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \\
     && apk --update add xz \\
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \\
-    && tar -xvf /tmp/gcc-libs.tar.gz -C /
+    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so
 EOI
 }
 
