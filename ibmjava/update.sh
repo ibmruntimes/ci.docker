@@ -85,7 +85,7 @@ print_ubuntu_os() {
 		;;
 	esac
 	cat >> $1 <<-EOI
-	FROM $osrepo:14.04
+	FROM $osrepo:16.04
 
 	EOI
 }
@@ -139,7 +139,9 @@ RUN apk --update add curl wget ca-certificates tar \\
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \\
     && apk --update add xz \\
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \\
-    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so
+    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \\
+    && rm -f /tmp/gcc-libs.tar.gz \\
+    && rm -f /tmp/glibc-2.21-r2.apk
 EOI
 }
 
@@ -204,9 +206,7 @@ EOI
     && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin \
-    && rm -f /tmp/gcc-libs.tar.gz \
-    && rm -f /tmp/glibc-2.21-r2.apk
+    && rm -f /tmp/ibm-java.bin
 EOI
 }
 

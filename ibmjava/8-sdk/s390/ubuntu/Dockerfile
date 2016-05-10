@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM s390x/ubuntu:14.04
+FROM s390x/ubuntu:16.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 

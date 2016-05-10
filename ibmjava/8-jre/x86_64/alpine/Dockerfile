@@ -29,7 +29,9 @@ RUN apk --update add curl wget ca-certificates tar \
     && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \
     && apk --update add xz \
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \
-    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so
+    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
+    && rm -f /tmp/gcc-libs.tar.gz \
+    && rm -f /tmp/glibc-2.21-r2.apk
 
 ENV JAVA_VERSION 1.8.0_sr3
 
@@ -47,9 +49,7 @@ RUN ESUM="b34f89078048ba0ac650bf56c06331028a71d505c65743383623d94ca29f2c4e" \
     && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin \
-    && rm -f /tmp/gcc-libs.tar.gz \
-    && rm -f /tmp/glibc-2.21-r2.apk
+    && rm -f /tmp/ibm-java.bin
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH

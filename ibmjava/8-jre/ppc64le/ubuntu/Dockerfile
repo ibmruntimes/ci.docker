@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM ppc64le/ubuntu:14.04
+FROM ppc64le/ubuntu:16.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
