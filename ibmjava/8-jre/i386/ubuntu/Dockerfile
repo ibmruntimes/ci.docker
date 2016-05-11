@@ -25,7 +25,7 @@ MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
-       lib32z1 lib32ncurses5 lib32bz2-1.0 lib32gcc1 \
+       lib32z1 lib32ncurses5 lib32gcc1 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION 1.8.0_sr3
