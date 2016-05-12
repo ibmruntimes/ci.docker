@@ -19,13 +19,12 @@
 # limitations under the License.
 #
 
-FROM ubuntu:16.04
+FROM i386/ubuntu:16.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
-       lib32z1 lib32ncurses5 lib32gcc1 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION 1.8.0_sr3

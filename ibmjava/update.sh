@@ -18,12 +18,12 @@ set -eo pipefail
 
 # Dockerfiles to be generated
 version="8"
-package="jre sdk"
+package="jre sdk sfj"
 arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
 
 # sha256sum for the various versions, packages and arches
-declare -A jre_8_sums=( 
+declare -A jre_8_sums=(
                      [version]="1.8.0_sr3"
                      [i386]="18d42c79df9515e014955fe291829113b2b07d5051a1a0165a8bd05fbea2245c"
                      [ppc64le]="4fabb9490b47686a49d8a55005df6cc5f9c67bb42b98d689eba6289b394b2ba9"
@@ -32,13 +32,22 @@ declare -A jre_8_sums=(
                      [x86_64]="b34f89078048ba0ac650bf56c06331028a71d505c65743383623d94ca29f2c4e"
                    )
 
-declare -A sdk_8_sums=( 
+declare -A sdk_8_sums=(
                      [version]="1.8.0_sr3"
                      [i386]="bbfea245c371bdeee18564214e7468f15d372cc9e38f1c8189350a81c3386b19"
                      [ppc64le]="a45f1b8fbfabb0f5942bd33f136a0a9e8db5cff61302cf62dd58820298eb2dbf"
                      [s390]="a9de0f2fbb92f79be0f068936ed8f2d8e5140e47b6146cdd9941c63f39a80ee7"
                      [s390x]="9fe2d86935254de2d2fd2411e2e31232fa8245628674f45b068fa83200f029ec"
                      [x86_64]="8f2f3cada3809fe4f9d0d6da14bd089739cd5d0e419c8051e2b483c653f73b6b"
+                   )
+
+declare -A sfj_8_sums=(
+                     [version]="1.8.0_sr3"
+                     [i386]="6c598b0e9615e0e70b9c9aec95c329d1787d33adaab57a0258255b6b928f8d11"
+                     [ppc64le]="8e76365995ec0bb675b07fb69ec34a60aca151cfc957ab7b188326c99207bdd0"
+                     [s390]="62e776db940857a6226ae9b65ffd8f7885abae8f57c38fb84cdb857e3d68084d"
+                     [s390x]="868ad321a7dd080a57216a8864ac55520fa6a3e91429dc3acf4979d38775bf53"
+                     [x86_64]="c0549c3671cdc2acacefb0e1841a5551d67faed93b4104f33a47248a540b9221"
                    )
 
 # Generate the common license and copyright header
@@ -71,7 +80,10 @@ print_legal() {
 # Print the supported Ubuntu OS
 print_ubuntu_os() {
 	case $arch in
-	i386|x86_64)
+	i386)
+		osrepo="i386/ubuntu"
+		;;
+	x86_64)
 		osrepo="ubuntu"
 		;;
 	s390|s390x)
@@ -116,11 +128,12 @@ RUN apt-get update \
 EOI
 
 	else
+# For 32bit compatibility on 64bit OS add the following packages
+#       lib32z1 lib32ncurses5 lib32bz2 lib32gcc1 \
 		cat >> $1 <<'EOI'
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
-       lib32z1 lib32ncurses5 lib32gcc1 \
     && rm -rf /var/lib/apt/lists/*
 EOI
 
@@ -149,7 +162,7 @@ EOI
 print_env() {
 	shasums="$pack"_"$ver"_sums
 	jverinfo=${shasums}[version]
-    eval JVER=\${$jverinfo}
+	eval JVER=\${$jverinfo}
 
 	cat >> $1 <<-EOI
 
@@ -162,7 +175,7 @@ EOI
 print_ubuntu_main_run() {
 	shasums="$pack"_"$ver"_sums
 	archsum=${shasums}[$arch]
-    eval ASUM=\${$archsum}
+	eval ASUM=\${$archsum}
 	cat >> $1 <<-EOI
 RUN ESUM="$ASUM" \\
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \\
@@ -188,7 +201,7 @@ EOI
 print_alpine_main_run() {
 	shasums="$pack"_"$ver"_sums
 	archsum=${shasums}[$arch]
-    eval ASUM=\${$archsum}
+	eval ASUM=\${$archsum}
 	cat >> $1 <<-EOI
 RUN ESUM="$ASUM" \\
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \\
@@ -239,6 +252,7 @@ do
 				file=$ver-$pack/$arch/$os/Dockerfile
 				# Ubuntu is supported for everything
 				if [ "$os" == "ubuntu" ]; then 
+					mkdir -p `dirname $file` 2>/dev/null
 					echo -n "Writing $file..."
 					print_legal $file;
 					print_ubuntu_os $file;
@@ -251,7 +265,8 @@ do
 				fi
 				# Alpine is supported for x86_64 and JRE package only
 				if [ "$os" == "alpine" -a "$arch" == "x86_64" ]; then
-					if [ "$pack" == "jre" ]; then 
+					if [ "$pack" == "jre" -o "$pack" == "sfj" ]; then 
+						mkdir -p `dirname $file` 2>/dev/null
 						echo -n "Writing $file..."
 						print_legal $file;
 						print_alpine_os $file;

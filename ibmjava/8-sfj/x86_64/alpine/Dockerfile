@@ -19,23 +19,28 @@
 # limitations under the License.
 #
 
-FROM i386/ubuntu:16.04
+FROM alpine:latest
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends wget ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk --update add curl wget ca-certificates tar \
+    && ln -s /lib /lib64 \
+    && curl -Ls https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \
+    && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \
+    && apk --update add xz \
+    && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \
+    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
+    && rm -f /tmp/gcc-libs.tar.gz \
+    && rm -f /tmp/glibc-2.21-r2.apk
 
 ENV JAVA_VERSION 1.8.0_sr3
 
-RUN ESUM="18d42c79df9515e014955fe291829113b2b07d5051a1a0165a8bd05fbea2245c" \
+RUN ESUM="c0549c3671cdc2acacefb0e1841a5551d67faed93b4104f33a47248a540b9221" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
-    && YML_FILE="jre/linux/i386/index.yml" \
+    && YML_FILE="sfj/linux/x86_64/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
     && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
-    && echo "$ESUM /tmp/ibm-java.bin" | sha256sum -c - \
     && echo "INSTALLER_UI=silent" > /tmp/response.properties \
     && echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
     && echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \

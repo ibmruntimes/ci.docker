@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM i386/ubuntu:16.04
+FROM ubuntu:16.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
@@ -29,9 +29,9 @@ RUN apt-get update \
 
 ENV JAVA_VERSION 1.8.0_sr3
 
-RUN ESUM="18d42c79df9515e014955fe291829113b2b07d5051a1a0165a8bd05fbea2245c" \
+RUN ESUM="c0549c3671cdc2acacefb0e1841a5551d67faed93b4104f33a47248a540b9221" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
-    && YML_FILE="jre/linux/i386/index.yml" \
+    && YML_FILE="sfj/linux/x86_64/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
     && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
