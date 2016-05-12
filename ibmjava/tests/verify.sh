@@ -24,7 +24,13 @@
 #####################################################################################
 
 image=$1
-tag=`echo $image | cut -d ":" -f2`
+arch=`echo $image | cut -d "/" -f1`
+
+if [ "$arch" == "i386" ]; then
+	tag=$arch-`echo $image | cut -d ":" -f2`
+else
+	tag=`echo $image | cut -d ":" -f2`
+fi
 
 testJavaVersion()
 {
