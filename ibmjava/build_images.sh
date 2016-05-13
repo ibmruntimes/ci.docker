@@ -49,7 +49,7 @@ function check_build_status() {
 	if [ $num_built != $num_building ]; then
 		num_error=`find . -name "Dockerfile.err" -exec ls -l {} \; | awk '{ print $5 }' | grep -v "0" | wc -l`
 		if [ $num_error != 0 ]; then
-			echo "($num_error) build(s) failed"
+			echo "($num_error) build(s) failed, Some builds may still be running"
 		else
 			echo "$num_building(t):$num_built(c), build(s) ongoing"
 		fi
@@ -106,6 +106,10 @@ do
 						build_image;
 					fi
 					;;
+				default)
+					echo "Unsupported arch:$machine: Exiting"
+					exit
+					;;
 				esac
 				popd >/dev/null
 			done
@@ -118,7 +122,7 @@ while [[ "$status" == *"build(s) ongoing"* ]];
 do
 	echo "Status = $status"
 	status=$(check_build_status)
-	sleep 5
+	sleep 10
 done
 edate=$(getdate)
 tdiff=$(timediff "$sdate" "$edate")
