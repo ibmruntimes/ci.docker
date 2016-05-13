@@ -16,7 +16,7 @@
 #
 #####################################################################################
 #                                                                                   #
-#  Script to verify a WebSphere Liberty image                                       #
+#  Script to verify a IBM® SDK, Java™ Technology Edition                            #
 #                                                                                   #
 #                                                                                   #
 #  Usage : verify.sh <Image name>                                                   #
