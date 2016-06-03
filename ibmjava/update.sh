@@ -185,7 +185,7 @@ EOI
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
     && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
-    && echo "$ESUM /tmp/ibm-java.bin" | sha256sum -c - \
+    && echo "$ESUM  /tmp/ibm-java.bin" | sha256sum -c - \
     && echo "INSTALLER_UI=silent" > /tmp/response.properties \
     && echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
     && echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \
@@ -211,6 +211,7 @@ EOI
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
     && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
+    && echo "$ESUM  /tmp/ibm-java.bin" | sha256sum -c - \
     && echo "INSTALLER_UI=silent" > /tmp/response.properties \
     && echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
     && echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \
