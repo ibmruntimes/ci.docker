@@ -35,7 +35,7 @@ fi
 testJavaVersion()
 {
    docker run --rm $image java -version 2>testvers.log
-   comparison=$(diff -u testvers.log "$tag.txt")
+   comparison=$(diff -u testvers.log "$PWD/version-info/$tag.txt")
 
    if [ $? != 0 ]
    then
