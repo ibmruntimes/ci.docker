@@ -19,10 +19,28 @@ set -eo pipefail
 # Docker Images to be generated
 version="8"
 package="jre sdk sfj"
-arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
 
+# Supported JRE arches for the machine that we are currently building on
 machine=`uname -m`
+case $machine in
+x86_64)
+	arches="i386 x86_64"
+	;;
+s390x)
+	arches="s390 s390x"
+	;;
+ppc64le)
+	arches="ppc64le"
+	;;
+*)
+	echo "Unsupported arch:$machine, Exiting"
+	exit 1
+	;;
+esac
+
+baseimage="j9"
+rootdir=".."
 
 function timediff() {
 	ssec=`date --utc --date "$1" +%s`
@@ -37,28 +55,34 @@ function getdate() {
 }
 
 function build_image() {
+	image_name=$1
+	logfile=$2
+
 	echo "Building $image_name from $file..."
 	# Start all the builds parallely
-	(docker build --no-cache -t $image_name . 2> $logfile.err 1> $logfile.log) &
+	(docker build --no-cache -t $image_name . 2> $logfile.err 1> $logfile.out) &
 }
 
 function check_build_status() {
-	num_building=`find . -name "Dockerfile.log" | wc -l`
-	num_built=`find . -name "Dockerfile.log" -exec grep "Successfully built" {} \; | wc -l`
+	num_building=`find $rootdir -name "*.out" | wc -l`
+	num_built=`find $rootdir -name "*.out" -exec grep "Successfully built" {} \; | wc -l`
 
-	if [ $num_built != $num_building ]; then
-		num_error=`find . -name "Dockerfile.err" -exec ls -l {} \; | awk '{ print $5 }' | grep -v "0" | wc -l`
-		if [ $num_error != 0 ]; then
-			echo "($num_error) build(s) failed, Some builds may still be running"
+	if [ $num_built -ne $num_building ]; then
+		num_error=`find $rootdir -name "*.err" -exec ls -l {} \; | \
+				awk '{ print $5 }' | grep -v "0" | wc -l`
+		if [ $num_error -ne 0 ]; then
+			printf "(%02d) build(s) failed, Some builds may still be running\n" "$num_error"
 		else
-			echo "$num_building(t):$num_built(c), build(s) ongoing"
+			printf "%02d(t):%02d(c), build(s) ongoing\n" "$num_building" "$num_built"
 		fi
 	else
 		# We are done here, report success
-		echo "$num_building(t):$num_built(c), build(s) successful"
+		printf "%02d(t):%02d(c), build(s) successful\n" "$num_building" "$num_built"
 	fi
 }
 
+echo
+echo "Starting docker image builds in parallel..."
 # Iterate through all the Dockerfiles and build the right ones
 sdate=$(getdate)
 for ver in $version
@@ -69,54 +93,31 @@ do
 		do
 			for os in $osver
 			do
-				file=$ver-$pack/$arch/$os/Dockerfile
+				file="$rootdir/$ver-$pack/$arch/$os/Dockerfile"
 				if [ ! -f $file ]; then
 					continue;
 				fi
 				ddir=`dirname $file`
 				logfile=`basename $file`
 				pushd $ddir >/dev/null
-				if [ "$arch" == "x86_64" ]; then
-					if [ "$os" != "ubuntu" ]; then
-						image_name=ibmjava:$ver-$pack-$os
-					else
-						image_name=ibmjava:$ver-$pack
-					fi
+				if [ "$os" != "ubuntu" ]; then
+					ostag=$pack-$os
 				else
-					if [ "$os" != "ubuntu" ]; then
-						image_name=$arch/ibmjava:$ver-$pack-$os
-					else
-						image_name=$arch/ibmjava:$ver-$pack
-					fi
+					ostag=$pack
 				fi
-				# Only build images for the arch that we are currently running on
-				case $machine in
-				x86_64)
-					if [ "$arch" == "x86_64" -o "$arch" == "i386" ]; then
-						build_image;
-					fi
-					;;
-				s390x)
-					if [ "$arch" == "s390" -o "$arch" == "s390x" ]; then
-						build_image;
-					fi
-					;;
-				ppc64le)
-					if [ "$arch" == "ppc64le" ]; then
-						build_image;
-					fi
-					;;
-				default)
-					echo "Unsupported arch:$machine: Exiting"
-					exit
-					;;
-				esac
+				if [ "$arch" == "x86_64" ]; then
+					image_name=$baseimage:$ver-$ostag
+				else
+					image_name=$machine/$baseimage:$ver-$ostag
+				fi
+				build_image $image_name $logfile
 				popd >/dev/null
 			done
 		done
 	done
 done
 
+echo
 status=$(check_build_status)
 while [[ "$status" == *"build(s) ongoing"* ]];
 do
@@ -127,8 +128,8 @@ done
 edate=$(getdate)
 tdiff=$(timediff "$sdate" "$edate")
 echo
-echo "##########################################"
+echo "############################################"
 echo "Status    : $status"
-echo "Time taken: $((tdiff/60)):$((tdiff%60)) mins"
-echo "##########################################"
+printf "Time taken: %02d:%02d mins\n" "$((tdiff/60))" "$((tdiff%60))"
+echo "############################################"
 echo
