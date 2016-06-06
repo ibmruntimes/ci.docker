@@ -21,6 +21,13 @@ version="8"
 package="jre sdk sfj"
 osver="ubuntu alpine"
 
+dver=`docker version 2>/dev/null`
+if [ $? != 0 ]; then
+	echo "ERROR: Docker command is running in unprivileged mode."
+	echo "       Run Docker with sudo privileges or make sure the userid is part of the docker group."
+	exit 1
+fi
+
 # Supported JRE arches for the machine that we are currently building on
 machine=`uname -m`
 case $machine in
@@ -28,7 +35,8 @@ x86_64)
 	arches="i386 x86_64"
 	;;
 s390x)
-	arches="s390 s390x"
+	# No support for s390 Docker Images for now, only s390x.
+	arches="s390x"
 	;;
 ppc64le)
 	arches="ppc64le"

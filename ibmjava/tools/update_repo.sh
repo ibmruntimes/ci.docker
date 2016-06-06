@@ -18,10 +18,17 @@ set -o pipefail
 
 function usage() {
 	echo
-	echo "Usage: $0 [-l] [-n] [-v <8>] [-s source_repo] [-t <ibmcom|ppc64le|s390x>]"
+	echo "Usage: $0 [-h] [-l] [-n] [-v <8>] [-s source_repo] [-t <ibmcom|ppc64le|s390x>]"
 	echo " l = use local source, n = no push to remote. "
 	exit 1
 }
+
+dver=`docker version 2>/dev/null`
+if [ $? != 0 ]; then
+	echo "ERROR: Docker command is running in unprivileged mode."
+	echo "       Run Docker with sudo privileges or make sure the userid is part of the docker group."
+	exit 1
+fi
 
 machine=`uname -m`
 version="8"
@@ -55,7 +62,7 @@ default)
 	;;
 esac
 
-while getopts lns:t:v: opts
+while getopts hlns:t:v: opts
 do
 	case $opts in
 	l)
