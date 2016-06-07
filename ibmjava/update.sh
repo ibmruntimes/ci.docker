@@ -105,7 +105,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:latest
+	FROM alpine:3.4
 
 	EOI
 }
@@ -140,21 +140,23 @@ EOI
 	fi
 }
 
-alpineGlibcRepo="https://circle-artifacts.com/gh/andyshinn/alpine-pkg-glibc/6/artifacts/0/home/ubuntu/alpine-pkg-glibc/packages/x86_64"
-
 # Select the alpine OS packages
+# Install GNU glibc as J9 needs it, upgrade to version glibc 2.23-r1
 print_alpine_pkg() {
-	cat >> $1 <<-EOI
+	cat >> $1 <<'EOI'
 
-RUN apk --update add curl wget ca-certificates tar \\
-    && ln -s /lib /lib64 \\
-    && curl -Ls $alpineGlibcRepo/glibc-2.21-r2.apk > /tmp/glibc-2.21-r2.apk \\
-    && apk add --allow-untrusted /tmp/glibc-2.21-r2.apk \\
-    && apk --update add xz \\
-    && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.gz \\
-    && tar -xvf /tmp/gcc-libs.tar.gz -C / usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \\
-    && rm -f /tmp/gcc-libs.tar.gz \\
-    && rm -f /tmp/glibc-2.21-r2.apk
+RUN apk add --no-cache wget ca-certificates tar \
+    && ln -s /lib /lib64 \
+    && ALPINE_GLIBC_REPO="https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1" \
+    && wget -q -O /tmp/glibc-2.23-r1.apk $ALPINE_GLIBC_REPO/glibc-2.23-r1.apk \
+    && apk add --allow-untrusted /tmp/glibc-2.23-r1.apk \
+    && rm -f /tmp/glibc-2.23-r1.apk \
+    && apk --update add xz \
+    && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
+    && tar -xvf /tmp/gcc-libs.tar.xz -C /tmp usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
+    && mv /tmp/usr/lib/libgcc* /usr/glibc-compat/lib \
+    && rm -rf /tmp/usr \
+    && rm -f /tmp/gcc-libs.tar.xz
 EOI
 }
 
