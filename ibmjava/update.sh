@@ -24,31 +24,31 @@ osver="ubuntu alpine"
 
 # sha256sum for the various versions, packages and arches
 declare -A jre_8_sums=(
-                     [version]="1.8.0_sr3"
-                     [i386]="18d42c79df9515e014955fe291829113b2b07d5051a1a0165a8bd05fbea2245c"
-                     [ppc64le]="4fabb9490b47686a49d8a55005df6cc5f9c67bb42b98d689eba6289b394b2ba9"
-                     [s390]="5ccb5512e6815858f3a86feac6dfb76ec394524f49126a9cd8cc5ade11335af9"
-                     [s390x]="3681b30faf63a1bc4f58b3d578342e542c323d226a6123c6b10937945960534d"
-                     [x86_64]="b34f89078048ba0ac650bf56c06331028a71d505c65743383623d94ca29f2c4e"
-                   )
+	[version]="1.8.0_sr3"
+	[i386]="18d42c79df9515e014955fe291829113b2b07d5051a1a0165a8bd05fbea2245c"
+	[ppc64le]="4fabb9490b47686a49d8a55005df6cc5f9c67bb42b98d689eba6289b394b2ba9"
+	[s390]="5ccb5512e6815858f3a86feac6dfb76ec394524f49126a9cd8cc5ade11335af9"
+	[s390x]="3681b30faf63a1bc4f58b3d578342e542c323d226a6123c6b10937945960534d"
+	[x86_64]="b34f89078048ba0ac650bf56c06331028a71d505c65743383623d94ca29f2c4e"
+)
 
 declare -A sdk_8_sums=(
-                     [version]="1.8.0_sr3"
-                     [i386]="bbfea245c371bdeee18564214e7468f15d372cc9e38f1c8189350a81c3386b19"
-                     [ppc64le]="a45f1b8fbfabb0f5942bd33f136a0a9e8db5cff61302cf62dd58820298eb2dbf"
-                     [s390]="a9de0f2fbb92f79be0f068936ed8f2d8e5140e47b6146cdd9941c63f39a80ee7"
-                     [s390x]="9fe2d86935254de2d2fd2411e2e31232fa8245628674f45b068fa83200f029ec"
-                     [x86_64]="8f2f3cada3809fe4f9d0d6da14bd089739cd5d0e419c8051e2b483c653f73b6b"
-                   )
+	[version]="1.8.0_sr3"
+	[i386]="bbfea245c371bdeee18564214e7468f15d372cc9e38f1c8189350a81c3386b19"
+	[ppc64le]="a45f1b8fbfabb0f5942bd33f136a0a9e8db5cff61302cf62dd58820298eb2dbf"
+	[s390]="a9de0f2fbb92f79be0f068936ed8f2d8e5140e47b6146cdd9941c63f39a80ee7"
+	[s390x]="9fe2d86935254de2d2fd2411e2e31232fa8245628674f45b068fa83200f029ec"
+	[x86_64]="8f2f3cada3809fe4f9d0d6da14bd089739cd5d0e419c8051e2b483c653f73b6b"
+)
 
 declare -A sfj_8_sums=(
-                     [version]="1.8.0_sr3"
-                     [i386]="6c598b0e9615e0e70b9c9aec95c329d1787d33adaab57a0258255b6b928f8d11"
-                     [ppc64le]="8e76365995ec0bb675b07fb69ec34a60aca151cfc957ab7b188326c99207bdd0"
-                     [s390]="62e776db940857a6226ae9b65ffd8f7885abae8f57c38fb84cdb857e3d68084d"
-                     [s390x]="868ad321a7dd080a57216a8864ac55520fa6a3e91429dc3acf4979d38775bf53"
-                     [x86_64]="c0549c3671cdc2acacefb0e1841a5551d67faed93b4104f33a47248a540b9221"
-                   )
+	[version]="1.8.0_sr3"
+	[i386]="6c598b0e9615e0e70b9c9aec95c329d1787d33adaab57a0258255b6b928f8d11"
+	[ppc64le]="8e76365995ec0bb675b07fb69ec34a60aca151cfc957ab7b188326c99207bdd0"
+	[s390]="62e776db940857a6226ae9b65ffd8f7885abae8f57c38fb84cdb857e3d68084d"
+	[s390x]="868ad321a7dd080a57216a8864ac55520fa6a3e91429dc3acf4979d38775bf53"
+	[x86_64]="c0549c3671cdc2acacefb0e1841a5551d67faed93b4104f33a47248a540b9221"
+)
 
 # Generate the common license and copyright header
 print_legal() {
@@ -140,23 +140,22 @@ EOI
 	fi
 }
 
-# Select the alpine OS packages
-# Install GNU glibc as J9 needs it, upgrade to version glibc 2.23-r1
+# Select the alpine OS packages.
+# Install GNU glibc as J9 needs it, install libgcc_s.so from gcc-libs.tar.xz (archlinux)
 print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN apk add --no-cache wget ca-certificates tar \
+RUN apk --update add --no-cache openssl ca-certificates \
     && ln -s /lib /lib64 \
-    && ALPINE_GLIBC_REPO="https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1" \
-    && wget -q -O /tmp/glibc-2.23-r1.apk $ALPINE_GLIBC_REPO/glibc-2.23-r1.apk \
-    && apk add --allow-untrusted /tmp/glibc-2.23-r1.apk \
-    && rm -f /tmp/glibc-2.23-r1.apk \
+    && GLIBC_VER="2.23-r2" \
+    && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
+    && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
+    && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
     && apk --update add xz \
     && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
-    && tar -xvf /tmp/gcc-libs.tar.xz -C /tmp usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
+    && tar -xvJf /tmp/gcc-libs.tar.xz -C /tmp usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
     && mv /tmp/usr/lib/libgcc* /usr/glibc-compat/lib \
-    && rm -rf /tmp/usr \
-    && rm -f /tmp/gcc-libs.tar.xz
+    && rm -rf /tmp/$GLIBC_VER.apk /tmp/usr /tmp/gcc-libs.tar.xz /var/cache/apk/*
 EOI
 }
 

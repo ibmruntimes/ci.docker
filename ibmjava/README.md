@@ -29,7 +29,7 @@ Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned abou
 |   JRE  |   JRE  |   SFJ  |   SFJ  |
 |:------:|:------:|:------:|:------:|
 | Ubuntu | Alpine | Ubuntu | Alpine |
-| 300 MB | 184 MB | 218 MB | 102 MB |
+| 300 MB | 183 MB | 218 MB | 101 MB |
 
 **Note: Alpine Linux is not an officially supported operating system for IBM® SDK, Java™ Technology Edition.**
 
