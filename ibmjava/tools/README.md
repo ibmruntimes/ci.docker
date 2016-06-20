@@ -20,9 +20,9 @@ Need the following setup to be in place on a local host to create/pull the docke
 
 * Install Docker. 
   * Ubuntu 16.04 is recommended. 
-    ```console
-    $ sudo apt-get install docker.io
-    ```
+  ```console
+  $ sudo apt-get install docker.io
+  ```
   * on RHEL (7.x LE), you need to install it manually from [here](http://ftp.unicamp.br/pub/ppc64el/rhel/7_1/docker-ppc64el/).
 * The ppc64le docker images are built locally on a ppc64le LPAR and pushed to the official [repo](https://hub.docker.com/r/ppc64le/ibmjava).
 
