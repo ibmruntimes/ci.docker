@@ -115,6 +115,8 @@ do
 				fi
 				if [ "$arch" == "x86_64" ]; then
 					image_name=$baseimage:$ver-$ostag
+				elif [ "$arch" == "i386" ]; then
+					image_name=$arch/$baseimage:$ver-$ostag
 				else
 					image_name=$machine/$baseimage:$ver-$ostag
 				fi
