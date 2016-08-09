@@ -25,7 +25,7 @@ MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
 RUN apk --update add --no-cache openssl ca-certificates \
     && ln -s /lib /lib64 \
-    && GLIBC_VER="2.23-r2" \
+    && GLIBC_VER="2.23-r3" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
     && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
