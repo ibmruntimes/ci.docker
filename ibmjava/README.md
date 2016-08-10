@@ -35,7 +35,11 @@ Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned abou
 
 ##### Architectures Supported
 
-In addition to the x86\_64 images, [ppc64le](https://hub.docker.com/r/ppc64le/ibmjava/) and [s390x](https://hub.docker.com/r/s390x/ibmjava/) images are available as well.
+Docker Images for the following architectures are now available:
+
+-   [x86\_64](https://hub.docker.com/ibmcom/ibmjava/)
+-   [ppc64le](https://hub.docker.com/r/ppc64le/ibmjava/)
+-   [s390x](https://hub.docker.com/r/s390x/ibmjava/)
 
 ### How to use this Image
 
