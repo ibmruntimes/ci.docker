@@ -117,6 +117,6 @@ do
 done
 
 # clean up
-rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties shasums-*.txt
+rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties
 
 popd >/dev/null
