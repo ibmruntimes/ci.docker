@@ -34,6 +34,12 @@ echo -n "Locating the shasums for version: $jvm_version..."
 rm -rf $jvm_version
 mkdir -p $jvm_version/version-info
 mv public.dhe.ibm.com $jvm_version
+
+rootdir="$PWD/../"
+update_file=$rootdir/update.sh
+verinfodir="$rootdir/tests/version-info/"
+sumsfile=shasums-$jvm_version.txt
+
 pushd $jvm_version >/dev/null
 find . -name "index.yml" -exec cat {} \; | 
 		grep -A 2 "$jvm_version" | 
@@ -56,11 +62,11 @@ find . -name "index.yml" -exec cat {} \; |
 			} else { 
 				printf"\t[%s]=\"%s\"\n", $6, substr($7,13) 
 			} 
-		} END { printf")\n" }' > shasums-$jvm_version.txt
+		} END { printf")\n" }' > $sumsfile
 echo "done"
 
 echo
-echo "sha256sums for the version: $jvm_version now available in shasums-$jvm_version.txt"
+echo "sha256sums for the version: $jvm_version now available in $sumsfile"
 echo
 
 version="8"
@@ -108,6 +114,8 @@ do
 			echo
 			if [ "$arch" == "x86_64" ]; then
 				./java-test/jre/bin/java -version 2>&1 | tee version-info/$ver-$package.txt
+				# Alpine version will be the same as the ubuntu one.
+				cp version-info/$ver-$package.txt version-info/$ver-$package-alpine.txt
 			else
 				./java-test/jre/bin/java -version 2>&1 | tee version-info/$arch-$ver-$package.txt
 			fi
@@ -115,6 +123,17 @@ do
 		done
 	done
 done
+
+echo "Verfication done."
+read -p "Update version-info files and update.sh? (y/n): " var_upd
+var_bump=`echo $var_upd | awk '{ print toupper($1) }'`
+if [ "$var_bump" == "Y" ]; then
+	echo -n "Updating..."
+	sed -e '/_sums=/,/)/ d' -i $update_file
+	sed -e '/# sha256sum / {' -e 'N;s/\n.*//;' -e 'N;s/\n.*//;' -e 'r '$sumsfile'' -e '}' -i $update_file
+	cp version-info/* $verinfodir
+	echo "done"
+fi
 
 # clean up
 rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties
