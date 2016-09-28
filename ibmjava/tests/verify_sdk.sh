@@ -96,28 +96,30 @@ echo "LICENSE_ACCEPTED=TRUE" >> response.properties
 echo "Now downloading the JRE binaries for all arches to match sha256sums"
 for ver in $version
 do
-	for package in $package
+	for pkg in $package
 	do
 		for arch in $arches
 		do
-			yml_file="public.dhe.ibm.com/meta/$package/linux/$arch/index.yml"
+			yml_file="public.dhe.ibm.com/meta/$pkg/linux/$arch/index.yml"
 			pack_url=`grep -A 1 "$jvm_version" $yml_file | grep "uri:" | awk '{ print $2 }'`
-			echo -n "Downloading $package for $arch..."
+			echo -n "Downloading $pkg for $arch..."
 			wget -q -O ibm-java.bin $pack_url
 			echo "done"
-			ESUM=`grep -A 6 "$package" shasums-$jvm_version.txt | grep $arch | awk -F '"' '{ print $2 }'`
+			ESUM=`grep -A 6 "$pkg" shasums-$jvm_version.txt | grep $arch | awk -F '"' '{ print $2 }'`
 			echo "$ESUM  ibm-java.bin" | sha256sum -c -
-			echo -n "Installing $package for $arch..."
+			echo -n "Installing $pkg for $arch..."
 			chmod +x ibm-java.bin
 			./ibm-java.bin -i silent -f response.properties
 			echo "done"
 			echo
 			if [ "$arch" == "x86_64" ]; then
-				./java-test/jre/bin/java -version 2>&1 | tee version-info/$ver-$package.txt
+				./java-test/jre/bin/java -version 2>&1 | tee version-info/$ver-$pkg.txt
 				# Alpine version will be the same as the ubuntu one.
-				cp version-info/$ver-$package.txt version-info/$ver-$package-alpine.txt
+				if [ "$pkg" != "sdk" ]; then
+					cp version-info/$ver-$pkg.txt version-info/$ver-$pkg-alpine.txt
+				fi
 			else
-				./java-test/jre/bin/java -version 2>&1 | tee version-info/$arch-$ver-$package.txt
+				./java-test/jre/bin/java -version 2>&1 | tee version-info/$arch-$ver-$pkg.txt
 			fi
 			echo
 		done
