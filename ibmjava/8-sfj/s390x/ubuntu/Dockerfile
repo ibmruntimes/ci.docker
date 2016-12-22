@@ -27,9 +27,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 1.8.0_sr3fp21
+ENV JAVA_VERSION 1.8.0_sr3fp22
 
-RUN ESUM="4ead7e2ce9e90962bcc9660590817adfbfd6db0f820f54d9534dc6c1f41bd363" \
+RUN ESUM="c5fa236a11f1a770bd3e6b109b1ac32bdfadb2452d3de68dd88929caacbe1181" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
     && YML_FILE="sfj/linux/s390x/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \

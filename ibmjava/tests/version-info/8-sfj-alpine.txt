@@ -1,8 +1,8 @@
 java version "1.8.0"
-Java(TM) SE Runtime Environment (build pxa6480sr3fp21-20161117_02(SR3 FP21) Small Footprint)
-IBM J9 VM (build 2.8, JRE 1.8.0 Linux amd64-64 Compressed References 20161114_325917 (JIT enabled, AOT enabled)
-J9VM - R28_20161114_0146_B325917
-JIT  - tr.r14.java.green_20161111_127476
-GC   - R28_20161114_0146_B325917_CMPRSS
-J9CL - 20161114_325917)
-JCL - 20161116_01 based on Oracle jdk8u111-b14
+Java(TM) SE Runtime Environment (build pxa6480sr3fp22-20161213_02(SR3 FP22) Small Footprint)
+IBM J9 VM (build 2.8, JRE 1.8.0 Linux amd64-64 Compressed References 20161209_329148 (JIT enabled, AOT enabled)
+J9VM - R28_20161209_1345_B329148
+JIT  - tr.r14.java.green_20161207_128946
+GC   - R28_20161209_1345_B329148_CMPRSS
+J9CL - 20161209_329148)
+JCL - 20161213_01 based on Oracle jdk8u111-b14
