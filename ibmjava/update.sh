@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# (C) Copyright IBM Corporation 2016.
+# (C) Copyright IBM Corporation 2016, 2017
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 set -eo pipefail
 
 # Dockerfiles to be generated
-version="8"
+version="8 9"
 package="jre sdk sfj"
 arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
@@ -50,10 +50,19 @@ declare -A sfj_8_sums=(
 	[x86_64]="6b63ed16b0f0cdc71da6d478a383e1896c132725a7c5a959310985c3549f6c75"
 )
 
+declare -A sdk_9_sums=(
+	[version]="1.9.0_ea2"
+	[i386]="5add39cc5ca56b97cf8ce71b9e1a15d19d36864aaed1e0296f50355ba3f34bd5"
+	[ppc64le]="3c0dda9f449a667d12fe5f59a1ec059a90a9dc483fd35eef5ff53dd8b096cdf5"
+	[s390]="8d06af57d8236839f5c403c12dcf4c89e22dd91716a4d26b85c8d92f6d1e2e8b"
+	[s390x]="6e823afa1df83e364381f827f4244bfe29b0ddd58ef0203eb60df9b8c0d123af"
+	[x86_64]="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688"
+)
+
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016.
+	# (C) Copyright IBM Corporation 2016, 2017
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -227,11 +236,19 @@ EOI
 
 print_java_env() {
 if [ "$pack" == "sdk" ]; then
-	cat >> $1 <<'EOI'
+	if [ "$ver" == "8" ]; then
+		cat >> $1 <<'EOI'
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/bin:$PATH
 EOI
+	elif [ "$ver" == "9" ]; then
+		cat >> $1 <<'EOI'
+
+ENV JAVA_HOME=/opt/ibm/java \
+    PATH=/opt/ibm/java/bin:$PATH
+EOI
+	fi
 else
 	cat >> $1 <<'EOI'
 
@@ -239,6 +256,34 @@ ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH
 EOI
 fi
+}
+
+generate_ubuntu() {
+	file=$1
+	mkdir -p `dirname $file` 2>/dev/null
+	echo -n "Writing $file..."
+	print_legal $file;
+	print_ubuntu_os $file;
+	print_maint $file;
+	print_ubuntu_pkg $file;
+	print_env $file;
+	print_ubuntu_main_run $file;
+	print_java_env $file;
+	echo "done"
+}
+
+generate_alpine() {
+	file=$1
+	mkdir -p `dirname $file` 2>/dev/null
+	echo -n "Writing $file..."
+	print_legal $file;
+	print_alpine_os $file;
+	print_maint $file;
+	print_alpine_pkg $file;
+	print_env $file;
+	print_alpine_main_run $file;
+	print_java_env $file;
+	echo "done"
 }
 
 # Iterate through all the Java versions for each of the supported packages,
@@ -252,32 +297,20 @@ do
 			for os in $osver
 			do
 				file=$ver-$pack/$arch/$os/Dockerfile
-				# Ubuntu is supported for everything
-				if [ "$os" == "ubuntu" ]; then 
-					mkdir -p `dirname $file` 2>/dev/null
-					echo -n "Writing $file..."
-					print_legal $file;
-					print_ubuntu_os $file;
-					print_maint $file;
-					print_ubuntu_pkg $file;
-					print_env $file;
-					print_ubuntu_main_run $file;
-					print_java_env $file;
-					echo "done"
-				fi
-				# Alpine is supported for x86_64 and JRE package only
-				if [ "$os" == "alpine" -a "$arch" == "x86_64" ]; then
-					if [ "$pack" == "jre" -o "$pack" == "sfj" ]; then 
-						mkdir -p `dirname $file` 2>/dev/null
-						echo -n "Writing $file..."
-						print_legal $file;
-						print_alpine_os $file;
-						print_maint $file;
-						print_alpine_pkg $file;
-						print_env $file;
-						print_alpine_main_run $file;
-						print_java_env $file;
-						echo "done"
+				if [ "$ver" == "8" ]; then
+					# Ubuntu is supported for everything
+					if [ "$os" == "ubuntu" ]; then
+						generate_ubuntu $file
+					elif [ "$os" == "alpine" ]; then
+						# Alpine is supported for x86_64 arch and JRE and SFJ packages only
+						if [ "$arch" == "x86_64" ] && [ "$pack" == "jre" -o "$pack" == "sfj" ]; then
+							generate_alpine $file
+						fi
+					fi
+				elif [ "$ver" == "9" ]; then
+					# For now Java 9 betas images are only available for SDK
+					if [ "$os" == "ubuntu" -a "$pack" == "sdk" ]; then
+						generate_ubuntu $file
 					fi
 				fi
 			done
