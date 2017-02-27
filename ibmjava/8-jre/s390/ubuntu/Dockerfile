@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016.
+# (C) Copyright IBM Corporation 2016, 2017
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -27,9 +27,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 1.8.0_sr3fp22
+ENV JAVA_VERSION 1.8.0_sr4fp1
 
-RUN ESUM="eb075cec66cdd94f5a606ade5eee48396d805ebf9417952eeeb2864c45d81181" \
+RUN ESUM="7ba77b232149ac5188b33f81b365173d0570cf044d41b5a493eddcab92de159b" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
     && YML_FILE="jre/linux/s390/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
