@@ -155,22 +155,32 @@ print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
 RUN apk --update add --no-cache openssl ca-certificates \
-    && ln -s /lib /lib64 \
     && GLIBC_VER="2.23-r3" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
     && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
     && apk --update add xz \
     && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
-    && tar -xvJf /tmp/gcc-libs.tar.xz -C /tmp usr/lib/libgcc_s.so.1 usr/lib/libgcc_s.so \
-    && mv /tmp/usr/lib/libgcc* /usr/glibc-compat/lib \
-    && rm -rf /tmp/$GLIBC_VER.apk /tmp/usr /tmp/gcc-libs.tar.xz /var/cache/apk/*
+    && mkdir /tmp/gcc \
+    && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
+EOI
+
+	if [ "$ver" == "9" ]; then
+		GLIBC_PKGS="&& mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib \\"
+	else
+		GLIBC_PKGS="&& mv /tmp/gcc/usr/lib/libgcc* /usr/glibc-compat/lib \\"
+	fi
+
+	cat >> $1 <<-EOI
+    $GLIBC_PKGS
+    && rm -rf /tmp/\$GLIBC_VER.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 EOI
 }
 
 # Print the Java version that is being installed here
 print_env() {
-	shasums="$pack"_"$ver"_sums
+	spkg=$2
+	shasums="$spkg"_"$ver"_sums
 	jverinfo=${shasums}[version]
 	eval JVER=\${$jverinfo}
 
@@ -181,15 +191,18 @@ ENV JAVA_VERSION $JVER
 EOI
 }
 
-# Print
-print_ubuntu_main_run() {
-	shasums="$pack"_"$ver"_sums
+# Print the main RUN command that installs Java.
+# For Java 9 we use jlink to derive the JRE and the SFJ images.
+print_java_install() {
+	spkg=$2
+	dpkg=$3
+	shasums="$spkg"_"$ver"_sums
 	archsum=${shasums}[$arch]
 	eval ASUM=\${$archsum}
 	cat >> $1 <<-EOI
 RUN ESUM="$ASUM" \\
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \\
-    && YML_FILE="$pack/linux/$arch/index.yml" \\
+    && YML_FILE="$spkg/linux/$arch/index.yml" \\
 EOI
 	cat >> $1 <<'EOI'
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
@@ -204,58 +217,77 @@ EOI
     && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin
 EOI
-}
+	if [ "$ver" == "9" ]; then
+		if [ "$dpkg" == "jre" ]; then
+			JCMD="&& rm -f /tmp/ibm-java.bin \\
+    && cd /opt/ibm \\
+    && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.se.ee --output jre \\
+    && rm -rf java/* \\
+    && mv jre java"
+		elif [ "$dpkg" == "sfj" ]; then
+			JCMD="&& rm -f /tmp/ibm-java.bin \\
+    && cd /opt/ibm \\
+    && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.activation,java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.security.jgss,java.security.sasl,java.sql,java.xml.crypto,java.xml,com.ibm.management --exclude-files=@/tmp/sfj-exclude.txt --output jre \\
+    && rm -rf java/* /tmp/sfj-exclude.txt \\
+    && mv jre java"
+		else
+			JCMD="&& rm -f /tmp/ibm-java.bin"
+		fi
+	else
+		JCMD="&& rm -f /tmp/ibm-java.bin"
+	fi
 
-print_alpine_main_run() {
-	shasums="$pack"_"$ver"_sums
-	archsum=${shasums}[$arch]
-	eval ASUM=\${$archsum}
-	cat >> $1 <<-EOI
-RUN ESUM="$ASUM" \\
-    && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \\
-    && YML_FILE="$pack/linux/$arch/index.yml" \\
-EOI
-	cat >> $1 <<'EOI'
-    && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
-    && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
-    && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
-    && echo "$ESUM  /tmp/ibm-java.bin" | sha256sum -c - \
-    && echo "INSTALLER_UI=silent" > /tmp/response.properties \
-    && echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
-    && echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \
-    && mkdir -p /opt/ibm \
-    && chmod +x /tmp/ibm-java.bin \
-    && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
-    && rm -f /tmp/response.properties \
-    && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin
+	cat >> $1 <<EOI
+    $JCMD
 EOI
 }
 
 print_java_env() {
-if [ "$pack" == "sdk" ]; then
-	if [ "$ver" == "8" ]; then
-		cat >> $1 <<'EOI'
+	if [ "$pack" == "sdk" ]; then
+		if [ "$ver" == "8" ]; then
+			JHOME="/opt/ibm/java/jre"
+			JPATH="/opt/ibm/java/bin"
+		elif [ "$ver" == "9" ]; then
+			JHOME="/opt/ibm/java"
+			JPATH="/opt/ibm/java/bin"
+		fi
+	else
+		JHOME="/opt/ibm/java/jre"
+		JPATH="/opt/ibm/java/jre/bin"
+	fi
+	TPATH="PATH=$JPATH:\$PATH"
 
-ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/bin:$PATH
+	cat >> $1 <<-EOI
+
+ENV JAVA_HOME=$JHOME \\
+    $TPATH
 EOI
-	elif [ "$ver" == "9" ]; then
-		cat >> $1 <<'EOI'
+}
 
-ENV JAVA_HOME=/opt/ibm/java \
-    PATH=/opt/ibm/java/bin:$PATH
+print_exclude_file() {
+	spkg=$2
+	dpkg=$3
+	if [ "$ver" == "9" -a "$dpkg" == "sfj" ]; then
+		cp sfj-exclude.txt `dirname $file`
+		cat >> $1 <<-EOI
+COPY sfj-exclude.txt /tmp
+
 EOI
 	fi
-else
-	cat >> $1 <<'EOI'
+}
 
-ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/jre/bin:$PATH
-EOI
-fi
+generate_java() {
+	if [ "$ver" == "9" ]; then
+		spkg="sdk";
+	else
+		spkg=$pack;
+	fi
+	dpkg=$pack;
+	print_env $file $spkg;
+	print_exclude_file $file $spkg $dpkg;
+	print_java_install $file $spkg $dpkg;
+	print_java_env $file;
 }
 
 generate_ubuntu() {
@@ -266,9 +298,7 @@ generate_ubuntu() {
 	print_ubuntu_os $file;
 	print_maint $file;
 	print_ubuntu_pkg $file;
-	print_env $file;
-	print_ubuntu_main_run $file;
-	print_java_env $file;
+	generate_java $file;
 	echo "done"
 }
 
@@ -280,9 +310,7 @@ generate_alpine() {
 	print_alpine_os $file;
 	print_maint $file;
 	print_alpine_pkg $file;
-	print_env $file;
-	print_alpine_main_run $file;
-	print_java_env $file;
+	generate_java $file;
 	echo "done"
 }
 
@@ -297,20 +325,13 @@ do
 			for os in $osver
 			do
 				file=$ver-$pack/$arch/$os/Dockerfile
-				if [ "$ver" == "8" ]; then
-					# Ubuntu is supported for everything
-					if [ "$os" == "ubuntu" ]; then
-						generate_ubuntu $file
-					elif [ "$os" == "alpine" ]; then
-						# Alpine is supported for x86_64 arch and JRE and SFJ packages only
-						if [ "$arch" == "x86_64" ] && [ "$pack" == "jre" -o "$pack" == "sfj" ]; then
-							generate_alpine $file
-						fi
-					fi
-				elif [ "$ver" == "9" ]; then
-					# For now Java 9 betas images are only available for SDK
-					if [ "$os" == "ubuntu" -a "$pack" == "sdk" ]; then
-						generate_ubuntu $file
+				# Ubuntu is supported for everything
+				if [ "$os" == "ubuntu" ]; then
+					generate_ubuntu $file
+				elif [ "$os" == "alpine" ]; then
+					# Alpine is supported for x86_64 arch and JRE and SFJ packages only
+					if [ "$arch" == "x86_64" ] && [ "$pack" == "jre" -o "$pack" == "sfj" ]; then
+						generate_alpine $file
 					fi
 				fi
 			done

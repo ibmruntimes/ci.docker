@@ -19,27 +19,21 @@
 # limitations under the License.
 #
 
-FROM alpine:3.4
+FROM ubuntu:16.04
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
-RUN apk --update add --no-cache openssl ca-certificates \
-    && GLIBC_VER="2.23-r3" \
-    && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
-    && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
-    && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
-    && apk --update add xz \
-    && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
-    && mkdir /tmp/gcc \
-    && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
-    && mv /tmp/gcc/usr/lib/libgcc* /usr/glibc-compat/lib \
-    && rm -rf /tmp/$GLIBC_VER.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 1.8.0_sr4fp1
+ENV JAVA_VERSION 1.9.0_ea2
 
-RUN ESUM="e37d585c7e7df77065254ed866bc8db367e74720eea4507774d891b943c6428f" \
+COPY sfj-exclude.txt /tmp
+
+RUN ESUM="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
-    && YML_FILE="sfj/linux/x86_64/index.yml" \
+    && YML_FILE="sdk/linux/x86_64/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
     && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
@@ -52,7 +46,11 @@ RUN ESUM="e37d585c7e7df77065254ed866bc8db367e74720eea4507774d891b943c6428f" \
     && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin
+    && rm -f /tmp/ibm-java.bin \
+    && cd /opt/ibm \
+    && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.activation,java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.security.jgss,java.security.sasl,java.sql,java.xml.crypto,java.xml,com.ibm.management --exclude-files=@/tmp/sfj-exclude.txt --output jre \
+    && rm -rf java/* /tmp/sfj-exclude.txt \
+    && mv jre java
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH

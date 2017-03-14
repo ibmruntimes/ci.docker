@@ -74,11 +74,13 @@ function build_image() {
 function check_build_status() {
 	num_building=`find $rootdir -name "*.out" | wc -l`
 	num_built=`find $rootdir -name "*.out" -exec grep "Successfully built" {} \; | wc -l`
+	num_running=$(($num_building-$num_built))
+	builds_running=`ps -ef | grep -e "docker build" | grep -v grep | wc -l`
 
 	if [ $num_built -ne $num_building ]; then
 		num_error=`find $rootdir -name "*.err" -exec ls -l {} \; | \
 				awk '{ print $5 }' | grep -v "0" | wc -l`
-		if [ $num_error -ne 0 ]; then
+		if [ $num_running -ne $builds_running ] || [ $num_error -ne 0 ]; then
 			printf "(%02d) build(s) failed, Some builds may still be running\n" "$num_error"
 		else
 			printf "%02d(t):%02d(c), build(s) ongoing\n" "$num_building" "$num_built"
@@ -132,8 +134,8 @@ status=$(check_build_status)
 while [[ "$status" == *"build(s) ongoing"* ]];
 do
 	echo "Status = $status"
-	status=$(check_build_status)
 	sleep 10
+	status=$(check_build_status)
 done
 edate=$(getdate)
 tdiff=$(timediff "$sdate" "$edate")

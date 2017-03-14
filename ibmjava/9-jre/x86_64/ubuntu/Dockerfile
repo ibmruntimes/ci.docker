@@ -24,30 +24,31 @@ FROM ubuntu:16.04
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends wget ca-certificates \
-	&& rm -rf /var/lib/apt/lists/*
+    && apt-get install -y --no-install-recommends wget ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV JAVA_VERSION 1.9.0_ea2
 
 RUN ESUM="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688" \
-	&& BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
-	&& YML_FILE="sdk/linux/x86_64/index.yml" \
-	&& wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
-	&& JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
-	&& wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
-	&& echo "$ESUM  /tmp/ibm-java.bin" | sha256sum -c - \
-	&& echo "INSTALLER_UI=silent" > /tmp/response.properties \
-	&& echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
-	&& echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \
-	&& mkdir -p /opt/ibm \
-	&& chmod +x /tmp/ibm-java.bin \
-	&& /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
-	&& rm -f /tmp/response.properties \
-	&& rm -f /tmp/index.yml \
-	&& rm -f /tmp/ibm-java.bin \
-	&& cd /opt/ibm/java \
-	&& ./bin/jlink -G --module-path ./jmods --add-modules java.se.ee --output jre \
-	&& rm -rf ASSEMBLY_EXCEPTION Logs bin conf copyright demo docs include jmods jrt-fs.jar lib release sample src.zip
+    && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
+    && YML_FILE="sdk/linux/x86_64/index.yml" \
+    && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
+    && JAVA_URL=$(cat /tmp/index.yml | sed -n '/'$JAVA_VERSION'/{n;p}' | sed -n 's/\s*uri:\s//p' | tr -d '\r') \
+    && wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin $JAVA_URL \
+    && echo "$ESUM  /tmp/ibm-java.bin" | sha256sum -c - \
+    && echo "INSTALLER_UI=silent" > /tmp/response.properties \
+    && echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties \
+    && echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties \
+    && mkdir -p /opt/ibm \
+    && chmod +x /tmp/ibm-java.bin \
+    && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
+    && rm -f /tmp/response.properties \
+    && rm -f /tmp/index.yml \
+    && rm -f /tmp/ibm-java.bin \
+    && cd /opt/ibm \
+    && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.se.ee --output jre \
+    && rm -rf java/* \
+    && mv jre java
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
-	PATH=/opt/ibm/java/jre/bin:$PATH
+    PATH=/opt/ibm/java/jre/bin:$PATH
