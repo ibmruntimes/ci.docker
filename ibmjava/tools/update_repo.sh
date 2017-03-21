@@ -31,11 +31,26 @@ if [ $? != 0 ]; then
 fi
 
 machine=`uname -m`
-version="8"
-packages="sfj jre sdk"
 push_repo="ibmjava"
-
 nopush=0
+
+version="8 9"
+packages="jre sdk sfj"
+
+# Valid tags for the various images and versions
+declare -A image_8_tags=(
+	[version]="8"
+	[sfj]="8-sfj 8-sfj-alpine sfj sfj-alpine"
+	[jre]="8-jre 8-jre-alpine jre jre-alpine 8 latest"
+	[sdk]="8-sdk sdk"
+)
+
+declare -A image_9_tags=(
+	[version]="9"
+	[sfj]="9-sfj 9-sfj-alpine"
+	[jre]="9-jre 9-jre-alpine 9"
+	[sdk]="9-sdk"
+)
 
 # Setup defaults for source and target repos based on the current machine arch.
 case $machine in
@@ -169,48 +184,38 @@ function get_source_image() {
 }
 
 function update_target() {
-	version=$1
-	package=$2
-	tag=$1-$2
+	tag=$1
 	
 	# Download the source image with the given tag locally. 
 	get_source_image $source_repo $tag
 
-	# Create target images locally with the tags, $tag and $package for all (JRE, SDK & SFJ).
 	retag $tag $tag
-	retag $tag $package
 
 	# Push it to the remote repo.
 	push_target $tag
-	push_target $package
-
-	# For JRE alone push images with $version and latest tags.
-	if [ $package == "jre" ]; then
-		retag $tag $version
-		retag $tag latest
-
-		push_target $version
-		push_target latest
-	fi
-
-	# Pull, create and push Alpine images on x86_64 for both JRE and SFJ.
-	if [ $machine == "x86_64" ]; then
-		if [ $package == "jre" -o $package == "sfj" ]; then
-			get_source_image $source_repo $tag-alpine
-
-			retag $tag-alpine $tag-alpine
-			retag $tag-alpine $package-alpine
-
-			push_target $tag-alpine
-			push_target $package-alpine
-		fi
-	fi
 }
 
 # Update remote target repo for all packages.
-for pack in $packages
+for ver in $version
 do
-	update_target $version $pack
+	tagsarr=image_"$ver"_tags
+	for pkg in $packages
+	do
+		ptagsarr=${tagsarr}[$pkg]
+		eval ptags=\${$ptagsarr}
+
+		for tags in $ptags
+		do
+			# Push alpine images only on x86_64.
+			if [[ "$tags" == *alpine ]]; then
+				if [ $machine == "x86_64" ]; then
+					update_target $tags
+				fi
+			else
+				update_target $tags
+			fi
+		done
+	done
 done
 
 log

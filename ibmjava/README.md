@@ -4,10 +4,12 @@ Dockerfiles and build scripts for generating various Docker Images related to IB
 
 ### Supported packages
 
-* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8-jre)
-* [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8-sdk)
-* [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8-sfj)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9-sdk)
+* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre)
+* [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk)
+* [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj)
+* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/jre)
+* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/sdk)
+* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/sfj)
 
 ### Overview
 

@@ -218,6 +218,8 @@ EOI
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
 EOI
+
+	# For Java 9 JRE, use jlink with the java.se.ee aggregator module.
 	if [ "$ver" == "9" ]; then
 		if [ "$dpkg" == "jre" ]; then
 			JCMD="&& rm -f /tmp/ibm-java.bin \\
@@ -225,6 +227,8 @@ EOI
     && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.se.ee --output jre \\
     && rm -rf java/* \\
     && mv jre java"
+
+		# For Java 9 SFJ, use jlink with sfj-exclude.txt.
 		elif [ "$dpkg" == "sfj" ]; then
 			JCMD="&& rm -f /tmp/ibm-java.bin \\
     && cd /opt/ibm \\
@@ -234,6 +238,8 @@ EOI
 		else
 			JCMD="&& rm -f /tmp/ibm-java.bin"
 		fi
+
+	# For other Java versions, nothing to be done.
 	else
 		JCMD="&& rm -f /tmp/ibm-java.bin"
 	fi
@@ -324,7 +330,7 @@ do
 		do
 			for os in $osver
 			do
-				file=$ver-$pack/$arch/$os/Dockerfile
+				file=$ver/$pack/$arch/$os/Dockerfile
 				# Ubuntu is supported for everything
 				if [ "$os" == "ubuntu" ]; then
 					generate_ubuntu $file

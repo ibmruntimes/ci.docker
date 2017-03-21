@@ -32,7 +32,9 @@ fi
 machine=`uname -m`
 case $machine in
 x86_64)
-	arches="i386 x86_64"
+	# No need for i386 builds for now
+	# arches="i386 x86_64"
+	arches="x86_64"
 	;;
 s390x)
 	# No support for s390 Docker Images for now, only s390x.
@@ -75,7 +77,7 @@ function check_build_status() {
 	num_building=`find $rootdir -name "*.out" | wc -l`
 	num_built=`find $rootdir -name "*.out" -exec grep "Successfully built" {} \; | wc -l`
 	num_running=$(($num_building-$num_built))
-	builds_running=`ps -ef | grep -e "docker build" | grep -v grep | wc -l`
+	builds_running=`ps -ef | grep "docker" | grep "build" | grep -v grep | wc -l`
 
 	if [ $num_built -ne $num_building ]; then
 		num_error=`find $rootdir -name "*.err" -exec ls -l {} \; | \
@@ -103,7 +105,7 @@ do
 		do
 			for os in $osver
 			do
-				file="$rootdir/$ver-$pack/$arch/$os/Dockerfile"
+				file="$rootdir/$ver/$pack/$arch/$os/Dockerfile"
 				if [ ! -f $file ]; then
 					continue;
 				fi
