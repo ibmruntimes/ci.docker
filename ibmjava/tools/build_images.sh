@@ -22,6 +22,8 @@ package="jre sdk sfj"
 tools="maven"
 osver="ubuntu alpine"
 
+build_failed=0
+
 dver=`docker version 2>/dev/null`
 if [ $? != 0 ]; then
 	echo "ERROR: Docker command is running in unprivileged mode."
@@ -65,6 +67,13 @@ function getdate() {
 	date "+%Y-%m-%d %H:%M:%S"
 }
 
+function cleanup_logs() {
+	echo -n "Removing old log files..."
+	find .. -name "*.out" -exec rm -f {} \;
+	find .. -name "*.err" -exec rm -f {} \;
+	echo "done"
+}
+
 function build_image() {
 	image_name=$1
 	logfile=$2
@@ -96,6 +105,7 @@ function check_build_status() {
 
 function wait_for_build_complete() {
 	echo
+	sleep 2
 	status=$(check_build_status)
 	while [[ "$status" == *"build(s) ongoing"* ]];
 	do
@@ -105,6 +115,9 @@ function wait_for_build_complete() {
 	done
 	edate=$(getdate)
 	tdiff=$(timediff "$sdate" "$edate")
+	if [[ "$status" == *"build(s) failed"* ]]; then
+		build_failed=1
+	fi
 	echo
 	echo "############################################"
 	echo "Status    : $status"
@@ -112,6 +125,8 @@ function wait_for_build_complete() {
 	echo "############################################"
 	echo
 }
+
+cleanup_logs
 
 echo
 echo "Starting ibmjava docker image builds in parallel..."
@@ -152,6 +167,12 @@ do
 done
 
 wait_for_build_complete
+
+if [ $build_failed -eq 1 ]; then
+	echo
+	echo "Not building tool images as earlier builds failed"
+	exit -1;
+fi
 
 echo
 echo "Starting maven docker image builds in parallel..."
