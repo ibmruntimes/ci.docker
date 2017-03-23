@@ -19,6 +19,7 @@ set -eo pipefail
 # Docker Images to be generated
 version="8 9"
 package="jre sdk sfj"
+tools="maven"
 osver="ubuntu alpine"
 
 dver=`docker version 2>/dev/null`
@@ -93,8 +94,27 @@ function check_build_status() {
 	fi
 }
 
+function wait_for_build_complete() {
+	echo
+	status=$(check_build_status)
+	while [[ "$status" == *"build(s) ongoing"* ]];
+	do
+		echo "Status = $status"
+		sleep 10
+		status=$(check_build_status)
+	done
+	edate=$(getdate)
+	tdiff=$(timediff "$sdate" "$edate")
+	echo
+	echo "############################################"
+	echo "Status    : $status"
+	printf "Time taken: %02d:%02d mins\n" "$((tdiff/60))" "$((tdiff%60))"
+	echo "############################################"
+	echo
+}
+
 echo
-echo "Starting docker image builds in parallel..."
+echo "Starting ibmjava docker image builds in parallel..."
 # Iterate through all the Dockerfiles and build the right ones
 sdate=$(getdate)
 for ver in $version
@@ -131,19 +151,28 @@ do
 	done
 done
 
+wait_for_build_complete
+
 echo
-status=$(check_build_status)
-while [[ "$status" == *"build(s) ongoing"* ]];
+echo "Starting maven docker image builds in parallel..."
+sdate=$(getdate)
+for ver in $version
 do
-	echo "Status = $status"
-	sleep 10
-	status=$(check_build_status)
+	for tool in $tools
+	do
+		if [ "$arch" == "x86_64" ]; then
+			file="$rootdir/$ver/$tool/Dockerfile"
+			if [ ! -f $file ]; then
+				continue;
+			fi
+			ddir=`dirname $file`
+			logfile=`basename $file`
+			pushd $ddir >/dev/null
+			image_name=$baseimage:$ver-$tool
+			build_image $image_name $logfile
+			popd >/dev/null
+		fi
+	done
 done
-edate=$(getdate)
-tdiff=$(timediff "$sdate" "$edate")
-echo
-echo "############################################"
-echo "Status    : $status"
-printf "Time taken: %02d:%02d mins\n" "$((tdiff/60))" "$((tdiff%60))"
-echo "############################################"
-echo
+
+wait_for_build_complete

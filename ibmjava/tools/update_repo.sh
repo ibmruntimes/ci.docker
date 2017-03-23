@@ -18,7 +18,7 @@ set -o pipefail
 
 function usage() {
 	echo
-	echo "Usage: $0 [-h] [-l] [-n] [-v <8>] [-s source_repo] [-t <ibmcom|ppc64le|s390x>]"
+	echo "Usage: $0 [-h] [-l] [-n] [-v <8|9>] [-s source_repo] [-t <ibmcom|ppc64le|s390x>]"
 	echo " l = use local source, n = no push to remote. "
 	exit 1
 }
@@ -35,7 +35,7 @@ push_repo="ibmjava"
 nopush=0
 
 version="8 9"
-packages="jre sdk sfj"
+packages="jre sdk sfj maven"
 
 # Valid tags for the various images and versions
 declare -A image_8_tags=(
@@ -43,6 +43,7 @@ declare -A image_8_tags=(
 	[sfj]="8-sfj 8-sfj-alpine sfj sfj-alpine"
 	[jre]="8-jre 8-jre-alpine jre jre-alpine 8 latest"
 	[sdk]="8-sdk sdk"
+	[maven]="8-maven maven"
 )
 
 declare -A image_9_tags=(
@@ -50,6 +51,7 @@ declare -A image_9_tags=(
 	[sfj]="9-sfj 9-sfj-alpine"
 	[jre]="9-jre 9-jre-alpine 9"
 	[sdk]="9-sdk"
+	[maven]="9-maven"
 )
 
 # Setup defaults for source and target repos based on the current machine arch.

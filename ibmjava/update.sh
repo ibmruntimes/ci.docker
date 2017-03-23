@@ -19,6 +19,7 @@ set -eo pipefail
 # Dockerfiles to be generated
 version="8 9"
 package="jre sdk sfj"
+tools="maven"
 arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
 
@@ -320,6 +321,44 @@ generate_alpine() {
 	echo "done"
 }
 
+# Print the ibmjava image version
+print_java() {
+	cat >> $1 <<-EOI
+	FROM ibmjava:$ver-sdk
+
+	EOI
+}
+
+#
+print_maven() {
+	cat >> $1 <<'EOI'
+
+ARG MAVEN_VERSION=3.3.9
+
+RUN mkdir -p /usr/share/maven \
+    && BASE_URL="http://apache.osuosl.org/maven/maven-3" \
+    && wget -q -O /tmp/maven.tar.gz $BASE_URL/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+    && tar -xzC /usr/share/maven --strip-components=1 -f /tmp/maven.tar.gz \
+    && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
+
+ENV MAVEN_HOME /usr/share/maven
+
+CMD ["/usr/bin/mvn"]
+EOI
+}
+
+generate_maven() {
+	file=$1
+	mkdir -p `dirname $file` 2>/dev/null
+	echo -n "Writing $file..."
+	print_legal $file;
+
+	print_java $file;
+	print_maint $file;
+	print_maven $file;
+	echo "done"
+}
+
 # Iterate through all the Java versions for each of the supported packages,
 # architectures and supported Operating Systems.
 for ver in $version
@@ -342,5 +381,15 @@ do
 				fi
 			done
 		done
+	done
+done
+
+# Iterate through all the build tools.
+for ver in $version
+do
+	for tool in $tools
+	do
+		file=$ver/$tool/Dockerfile
+		generate_maven $file
 	done
 done
