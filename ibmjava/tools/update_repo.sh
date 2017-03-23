@@ -35,7 +35,8 @@ push_repo="ibmjava"
 nopush=0
 
 version="8 9"
-packages="jre sdk sfj maven"
+packages="jre sdk sfj"
+tools="maven"
 
 # Valid tags for the various images and versions
 declare -A image_8_tags=(
@@ -214,6 +215,25 @@ do
 					update_target $tags
 				fi
 			else
+				update_target $tags
+			fi
+		done
+	done
+done
+
+# Update remote target repo for all tools.
+for ver in $version
+do
+	tagsarr=image_"$ver"_tags
+	for tool in $tools
+	do
+		ttagsarr=${tagsarr}[$tool]
+		eval ttags=\${$ttagsarr}
+
+		for tags in $ttags
+		do
+			# Tools are to be pushed only for x86_64.
+			if [ $machine == "x86_64" ]; then
 				update_target $tags
 			fi
 		done
