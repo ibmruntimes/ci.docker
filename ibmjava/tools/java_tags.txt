@@ -1,0 +1,10 @@
+8-sfj sfj
+8-sfj-alpine sfj-alpine
+8-jre jre 8 latest
+8-jre-alpine jre-alpine
+8-sdk sdk
+9-sfj
+9-sfj-alpine
+9-jre
+9-jre-alpine
+9-sdk
