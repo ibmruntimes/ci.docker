@@ -185,6 +185,13 @@ function update_target() {
 	stag=$1
 	ttag=$2
 	
+	# Ignore alpine on non x86_64
+	if [[ "$stag" ==*alpine ]]; then
+		if [ $machine != "x86_64" ]; then
+			return;
+		fi
+	fi
+
 	# Download the source image with the given tag locally. 
 	get_source_image $source_repo $stag
 
@@ -194,11 +201,25 @@ function update_target() {
 	push_target $ttag
 }
 
+# Parse the tags array and create and push the target.
+# The first entry on each line represents a tag that has already been created
+# by the build script. Eg. See the following entry in java_tags.txt
+# 8-jre jre 8 latest
+# j9:8-jre is a docker image that build_images.sh would have already created.
+# We now need to create images with the following tags
+# ibmcom/ibmjava:8-jre
+# ibmcom/ibmjava:jre
+# ibmcom/ibmjava:8
+# ibmcom/ibmjava:latest
+# 8-jre is the base image and the rest are additional tags for the same image.
 function parse_array() {
 	for i in `seq 0 $(( ${#tagsarray[@]} - 1 ))`
 	do
 		declare -a imagearray=( ${tagsarray[$i]} )
+		# Create the tag for the base image and push it.
 		update_target ${imagearray[0]} ${imagearray[0]}
+
+		# Create any additional tags for the base image and push them.
 		for j in `seq 1 $(( ${#imagearray[@]} - 1 ))`
 		do
 			update_target ${imagearray[0]} ${imagearray[$j]}
@@ -206,6 +227,9 @@ function parse_array() {
 	done
 }
 
+# Read the tags file. The tags file consists of multiple entries per line that
+# each represents a tag to be created and pushed to the target repo.
+# Read only the relevant versions if specified, else read the entire tags file.
 function read_file() {
 	file=$1
 
@@ -217,10 +241,12 @@ function read_file() {
 	parse_array
 }
 
-# Read from tags file
-if [ $image == "j" ]; then
+# Read from the tags file and create and array of tags to be created and pushed.
+# java_tags.txt consists of all tags for various java versions.
+# tool_tags.txt consists of all tags for various tools and related versions.
+if [ $image == 'j' ]; then
 	read_file java_tags.txt
-elif [ $image == "t" ]; then
+elif [ $image == 't' ]; then
 	read_file tool_tags.txt
 else
 	read_file java_tags.txt

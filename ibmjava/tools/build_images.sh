@@ -19,8 +19,8 @@ set -eo pipefail
 # Docker Images to be generated
 version="8 9"
 package="jre sdk sfj"
-tools="maven"
 osver="ubuntu alpine"
+unset tools
 
 build_failed=0
 
@@ -38,6 +38,7 @@ x86_64)
 	# No need for i386 builds for now
 	# arches="i386 x86_64"
 	arches="x86_64"
+	tools="maven"
 	;;
 s390x)
 	# No support for s390 Docker Images for now, only s390x.
@@ -175,24 +176,23 @@ if [ $build_failed -eq 1 ]; then
 fi
 
 echo
-echo "Starting maven docker image builds in parallel..."
+echo "Starting tools docker image builds in parallel..."
+# Tools are only built on x86_64, on other arches this is a no-op
 sdate=$(getdate)
 for ver in $version
 do
 	for tool in $tools
 	do
-		if [ "$arch" == "x86_64" ]; then
-			file="$rootdir/$ver/$tool/Dockerfile"
-			if [ ! -f $file ]; then
-				continue;
-			fi
-			ddir=`dirname $file`
-			logfile=`basename $file`
-			pushd $ddir >/dev/null
-			image_name=$baseimage:$ver-$tool
-			build_image $image_name $logfile
-			popd >/dev/null
+		file="$rootdir/$ver/$tool/Dockerfile"
+		if [ ! -f $file ]; then
+			continue;
 		fi
+		ddir=`dirname $file`
+		logfile=`basename $file`
+		pushd $ddir >/dev/null
+		image_name=$baseimage:$ver-$tool
+		build_image $image_name $logfile
+		popd >/dev/null
 	done
 done
 
