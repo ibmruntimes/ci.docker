@@ -5,6 +5,6 @@
 8-sdk sdk
 9-sfj
 9-sfj-alpine
-9-jre
+9-jre 9
 9-jre-alpine
-9-sdk
+9-sdk 9-ea2-sdk
