@@ -20,11 +20,11 @@ Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned abou
 ##### Size comparison of the various Java packages.
 
 ```console
-ibmcom/ibmjava                                            8-maven             5c3c8936f41c        5 days ago          376.9 MB
-ibmcom/ibmjava                                            8-jre               d239d0beeee7        5 days ago          309.9 MB
-ibmcom/ibmjava                                            sfj                 6a31e424a59a        5 days ago          227.1 MB
-ibmcom/ibmjava                                            8-jre-alpine        06ee538632b2        5 days ago          183.8 MB
-ibmcom/ibmjava                                            8-sfj-alpine        81ac3b9476a3        5 days ago          101.2 MB
+ibmcom/ibmjava   8-maven             5c3c8936f41c        5 days ago          376.9 MB
+ibmcom/ibmjava   8-jre               d239d0beeee7        5 days ago          309.9 MB
+ibmcom/ibmjava   8-sfj               6a31e424a59a        5 days ago          227.1 MB
+ibmcom/ibmjava   8-jre-alpine        06ee538632b2        5 days ago          183.8 MB
+ibmcom/ibmjava   8-sfj-alpine        81ac3b9476a3        5 days ago          101.2 MB
 ```
 
 #### Apache Maven Docker Image with IBM Java
