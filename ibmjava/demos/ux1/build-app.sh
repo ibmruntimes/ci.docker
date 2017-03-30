@@ -40,7 +40,10 @@ function getdate() {
 	date "+%Y-%m-%d %H:%M:%S"
 }
 
-rm -rf java-tomcat-example-app
+export APP_REPO=priyaranjan20
+export APP_NAME=SampleApp
+
+rm -rf $APP_NAME
 
 echo 2>&1 | tee -a $LOGFILE
 echo "#####################################################################" 2>&1 | tee -a $LOGFILE
@@ -54,17 +57,17 @@ echo -n "Pull the latest Docker images for ibmjava:8-maven and ibmjava:8-sfj-alp
 echo "done" 2>&1 | tee -a $LOGFILE
 
 echo -n "Cloning the latest application source tree ... " 2>&1 | tee -a $LOGFILE
-(git clone https://github.com/catalyzeio/java-tomcat-example-app.git 2>> $LOGFILE)
+(URL=https://github.com/$APP_REPO/$APP_NAME.git; git clone $URL 2>> $LOGFILE)
 echo "done" 2>&1 | tee -a $LOGFILE
 
 echo -n "Build application using the IBM maven Docker Image ... " 2>&1 | tee -a $LOGFILE
-pushd java-tomcat-example-app >> $LOGFILE
+pushd $APP_NAME >> $LOGFILE
 (docker run --user=`id -u`:`id -g` -v $PWD:/opt/myapp -w /opt/myapp -it --rm ibmcom/ibmjava:8-maven mvn package >> $LOGFILE)
 popd >> $LOGFILE
 echo "done" | tee -a $LOGFILE
 
 echo -n "Build a minimal application Docker Image using the ibmjava:sfj-alpine Image ... " 2>&1 | tee -a $LOGFILE
-(docker build -t myapp . >> $LOGFILE)
+(docker build --build-arg app_name=$APP_NAME -t myapp . >> $LOGFILE)
 echo "done" | tee -a $LOGFILE
 echo 2>&1 | tee -a $LOGFILE
 
