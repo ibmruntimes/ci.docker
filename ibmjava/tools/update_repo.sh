@@ -43,13 +43,13 @@ nopush=0
 
 unset jver
 tools="maven"
-image="both"
 
 # Setup defaults for source and target repos based on the current machine arch.
 case $machine in
 x86_64)
 	source_repo="j9"
 	tprefix="ibmcom"
+	images="java tools"
 	remote=0
 	;;
 s390x)
@@ -57,12 +57,14 @@ s390x)
 	tprefix="s390x"
 	# No remote repos to pull from for s390x
 	remote=0
+	images="java"
 	;;
 ppc64le)
 	source_repo="ppc64le/j9"
 	tprefix="ppc64le"
 	# No remote repos to pull from for ppc64le
 	remote=0
+	images="java"
 	;;
 default)
 	echo "Unsupported arch:$machine. Exiting"
@@ -75,8 +77,13 @@ do
 	case $opts in
 	i)
 		# which images to push.
-		image="$OPTARG"
-		[[ $image == "java" || $image == "tools"  || $image == "both" ]] || usage
+		ival="$OPTARG"
+		[[ $ival == "java" || $ival == "tools"  || $ival == "both" ]] || usage
+		if [ $ival == "both" ]; then
+			images="java tools"
+		else
+			images=$ival
+		fi
 		;;
 	l)
 		# Use local repo instead of pulling from remote source.
@@ -175,7 +182,7 @@ function get_source_image() {
 		image=`docker images | grep "$repo" | awk '{ print $2 }' | grep "^$stag$"`
 		if [ "$image" == "" ]; then
 			log "\n####[E]: [$repo:$stag]: Image not found locally, exiting..."
-			#exit 1
+			exit 1
 		fi
 		log "found"
 	fi
@@ -243,15 +250,11 @@ function read_file() {
 
 # Read from the tags file and create and array of tags to be created and pushed.
 # java_tags.txt consists of all tags for various java versions.
-# tool_tags.txt consists of all tags for various tools and related versions.
-if [ $image == "java" ]; then
-	read_file java_tags.txt
-elif [ $image == "tools" ]; then
-	read_file tool_tags.txt
-else
-	read_file java_tags.txt
-	read_file tool_tags.txt
-fi
+# tools_tags.txt consists of all tags for various tools and related versions.
+for ival in $images
+do
+	read_file "$ival"_tags.txt
+done
 
 log
 log "See $logfile for more details"
