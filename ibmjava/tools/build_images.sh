@@ -42,14 +42,44 @@ fi
 
 baseimage="j9"
 rootdir=".."
+tools="maven"
+
+# Supported JRE arches for the machine that we are currently building on
+machine=`uname -m`
+case $machine in
+x86_64)
+	# No need for i386 builds for now
+	# arches="i386 x86_64"
+	arches="x86_64"
+	images="java tools"
+	;;
+s390x)
+	# No support for s390 Docker Images for now, only s390x.
+	arches="s390x"
+	images="java"
+	;;
+ppc64le)
+	arches="ppc64le"
+	images="java"
+	;;
+*)
+	echo "Unsupported arch:$machine, Exiting"
+	exit 1
+	;;
+esac
 
 while getopts hi:v: opts
 do
 	case $opts in
 	i)
 		# which images to push.
-		image="$OPTARG"
-		[[ $image == "java" || $image == "tools"  || $image == "both" ]] || usage
+		ival="$OPTARG"
+		[[ $ival == "java" || $ival == "tools"  || $ival == "both" ]] || usage
+		if [ $ival == "both" ]; then
+			images="java tools"
+		else
+			images=$ival
+		fi
 		;;
 	v)
 		# Update only provided version
@@ -62,30 +92,6 @@ do
 	esac
 done
 shift $(($OPTIND-1))
-
-# Supported JRE arches for the machine that we are currently building on
-machine=`uname -m`
-case $machine in
-x86_64)
-	# No need for i386 builds for now
-	# arches="i386 x86_64"
-	arches="x86_64"
-	tools="maven"
-	;;
-s390x)
-	# No support for s390 Docker Images for now, only s390x.
-	arches="s390x"
-	unset tools
-	;;
-ppc64le)
-	arches="ppc64le"
-	unset tools
-	;;
-*)
-	echo "Unsupported arch:$machine, Exiting"
-	exit 1
-	;;
-esac
 
 function timediff() {
 	ssec=`date --utc --date "$1" +%s`
@@ -158,8 +164,10 @@ function wait_for_build_complete() {
 	echo
 }
 
-# Iterate through all the Dockerfiles and build the right ones
+# Iterate through all the Java Dockerfiles and build the right ones
 function build_java_images() {
+	echo
+	echo "Starting ibmjava docker image builds in parallel..."
 	for ver in $version
 	do
 		for pack in $package
@@ -195,7 +203,10 @@ function build_java_images() {
 	done
 }
 
-function build_tool_images() {
+# Iterate through all the tools Dockerfiles and build the right ones.
+function build_tools_images() {
+	echo
+	echo "Starting tools docker image builds in parallel..."
 	for ver in $version
 	do
 		for tool in $tools
@@ -214,24 +225,18 @@ function build_tool_images() {
 	done
 }
 
+# Remove any old log files.
 cleanup_logs
 
-echo
-echo "Starting ibmjava docker image builds in parallel..."
-sdate=$(getdate)
-build_java_images
-wait_for_build_complete
-
-if [ $build_failed -eq 1 ]; then
-	echo
-	echo "ERROR: builds failed"
-	exit -1;
-fi
-
-if [ ! -z $tools ]; then
-	echo
-	echo "Starting tools docker image builds in parallel..."
-	build_tool_images
-
+# Build only the set of images specified.
+for val in $images
+do
+	sdate=$(getdate)
+	build_"$val"_images
 	wait_for_build_complete
-fi
+	if [ $build_failed -eq 1 ]; then
+		echo
+		echo "ERROR: $val builds failed"
+		exit -1;
+	fi
+done
