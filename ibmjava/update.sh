@@ -115,7 +115,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.4
+	FROM alpine:3.6
 
 	EOI
 }
@@ -155,12 +155,11 @@ EOI
 print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN apk --update add --no-cache openssl ca-certificates \
-    && GLIBC_VER="2.23-r3" \
+RUN apk --update add --no-cache openssl ca-certificates xz \
+    && GLIBC_VER="2.25-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
     && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
-    && apk --update add xz \
     && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
     && mkdir /tmp/gcc \
     && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
@@ -374,8 +373,8 @@ do
 				if [ "$os" == "ubuntu" ]; then
 					generate_ubuntu $file
 				elif [ "$os" == "alpine" ]; then
-					# Alpine is supported for x86_64 arch and JRE and SFJ packages only
-					if [ "$arch" == "x86_64" ] && [ "$pack" == "jre" -o "$pack" == "sfj" ]; then
+					# Alpine is supported for x86_64 arch only
+					if [ "$arch" == "x86_64" ]; then
 						generate_alpine $file
 					fi
 				fi

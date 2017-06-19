@@ -51,11 +51,7 @@ RUN ESUM="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688" \
     && /tmp/ibm-java.bin -i silent -f /tmp/response.properties \
     && rm -f /tmp/response.properties \
     && rm -f /tmp/index.yml \
-    && rm -f /tmp/ibm-java.bin \
-    && cd /opt/ibm \
-    && ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.se.ee --output jre \
-    && rm -rf java/* \
-    && mv jre java
+    && rm -f /tmp/ibm-java.bin
 
-ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/jre/bin:$PATH
+ENV JAVA_HOME=/opt/ibm/java \
+    PATH=/opt/ibm/java/bin:$PATH
