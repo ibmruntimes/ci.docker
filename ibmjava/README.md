@@ -4,12 +4,12 @@ Dockerfiles and build scripts for generating various Docker Images related to IB
 
 ### Supported packages
 
-* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre)
 * [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk)
+* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre)
 * [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/jre)
 * [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/sdk)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/sfj)
+* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, JRE package](9/jre)
+* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SFJ package](9/sfj)
 
 ### Overview
 
@@ -31,7 +31,7 @@ The Small Footprint JRE ([SFJ](http://www.ibm.com/support/knowledgecenter/en/SSY
 
 ##### Alpine Linux
 
-Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned about the size of the overall image. Alpine Linux is a stripped down version of Linux that is based on [musl glibc](http://wiki.musl-libc.org/wiki/Functional_differences_from_glibc) and Busybox, resulting in a [Docker image](https://hub.docker.com/_/alpine/) size of approximately 5 MB. Due to its extremely small size and reduced number of installed packages, it has a much smaller attack surface which improves security. However, because the IBM SDK has a dependency on gnu glibc, installing this library adds an extra 8 MB to the image size. The following table compares Docker Image sizes based on JRE version `8.0-3.10`.
+Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned about the size of the overall image. Alpine Linux is a stripped down version of Linux that is based on [musl libc](http://wiki.musl-libc.org/wiki/Functional_differences_from_glibc) and Busybox, resulting in a [Docker image](https://hub.docker.com/_/alpine/) size of approximately 5 MB. Due to its extremely small size and reduced number of installed packages, it has a much smaller attack surface which improves security. However, because the IBM SDK has a dependency on gnu glibc, installing this library adds an extra 8 MB to the image size. The following table compares Docker Image sizes based on JRE version `8.0-3.10`.
 
 |   JRE  |   JRE  |   SFJ  |   SFJ  |
 |:------:|:------:|:------:|:------:|
@@ -121,8 +121,8 @@ The Dockerfiles and associated scripts are licensed under the [Apache License 2.
 
 Licenses for the products installed within the images:
 
--	IBM® SDK, Java™ Technology Edition: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PMAA-A3Z8P2&title=IBM® SDK, Java™ Technology Edition Docker Image, Version 8.0&l=en).
--	IBM® SDK, Java™ Technology Edition Version 9 Early Access: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-JWOD-AFSFP8&title=IBM® SDK, Java™ Technology Edition Version 9.0 Early Access&l=en)
+-	IBM® SDK, Java™ Technology Edition: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PMAA-A3Z8P2&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+8.0&l=en).
+-	IBM® SDK, Java™ Technology Edition Version 9 Early Access: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-JWOD-AFSFP8&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+9.0+Early+Access&l=en)
 
 
 #### Issues
