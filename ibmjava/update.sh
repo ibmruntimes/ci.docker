@@ -24,15 +24,6 @@ arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
 
 # sha256sum for the various versions, packages and arches
-declare -A sdk_9_sums=(
-        [version]="1.9.0_ea2"
-        [i386]="5add39cc5ca56b97cf8ce71b9e1a15d19d36864aaed1e0296f50355ba3f34bd5"
-        [ppc64le]="3c0dda9f449a667d12fe5f59a1ec059a90a9dc483fd35eef5ff53dd8b096cdf5"
-        [s390]="8d06af57d8236839f5c403c12dcf4c89e22dd91716a4d26b85c8d92f6d1e2e8b"
-        [s390x]="6e823afa1df83e364381f827f4244bfe29b0ddd58ef0203eb60df9b8c0d123af"
-        [x86_64]="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688"
-)
-
 declare -A jre_8_sums=(
 	[version]="1.8.0_sr4fp6"
 	[i386]="211990d9b1ae697f31a8efed75fe55a6cc8fa4a60b067da68a772358e9aed31b"
@@ -60,7 +51,14 @@ declare -A sfj_8_sums=(
 	[x86_64]="67a5d790e414c230382d534b7df251d9341d2a4996b39a5081e6333d22ef38e4"
 )
 
-
+declare -A sdk_9_sums=(
+	[version]="1.9.0_ea2"
+	[i386]="5add39cc5ca56b97cf8ce71b9e1a15d19d36864aaed1e0296f50355ba3f34bd5"
+	[ppc64le]="3c0dda9f449a667d12fe5f59a1ec059a90a9dc483fd35eef5ff53dd8b096cdf5"
+	[s390]="8d06af57d8236839f5c403c12dcf4c89e22dd91716a4d26b85c8d92f6d1e2e8b"
+	[s390x]="6e823afa1df83e364381f827f4244bfe29b0ddd58ef0203eb60df9b8c0d123af"
+	[x86_64]="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688"
+)
 
 # Generate the common license and copyright header
 print_legal() {
