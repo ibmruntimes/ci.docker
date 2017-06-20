@@ -155,12 +155,12 @@ EOI
 print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN apk --update add --no-cache openssl ca-certificates xz \
+RUN apk --update add --no-cache ca-certificates curl openssl xz \
     && GLIBC_VER="2.25-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
-    && wget -q -O /tmp/$GLIBC_VER.apk $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk \
+    && curl -Ls $ALPINE_GLIBC_REPO/$GLIBC_VER/glibc-$GLIBC_VER.apk > /tmp/$GLIBC_VER.apk \
     && apk add --allow-untrusted /tmp/$GLIBC_VER.apk \
-    && wget -q -O /tmp/gcc-libs.tar.xz https://www.archlinux.org/packages/core/x86_64/gcc-libs/download \
+    && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.xz \
     && mkdir /tmp/gcc \
     && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
 EOI
