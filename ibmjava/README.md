@@ -31,12 +31,12 @@ The Small Footprint JRE ([SFJ](http://www.ibm.com/support/knowledgecenter/en/SSY
 
 ##### Alpine Linux
 
-Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned about the size of the overall image. Alpine Linux is a stripped down version of Linux that is based on [musl libc](http://wiki.musl-libc.org/wiki/Functional_differences_from_glibc) and Busybox, resulting in a [Docker image](https://hub.docker.com/_/alpine/) size of approximately 5 MB. Due to its extremely small size and reduced number of installed packages, it has a much smaller attack surface which improves security. However, because the IBM SDK has a dependency on gnu glibc, installing this library adds an extra 8 MB to the image size. The following table compares Docker Image sizes based on JRE version `8.0-3.10`.
+Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned about the size of the overall image. Alpine Linux is a stripped down version of Linux that is based on [musl libc](http://wiki.musl-libc.org/wiki/Functional_differences_from_glibc) and Busybox, resulting in a [Docker image](https://hub.docker.com/_/alpine/) size of approximately 5 MB. Due to its extremely small size and reduced number of installed packages, it has a much smaller attack surface which improves security. However, because the IBM SDK has a dependency on gnu glibc, installing this library adds an extra 8 MB to the image size. The following table compares Docker Image sizes based on JRE version `8.0-4.6`.
 
 |   JRE  |   JRE  |   SFJ  |   SFJ  |
 |:------:|:------:|:------:|:------:|
 | Ubuntu | Alpine | Ubuntu | Alpine |
-| 305 MB | 184 MB | 220 MB | 101 MB |
+| 298 MB | 186 MB | 216 MB | 103 MB |
 
 **Note: Alpine Linux is not an officially supported operating system for IBM® SDK, Java™ Technology Edition.**
 
