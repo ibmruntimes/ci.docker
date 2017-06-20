@@ -173,6 +173,7 @@ EOI
 
 	cat >> $1 <<-EOI
     $GLIBC_PKGS
+    && apk del curl \\
     && rm -rf /tmp/\$GLIBC_VER.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 EOI
 }

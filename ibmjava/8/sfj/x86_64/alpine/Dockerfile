@@ -32,6 +32,7 @@ RUN apk --update add --no-cache ca-certificates curl openssl xz \
     && mkdir /tmp/gcc \
     && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
     && mv /tmp/gcc/usr/lib/libgcc* /usr/glibc-compat/lib \
+    && apk del curl \
     && rm -rf /tmp/$GLIBC_VER.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 
 ENV JAVA_VERSION 1.8.0_sr4fp6
