@@ -35,9 +35,9 @@ RUN apk --update add --no-cache ca-certificates curl openssl xz \
     && apk del curl \
     && rm -rf /tmp/$GLIBC_VER.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 
-ENV JAVA_VERSION 1.8.0_sr4fp6
+ENV JAVA_VERSION 1.8.0_sr4fp7
 
-RUN ESUM="1d60fb97c4c30c7209b4792d22d0d4a9a6239db97adc647413bad722cada535c" \
+RUN ESUM="431f94a4f51c1f53d5a6e62fce3c65f16e955acd772554d17e0d864416d7ba05" \
     && BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/" \
     && YML_FILE="jre/linux/x86_64/index.yml" \
     && wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml $BASE_URL/$YML_FILE \
