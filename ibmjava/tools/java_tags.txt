@@ -3,8 +3,10 @@
 8-jre jre 8 latest
 8-jre-alpine jre-alpine
 8-sdk sdk
+8-sdk-alpine sdk-alpine
 9-sfj
 9-sfj-alpine
 9-jre 9
 9-jre-alpine
 9-sdk 9-ea2-sdk
+9-sdk-alpine

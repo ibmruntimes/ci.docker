@@ -24,7 +24,7 @@ echo "done"
 # If no version provided, look for the latest entry in the x86_64 jre index.yml
 if [ -z "$1" ]; then
 	yml_file="public.dhe.ibm.com/meta/jre/linux/x86_64/index.yml"
-	jvm_version=`awk -F":" '{ print $1 }' $yml_file | grep -v -e "uri" -e "sha256sum" -e "license" -e "---" -e "version" | sort | tail -1`
+	jvm_version=`awk -F":" '{ print $1 }' $yml_file | grep -v -e "uri" -e "sha256sum" -e "license" -e "---" -e "version" | sort -V | tail -1`
 else
 	jvm_version=$1
 fi
@@ -102,6 +102,7 @@ do
 		do
 			yml_file="public.dhe.ibm.com/meta/$pkg/linux/$arch/index.yml"
 			pack_url=`grep -A 1 "$jvm_version" $yml_file | grep "uri:" | awk '{ print $2 }'`
+			rm -rf ibm-java.bin
 			echo -n "Downloading $pkg for $arch..."
 			wget -q -O ibm-java.bin $pack_url
 			echo "done"
