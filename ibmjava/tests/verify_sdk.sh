@@ -102,7 +102,7 @@ do
 		do
 			yml_file="public.dhe.ibm.com/meta/$pkg/linux/$arch/index.yml"
 			pack_url=`grep -A 1 "$jvm_version" $yml_file | grep "uri:" | awk '{ print $2 }'`
-			rm -rf ibm-java.bin
+			rm -f ibm-java.bin
 			echo -n "Downloading $pkg for $arch..."
 			wget -q -O ibm-java.bin $pack_url
 			echo "done"
