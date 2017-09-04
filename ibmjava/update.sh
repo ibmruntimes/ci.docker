@@ -24,6 +24,7 @@ arches="i386 ppc64le s390 s390x x86_64"
 osver="ubuntu alpine"
 
 # sha256sum for the various versions, packages and arches
+# Version 8 sums [DO NO EDIT THIS LINE]
 declare -A jre_8_sums=(
 	[version]="1.8.0_sr4fp11"
 	[i386]="da06a3df4c7ac7e29d9c92f8217e3dc1446c3b76194a99ab3dfb57dd3bcc55cf"
@@ -51,6 +52,7 @@ declare -A sfj_8_sums=(
 	[x86_64]="4fcd64915fb9dec9e60d5aaaf07958db583312fc86eb95ae3336b5c22cf73a4d"
 )
 
+# Version 9 sums [DO NO EDIT THIS LINE]
 declare -A sdk_9_sums=(
 	[version]="1.9.0_ea2"
 	[i386]="5add39cc5ca56b97cf8ce71b9e1a15d19d36864aaed1e0296f50355ba3f34bd5"
