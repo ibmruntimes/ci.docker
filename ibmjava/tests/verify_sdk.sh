@@ -18,8 +18,9 @@ set -eo pipefail
 
 function usage() {
 	echo
-	echo "Usage: $0 [-h] [-v <8|9>]"
+	echo "Usage: $0 [-h] [-v <'8'|9>] [-u <Y|n>]"
 	echo " h = help. "
+	echo " u = update y/n? "
 	echo " v = version of binaries to push. "
 	echo
 	exit 1
@@ -27,6 +28,7 @@ function usage() {
 
 export version="8"
 package="jre sdk sfj"
+update="y"
 
 machine=`uname -m`
 case $machine in
@@ -53,6 +55,9 @@ do
 		major_ver="$OPTARG"
 		((major_ver == 8 || major_ver == 9)) || usage
 		export version="$major_ver"
+		;;
+	u)
+		update="$OPTARG"
 		;;
 	*)
 		usage
@@ -82,7 +87,8 @@ function get_shasums() {
 						printf "%s\n", $2 
 					} 
 			}' |
-			awk -F"/" '{ print $11,$13,$14 }' | awk '{ printf"%s %s %s %s\n", substr($3, 10, 3), $1, $2, $4 }' | sort |
+			awk -F"/" '{ print $11,$13,$14 }' |
+			awk '{ printf"%s %s %s %s\n", substr($3, 10, 3), $1, $2, $4 }' | sort |
 			awk 'BEGIN { fver=ENVIRON["full_version"]; mver=ENVIRON["version"]; }
 				{ 
 				if (packages != $1) { 
@@ -158,7 +164,7 @@ update_file=$rootdir/update.sh
 verinfodir="$rootdir/tests/version-info/"
 metadir="$rootdir/meta"
 
-echo ""
+echo "Getting latest shasum info for major version: $version"
 get_full_version_from_meta_info
 rm -rf $full_version
 mkdir -p $full_version/version-info
@@ -167,14 +173,12 @@ sumsfile=shasums-$full_version.txt
 
 pushd $full_version >/dev/null
 get_shasums
-#match_shasums
-read -p "Update version-info files and update.sh? (y/n): " var_upd
-var_bump=`echo $var_upd | awk '{ print toupper($1) }'`
+match_shasums
+var_bump=`echo $update | awk '{ print toupper($1) }'`
 if [ "$var_bump" == "Y" ]; then
 	update_sums
 	update_yml
 fi
 # clean up
-#rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties
+rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties
 popd >/dev/null
-
