@@ -189,7 +189,7 @@ print_java_install() {
          YML_FILE='${srcpkg}/linux/s390x/index.yml'; \\
          ;; \\
        *) \\
-         echo "Unsupported arch: ${ARCH}"; \\
+         echo "Unsupported arch: \${ARCH}"; \\
          exit 1; \\
          ;; \\
     esac; \\

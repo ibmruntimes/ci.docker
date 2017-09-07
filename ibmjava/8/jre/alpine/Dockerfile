@@ -61,7 +61,7 @@ RUN set -eux; \
          YML_FILE='jre/linux/s390x/index.yml'; \
          ;; \
        *) \
-         echo "Unsupported arch: "; \
+         echo "Unsupported arch: ${ARCH}"; \
          exit 1; \
          ;; \
     esac; \
