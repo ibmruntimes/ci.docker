@@ -127,7 +127,7 @@ EOI
 print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN apk --update add --no-cache ca-certificates curl openssl xz \
+RUN apk --update add --no-cache ca-certificates curl openssl binutils xz \
     && GLIBC_VER="2.25-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && curl -Ls ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-${GLIBC_VER}.apk > /tmp/${GLIBC_VER}.apk \
@@ -135,18 +135,10 @@ RUN apk --update add --no-cache ca-certificates curl openssl xz \
     && curl -Ls https://www.archlinux.org/packages/core/x86_64/gcc-libs/download > /tmp/gcc-libs.tar.xz \
     && mkdir /tmp/gcc \
     && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
-EOI
-
-	if [ "${ver}" == "9" ]; then
-		GLIBC_PKGS="&& mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib \\"
-	else
-		GLIBC_PKGS="&& mv /tmp/gcc/usr/lib/libgcc* /usr/glibc-compat/lib \\"
-	fi
-
-	cat >> $1 <<-EOI
-    ${GLIBC_PKGS}
-    && apk del curl \\
-    && rm -rf /tmp/\${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
+    && mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib \
+    && strip /usr/glibc-compat/lib/libgcc_s.so.* /usr/glibc-compat/lib/libstdc++.so* \
+    && apk del curl binutils \
+    && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 EOI
 }
 
