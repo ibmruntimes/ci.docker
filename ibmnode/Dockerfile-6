@@ -8,8 +8,8 @@ RUN buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
     $buildDeps \
     && rm -rf /var/lib/apt/lists/* \
     set -eux; \
-    IBM_VERSION="8.1.4.0" \
-    NODE_VERSION="8.1.4" \
+    IBM_VERSION="6.11.4.0" \
+    NODE_VERSION="6.11.4" \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
