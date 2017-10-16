@@ -1,0 +1,35 @@
+FROM ubuntu:16.04
+
+MAINTAINER Bethany Griggs <bethany.griggs@uk.ibm.com> (@BethGriggs)
+
+RUN buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
+    apt-get update \
+    && apt-get install -y --no-install-recommends \
+    $buildDeps \
+    && rm -rf /var/lib/apt/lists/* \
+    set -eux; \
+    IBM_VERSION="{{IBM_VERSION}}" \
+    NODE_VERSION="{{NODE_VERSION}}" \
+    ARCH="$(dpkg --print-architecture)"; \
+    case "${ARCH}" in \
+       amd64|x86_64) \
+         SHA256="$IBM_VERSION/linux/x86_64/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-x64.bin.sha256.txt"; \
+         BINARY="$IBM_VERSION/linux/x86_64/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-x64.bin"; \
+         ;; \
+       *) \
+         echo "Unsupported arch: ${ARCH}"; \
+         exit 1; \
+         ;; \
+    esac; \
+    BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/nodejs/"; \
+    CHECKSUM=$(wget -qO- ${BASE_URL}/${SHA256} | awk '{print $1}'); \
+    wget -q -U UA_IBM_Node_Docker -O /tmp/ibm-node.bin ${BASE_URL}/${BINARY}; \
+    echo "${CHECKSUM}  /tmp/ibm-node.bin" | sha256sum -c -; \
+    mkdir -p /opt/ibm; \
+    chmod +x /tmp/ibm-node.bin; \
+    /tmp/ibm-node.bin -i silent  -DLICENSE_ACCEPTED=true -DUSER_INSTALL_DIR="/usr/local/bin/node"; \
+    apt-get purge -y --auto-remove \
+    $buildDeps
+
+ENV NODE_HOME=/usr/local/bin/node/bin/ \
+    PATH=/usr/local/bin/node/bin:$PATH
