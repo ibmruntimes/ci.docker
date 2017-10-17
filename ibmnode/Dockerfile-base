@@ -2,19 +2,28 @@ FROM ubuntu:16.04
 
 MAINTAINER Bethany Griggs <bethany.griggs@uk.ibm.com> (@BethGriggs)
 
+ENV IBM_VERSION {{IBM_VERSION}}
+ENV NODE_VERSION {{NODE_VERSION}}
+
 RUN buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
     apt-get update \
       && apt-get install -y --no-install-recommends $buildDeps \
       && rm -rf /var/lib/apt/lists/* \
     set -eux; \
-    IBM_VERSION="{{IBM_VERSION}}"; \
-    NODE_VERSION="{{NODE_VERSION}}"; \
+    AMD64_SHA="{{AMD64_SHA}}"; \
+    PPC64LE_SHA="{{PPC64LE_SHA}}"; \
+    S390X_SHA="{{S390X_SHA}}"; \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         SHA256="$IBM_VERSION/linux/x86_64/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-x64.bin.sha256.txt"; \
          BINARY="$IBM_VERSION/linux/x86_64/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-x64.bin"; \
          ;; \
+         ppc64el|ppc64le) \
+         BINARY="$IBM_VERSION/linux/ppc64le/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-ppc64le.bin"; \
+           ;; \
+         s390x) \
+         BINARY="$IBM_VERSION/linux/s390x/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-s390x.bin"; \
+           ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
          exit 1; \
