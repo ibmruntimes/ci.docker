@@ -32,12 +32,15 @@ RUN buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
     case "${ARCH}" in \
        amd64|x86_64) \
          BINARY="$IBM_VERSION/linux/x86_64/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-x64.bin"; \
+         SHA=$AMD64_SHA \
          ;; \
          ppc64el|ppc64le) \
          BINARY="$IBM_VERSION/linux/ppc64le/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-ppc64le.bin"; \
+         SHA=$PPC64LE_SHA \
            ;; \
          s390x) \
          BINARY="$IBM_VERSION/linux/s390x/ibm-$IBM_VERSION-node-v$NODE_VERSION-linux-s390x.bin"; \
+         SHA=$S390X_SHA \
            ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
@@ -45,9 +48,8 @@ RUN buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
          ;; \
     esac; \
     BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/nodejs/"; \
-    CHECKSUM=$(wget -qO- ${BASE_URL}/${SHA256} | awk '{print $1}'); \
     wget -q -U UA_IBM_Node_Docker -O /tmp/ibm-node.bin ${BASE_URL}/${BINARY}; \
-    echo "${CHECKSUM}  /tmp/ibm-node.bin" | sha256sum -c -; \
+    echo "${SHA}  /tmp/ibm-node.bin" | sha256sum -c - || exit 1; \
     mkdir -p /opt/ibm; \
     chmod +x /tmp/ibm-node.bin; \
     /tmp/ibm-node.bin -i silent  -DLICENSE_ACCEPTED=true -DUSER_INSTALL_DIR="/usr/local/bin/node"; \
