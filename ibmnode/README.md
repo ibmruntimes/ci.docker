@@ -21,9 +21,7 @@ For any architecture, you can just
 
 The Dockerfiles and associated scripts are licensed under the [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0.html).
 
-Licenses for the products installed within the images:
-
--  IBM® SDK for Node.js
+Licenses for the IBM SDK for Node.js are installed within the image at `/usr/local/license`.
 
 #### Issues
 
