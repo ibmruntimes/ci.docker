@@ -51,8 +51,8 @@ RUN set -eux; \
     echo "$SHA  /tmp/ibm-node.bin" | sha256sum -c - || exit 1; \
     mkdir -p /opt/ibm; \
     chmod +x /tmp/ibm-node.bin; \
-    /tmp/ibm-node.bin -i silent  -DLICENSE_ACCEPTED=true -DUSER_INSTALL_DIR="/usr/local/bin/node"; \
-    apt-get purge -y --auto-remove $buildDeps
+    /tmp/ibm-node.bin -i silent  -DLICENSE_ACCEPTED=true -DUSER_INSTALL_DIR="/usr/local"; \
+    apt-get purge -y --auto-remove $buildDeps;
 
 ENV NODE_HOME=/usr/local/bin/node/bin/ \
     PATH=/usr/local/bin/node/bin:$PATH
