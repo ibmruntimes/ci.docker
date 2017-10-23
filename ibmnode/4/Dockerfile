@@ -22,7 +22,7 @@ ENV NODE_VERSION 4.8.4
 
 RUN set -eux; \
     buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
-    apt-get update apt-get install -y --no-install-recommends $buildDeps \
+    apt-get update && apt-get install -y --no-install-recommends $buildDeps \
       && rm -rf /var/lib/apt/lists/*; \
     AMD64_SHA="0ef5b46a53e7477d50f40e1544b337adc19b9144565e99f0718ee38cc6365217"; \
     PPC64LE_SHA="89bb8d55af668b332eae62a2965be45d30160c98cff612dfd11a53d23cfb8a4d"; \
@@ -56,3 +56,6 @@ RUN set -eux; \
 
 ENV NODE_HOME=/usr/local/bin/node/bin/ \
     PATH=/usr/local/bin/node/bin:$PATH
+
+ONBUILD RUN echo 'Please note that by using this image you are accepting the license terms.' \
+            'Licenses are available at /usr/local/bin/node/license/'

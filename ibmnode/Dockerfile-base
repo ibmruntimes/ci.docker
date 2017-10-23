@@ -22,7 +22,7 @@ ENV NODE_VERSION {{NODE_VERSION}}
 
 RUN set -eux; \
     buildDeps='wget ca-certificates unzip openjdk-8-jre'; \
-    apt-get update apt-get install -y --no-install-recommends $buildDeps \
+    apt-get update && apt-get install -y --no-install-recommends $buildDeps \
       && rm -rf /var/lib/apt/lists/*; \
     AMD64_SHA="{{AMD64_SHA}}"; \
     PPC64LE_SHA="{{PPC64LE_SHA}}"; \
@@ -56,3 +56,6 @@ RUN set -eux; \
 
 ENV NODE_HOME=/usr/local/bin/node/bin/ \
     PATH=/usr/local/bin/node/bin:$PATH
+
+ONBUILD RUN echo 'Please note that by using this image you are accepting the license terms.' \
+            'Licenses are available at /usr/local/bin/node/license/'
