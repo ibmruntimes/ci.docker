@@ -1,7 +1,7 @@
 java version "1.8.0_151"
-Java(TM) SE Runtime Environment (build 8.0.5.6 - pxi3280sr5fp6-20171124_02(SR5 FP6))
-IBM J9 VM (build 2.9, JRE 1.8.0 Linux x86-32 20171122_371101 (JIT enabled, AOT enabled)
-OpenJ9   - 8e3c85d
-OMR      - 713f08e
-IBM      - c041ee8)
-JCL - 20171113_01 based on Oracle jdk8u151-b12
+Java(TM) SE Runtime Environment (build 8.0.5.7 - pxi3280sr5fp7-20171216_01(SR5 FP7))
+IBM J9 VM (build 2.9, JRE 1.8.0 Linux x86-32 20171215_373586 (JIT enabled, AOT enabled)
+OpenJ9   - 5aa401f
+OMR      - 101e793
+IBM      - b4a79bf)
+JCL - 20171214_01 based on Oracle jdk8u151-b12
