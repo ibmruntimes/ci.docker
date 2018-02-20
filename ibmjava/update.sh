@@ -17,7 +17,7 @@
 set -eo pipefail
 
 # Dockerfiles to be generated
-version="8 9"
+version="8"
 package="jre sdk sfj"
 tools="maven"
 arches="i386 ppc64le s390 s390x x86_64"

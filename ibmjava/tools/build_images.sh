@@ -27,7 +27,7 @@ function usage() {
 }
 
 # Docker Images to be generated
-version="8 9"
+version="8"
 package="jre sdk sfj"
 osver="ubuntu alpine"
 
@@ -48,18 +48,16 @@ tools="maven"
 machine=`uname -m`
 case $machine in
 x86_64)
-	# No need for i386 builds for now
-	# arches="i386 x86_64"
-	arches="x86_64"
+	arch="x86_64"
 	images="java tools"
 	;;
 s390x)
 	# No support for s390 Docker Images for now, only s390x.
-	arches="s390x"
+	arch="s390x"
 	images="java"
 	;;
 ppc64le)
-	arches="ppc64le"
+	arch="ppc64le"
 	images="java"
 	;;
 *)
@@ -170,34 +168,28 @@ function build_java_images() {
 	echo "Starting ibmjava docker image builds in parallel..."
 	for ver in $version
 	do
+		echo $ver
 		for pack in $package
 		do
-			for arch in $arches
+			echo $pack
+			for os in $osver
 			do
-				for os in $osver
-				do
-					file="$rootdir/$ver/$pack/$arch/$os/Dockerfile"
-					if [ ! -f $file ]; then
-						continue;
-					fi
-					ddir=`dirname $file`
-					logfile=`basename $file`
-					pushd $ddir >/dev/null
-					if [ "$os" != "ubuntu" ]; then
-						ostag=$pack-$os
-					else
-						ostag=$pack
-					fi
-					if [ "$arch" == "x86_64" ]; then
-						image_name=$baseimage:$ver-$ostag
-					elif [ "$arch" == "i386" ]; then
-						image_name=$arch/$baseimage:$ver-$ostag
-					else
-						image_name=$machine/$baseimage:$ver-$ostag
-					fi
-					build_image $image_name $logfile
-					popd >/dev/null
-				done
+				echo $osver
+				file="$rootdir/$ver/$pack/$os/Dockerfile"
+				if [ ! -f $file ]; then
+					continue;
+				fi
+				ddir=`dirname $file`
+				logfile=`basename $file`
+				pushd $ddir >/dev/null
+				if [ "$os" != "ubuntu" ]; then
+					ostag=$pack-$os
+				else
+					ostag=$pack
+				fi
+				image_name=$baseimage:$arch-$ver-$ostag
+				build_image $image_name $logfile
+				popd >/dev/null
 			done
 		done
 	done
