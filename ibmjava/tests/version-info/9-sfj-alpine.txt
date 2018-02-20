@@ -1,7 +1,0 @@
-java version "9-internal"
-Java(TM) SE Runtime Environment (build pxa6490ea-20170131_01)
-IBM J9 VM build 2.9, JRE 9 Linux amd64-64 Compressed References 20170119_333874 (JIT enabled, AOT enabled)
-J9VM - db9efe2
-JIT  - tr.open_20170112_130759_30d51616.green
-OMR   - 50f3d85
-JCL - 20170130_01 based on Oracle jdk-9+136
