@@ -7,19 +7,12 @@ Dockerfiles and build scripts for generating various Docker Images related to IB
 * [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk)
 * [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre)
 * [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SDK package](9/sdk)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, JRE package](9/jre)
-* [IBM® SDK, Java™ Technology Edition, Version 9 Early Access, SFJ package](9/sfj)
 
 ### Overview
 
-The images in this repository contain IBM® SDK, Java™ Technology Edition version 1.8.0\_sr5fp10 (8.0-5.10) and 1.9.0\_ea2 (9.0 early access). See [what's new](http://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.lnx.80.doc/diag/preface/changes_80/changes.html). See the license section for restrictions that relate to the use of this image. For more information about IBM® SDK, Java™ Technology Edition and API documentation, see the [IBM Knowledge Center](http://www.ibm.com/support/knowledgecenter/SSYKE2/welcome_javasdk_family.html). For tutorials, recipes, and Java usage in Bluemix, see [IBM developerWorks](http://www.ibm.com/developerworks/java).
+The images in this repository contain IBM® SDK, Java™ Technology Edition version 1.8.0\_sr5fp11 (8.0-5.11). See [what's new](http://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.lnx.80.doc/diag/preface/changes_80/changes.html). See the license section for restrictions that relate to the use of this image. For more information about IBM® SDK, Java™ Technology Edition and API documentation, see the [IBM Knowledge Center](http://www.ibm.com/support/knowledgecenter/SSYKE2/welcome_javasdk_family.html). For tutorials, recipes, and Java usage in Bluemix, see [IBM developerWorks](http://www.ibm.com/developerworks/java).
 
 Java and all Java-based trademarks and logos are trademarks or registered trademarks of Oracle and/or its affiliates.
-
-#### Java 9 Beta
-
-Java 9 Beta Images are now available for you to test and provide feedback ! Please see the [Open Beta Community](https://www.ibm.com/developerworks/community/wikis/home?lang=en#!/wiki/W0f473c0e23e2_435b_9c7d_7f4de7f136a4/page/Welcome%20to%20IBM%20SDK%2C%20Java%20Technology%20Edition%2C%20Version%209%20open%20beta) page for more details. The images are available for all three supported architectures (x86\_64, s390x and ppc64le).
 
 ### Images
 
@@ -122,7 +115,6 @@ The Dockerfiles and associated scripts are licensed under the [Apache License 2.
 Licenses for the products installed within the images:
 
 -	IBM® SDK, Java™ Technology Edition: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PMAA-A3Z8P2&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+8.0&l=en).
--	IBM® SDK, Java™ Technology Edition Version 9 Early Access: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-JWOD-AFSFP8&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+9.0+Early+Access&l=en)
 
 
 #### Issues
