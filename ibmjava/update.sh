@@ -224,9 +224,7 @@ EOI
 
 	# For other Java versions, nothing to be done.
 	else
-		JCMD="rm -f /tmp/ibm-java.bin; \\
-    cd /opt/ibm/java/jre/lib; \\
-    rm -rf icc;"
+		JCMD="rm -f /tmp/ibm-java.bin;"
 	fi
 
 	cat >> $1 <<EOI
