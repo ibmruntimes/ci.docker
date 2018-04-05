@@ -79,9 +79,7 @@ RUN set -eux; \
     /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
-    rm -f /tmp/ibm-java.bin; \
-    cd /opt/ibm/java/jre/lib; \
-    rm -rf icc;
+    rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH
