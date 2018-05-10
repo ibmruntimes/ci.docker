@@ -135,7 +135,7 @@ EOI
 print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
+RUN apk --update add --no-cache --virtual .build-deps binutils ca-certificates wget xz \
     && GLIBC_VER="2.25-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && wget -q -O /tmp/${GLIBC_VER}.apk ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
@@ -145,7 +145,7 @@ RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
     && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
     && mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib \
     && strip /usr/glibc-compat/lib/libgcc_s.so.* /usr/glibc-compat/lib/libstdc++.so* \
-    && apk del binutils wget \
+    && apk del .build-deps \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 EOI
 }
