@@ -82,4 +82,5 @@ RUN set -eux; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/bin:$PATH
+    PATH=/opt/ibm/java/bin:$PATH \
+    IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
