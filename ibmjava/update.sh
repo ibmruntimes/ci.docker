@@ -276,7 +276,8 @@ print_java_env() {
 	cat >> $1 <<-EOI
 
 ENV JAVA_HOME=${JHOME} \\
-    ${TPATH}
+    ${TPATH} \\
+    IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
 EOI
 }
 
