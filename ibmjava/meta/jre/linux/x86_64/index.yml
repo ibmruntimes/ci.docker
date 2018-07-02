@@ -1,10 +1,4 @@
 ---
-1.8.0_sr4fp10: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.4.10/linux/x86_64/ibm-java-jre-8.0-4.10-x86_64-archive.bin
-1.8.0_sr4fp11: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.4.11/linux/x86_64/ibm-java-jre-8.0-4.11-x86_64-archive.bin
-1.8.0_sr5fp5: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.5/linux/x86_64/ibm-java-jre-8.0-5.5-x86_64-archive.bin
-1.8.0_sr5fp6: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.6/linux/x86_64/ibm-java-jre-8.0-5.6-x86_64-archive.bin
-1.8.0_sr5fp7: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.7/linux/x86_64/ibm-java-jre-8.0-5.7-x86_64-archive.bin
-1.8.0_sr5fp10: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.10/linux/x86_64/ibm-java-jre-8.0-5.10-x86_64-archive.bin
-1.8.0_sr5fp11: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.11/linux/x86_64/ibm-java-jre-8.0-5.11-x86_64-archive.bin
 1.8.0_sr5fp15: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.15/linux/x86_64/ibm-java-jre-8.0-5.15-x86_64-archive.bin
 1.8.0_sr5fp16: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.16/linux/x86_64/ibm-java-jre-8.0-5.16-x86_64-archive.bin
+1.8.0_sr5fp17: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.5.17/linux/x86_64/ibm-java-jre-8.0-5.17-x86_64-archive.bin
