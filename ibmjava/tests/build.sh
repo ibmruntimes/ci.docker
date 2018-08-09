@@ -49,9 +49,14 @@ docker build --no-cache --pull -t $image $dloc  > build_$tag.log
 if [ $? = 0 ]
 then
     echo "******************************************************************************"
-    echo "              $image built successfully                                       "
+    echo " SUCCESS:     $image built successfully                                       "
     echo "******************************************************************************"
 else
-    echo " Build failed , exiting.........."
+    echo "******************************************************************************"
+    echo " FAILURE:     $image build failed                                             "
+    echo " LOGS: "
+    echo
+    tail -50 build_$tag.log | sed -e 's,^, ,'
+    echo "******************************************************************************"
     exit 1
 fi
