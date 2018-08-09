@@ -116,7 +116,7 @@ function build_image() {
 
 	echo "Building $image_name from $file..."
 	# Start all the builds parallely
-	(docker build --no-cache -t $image_name . 2> $logfile.err 1> $logfile.out) &
+	(docker build --no-cache --pull -t $image_name . 2> $logfile.err 1> $logfile.out) &
 }
 
 function check_build_status() {
