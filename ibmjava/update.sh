@@ -100,7 +100,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.6
+	FROM alpine:3.7
 
 	EOI
 }
