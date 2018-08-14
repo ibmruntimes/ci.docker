@@ -150,7 +150,7 @@ RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
 EOI
 }
 
-# Select the ubuntu OS packages
+# Select the rhel OS packages
 print_rhel_pkg() {
 	cat >> $1 <<'EOI'
 
