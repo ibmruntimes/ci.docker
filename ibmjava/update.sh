@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# (C) Copyright IBM Corporation 2016, 2017
+# (C) Copyright IBM Corporation 2016, 2018
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ version="8"
 package="jre sdk sfj"
 tools="maven"
 arches="i386 ppc64le s390 s390x x86_64"
-osver="ubuntu alpine"
+osver="ubuntu alpine rhel"
 
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
@@ -65,7 +65,7 @@ declare -A sdk_9_sums=(
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016, 2017
+	# (C) Copyright IBM Corporation 2016, 2018
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -105,6 +105,14 @@ print_alpine_os() {
 	EOI
 }
 
+# Print the supported RHEL OS
+print_rhel_os() {
+	cat >> $1 <<-EOI
+	FROM registry.access.redhat.com/rhel7
+
+	EOI
+}
+
 # Print the maintainer
 print_maint() {
 	cat >> $1 <<-EOI
@@ -139,6 +147,22 @@ RUN apk --update add --no-cache ca-certificates curl openssl binutils xz \
     && strip /usr/glibc-compat/lib/libgcc_s.so.* /usr/glibc-compat/lib/libstdc++.so* \
     && apk del curl binutils \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
+EOI
+}
+
+# Select the ubuntu OS packages
+print_rhel_pkg() {
+	cat >> $1 <<'EOI'
+
+RUN yum makecache fast \
+    && yum update -y \
+    && yum -y install openssl wget ca-certificates \
+    && yum clean packages \
+    && yum clean headers \
+    && yum clean all \
+    && rm -rf /var/cache/yum \
+    && rm -rf /var/tmp/yum-*
+
 EOI
 }
 
@@ -258,6 +282,19 @@ EOI
 	print_java_install ${file} ${srcpkg} ${dstpkg};
 }
 
+# Print the main RUN command that installs Java on rhel.
+print_rhel_java_install() {
+	srcpkg=$2
+	dstpkg=$3
+	shasums="${srcpkg}"_"${ver}"_sums
+	cat >> $1 <<'EOI'
+RUN set -eux; \
+    ARCH="$(arch)"; \
+    case "${ARCH}" in \
+EOI
+	print_java_install ${file} ${srcpkg} ${dstpkg};
+}
+
 print_java_env() {
 	if [ "${pack}" == "sdk" ]; then
 		if [ "${ver}" == "8" ]; then
@@ -334,6 +371,18 @@ generate_alpine() {
 	echo "done"
 }
 
+generate_rhel() {
+	file=$1
+	mkdir -p `dirname ${file}` 2>/dev/null
+	echo -n "Writing ${file}..."
+	print_legal ${file};
+	print_rhel_os ${file};
+	print_maint ${file};
+	print_rhel_pkg ${file};
+	generate_java ${file};
+	echo "done"
+}
+
 # Print the ibmjava image version
 print_java() {
 	cat >> $1 <<-EOI
@@ -386,6 +435,8 @@ do
 				generate_ubuntu ${file}
 			elif [ "${os}" == "alpine" ]; then
 				generate_alpine ${file}
+			elif [ "${os}" == "rhel" ]; then
+				generate_rhel ${file}
 			fi
 		done
 	done
