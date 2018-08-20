@@ -1,4 +1,4 @@
-#!/usr/local/bin/bash
+#!/bin/bash
 #
 # (C) Copyright IBM Corporation 2016, 2018
 #
