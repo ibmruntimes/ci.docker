@@ -80,4 +80,9 @@ RUN set -eux; \
     /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
-    rm -f /tmp/ibm-java.bin;
+    rm -f /tmp/ibm-java.bin; \
+    apk del .build-deps;
+
+ENV JAVA_HOME=/opt/ibm/java/jre \
+    PATH=/opt/ibm/java/jre/bin:$PATH \
+    IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
