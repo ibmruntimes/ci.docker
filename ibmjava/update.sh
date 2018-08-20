@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/local/bin/bash
 #
 # (C) Copyright IBM Corporation 2016, 2018
 #
@@ -345,6 +345,8 @@ if [ "${os}" == "ubuntu" ]; then
 		print_ubuntu_java_install ${file} ${srcpkg} ${dstpkg};
 elif [ "${os}" == "alpine" ]; then
 		print_alpine_java_install ${file} ${srcpkg} ${dstpkg};
+elif [ "${os}" == "rhel" ]; then
+		print_rhel_java_install ${file} ${srcpkg} ${dstpkg};
 fi
 	print_java_env ${file};
 }
