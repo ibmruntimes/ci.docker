@@ -33,6 +33,12 @@ Consider using [Alpine Linux](http://alpinelinux.org/) if you are concerned abou
 
 **Note: Alpine Linux is not an officially supported operating system for IBM® SDK, Java™ Technology Edition.**
 
+##### Red Hat Enterprise Linux
+
+The Dockerfile provided for Red Hat Enterprise Linux (RHEL) serves as a sample on how to build a docker image that uses IBM's Java on top of
+the RHEL Operating System.  We do not provide Docker Hub images for this Dockerfile.  To build this image you must use Red Hat's daemon for
+docker and have appropriate entitlement to RHEL. See [this page](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html/getting_started_with_containers/using_red_hat_base_container_images_standard_and_minimal) for more details.
+
 ##### Architectures Supported
 
 Docker Images for the following architectures are now available:
