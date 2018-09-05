@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016, 2017
+# (C) Copyright IBM Corporation 2016, 2018
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -36,30 +36,30 @@ RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
     && apk del binutils wget \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 
-ENV JAVA_VERSION 1.8.0_sr5fp20
+ENV JAVA_VERSION 1.8.0_sr5fp21
 
 RUN set -eux; \
     apk --no-cache add --virtual .build-deps wget; \
     ARCH="$(apk --print-arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='1c996f79d187967221eddeeb6f34ffb932923101e860139392e689e311c5b358'; \
+         ESUM='2f9bfcf949023bfccb0eef306bbb82459ddd423bccbcba59df19993fe5450fd5'; \
          YML_FILE='sdk/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='269405e0a33ab86e39b2cef0fe9fc44a86d4cdb4496aaebc9f5f9a11abeccc12'; \
+         ESUM='e635d4540a3ec5f6699e231440308b98b9741c98688eb873d6076e6bcf06260c'; \
          YML_FILE='sdk/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='eb4dbe4c252bb41871502d794c68743729274f0fe74880463f187b8a9f51826f'; \
+         ESUM='45f5be093a7aeef49508bee482e7a930454745185e949fdd5aaa48635ba22bfd'; \
          YML_FILE='sdk/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='eb4e400a74dd844d1ee239125db5177122f2fd407e65d24fe6996aad8f02752c'; \
+         ESUM='02af03f3fc85bca2235aecd298118be2cc4081b46a2077d94de9ed33f481895d'; \
          YML_FILE='sdk/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='d780c7b0d8449000a0b69e537a0bc03b10a18e3eaea060ab065a2968ae74ecac'; \
+         ESUM='cb7ca73df6a488c3f7cf56ded07b6768161dfdb9af346992d823d0607a56bf72'; \
          YML_FILE='sdk/linux/s390x/index.yml'; \
          ;; \
        *) \
