@@ -36,30 +36,30 @@ RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
     && apk del binutils wget \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
 
-ENV JAVA_VERSION 1.8.0_sr5fp21
+ENV JAVA_VERSION 1.8.0_sr5fp22
 
 RUN set -eux; \
     apk --no-cache add --virtual .build-deps wget; \
     ARCH="$(apk --print-arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='2f9bfcf949023bfccb0eef306bbb82459ddd423bccbcba59df19993fe5450fd5'; \
+         ESUM='5be5205ef921b9269bd7f84cf93322aeac2dbcf08536fdf38b1dd2036f8911b9'; \
          YML_FILE='sdk/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='e635d4540a3ec5f6699e231440308b98b9741c98688eb873d6076e6bcf06260c'; \
+         ESUM='da3c6dcb264508a29a505567f58c49c77594d5a6102a7e678f5b35aff79549fc'; \
          YML_FILE='sdk/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='45f5be093a7aeef49508bee482e7a930454745185e949fdd5aaa48635ba22bfd'; \
+         ESUM='51d53f86d79f5d1fd16a7ed11b305f140aa1b0946221f307334f310312e9f2b6'; \
          YML_FILE='sdk/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='02af03f3fc85bca2235aecd298118be2cc4081b46a2077d94de9ed33f481895d'; \
+         ESUM='17436a485322009b9d402a977a7fef9e6d14a062665e13f7a21962a695f6c989'; \
          YML_FILE='sdk/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='cb7ca73df6a488c3f7cf56ded07b6768161dfdb9af346992d823d0607a56bf72'; \
+         ESUM='6635bebc3108d0210eef7c75b76b7d3944d163b2374522fcd22570288d602a13'; \
          YML_FILE='sdk/linux/s390x/index.yml'; \
          ;; \
        *) \
