@@ -92,7 +92,7 @@ print_legal() {
 # Print the supported Ubuntu OS
 print_ubuntu_os() {
 	cat >> $1 <<-EOI
-	FROM ubuntu:16.04
+	FROM ubuntu:18.04
 
 	EOI
 }
@@ -100,7 +100,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.7
+	FROM alpine:3.9
 
 	EOI
 }
@@ -136,7 +136,7 @@ print_alpine_pkg() {
 	cat >> $1 <<'EOI'
 
 RUN apk --update add --no-cache binutils ca-certificates openssl wget xz \
-    && GLIBC_VER="2.25-r0" \
+    && GLIBC_VER="2.29-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && wget -q -O /tmp/${GLIBC_VER}.apk ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-${GLIBC_VER}.apk \
     && apk add --allow-untrusted /tmp/${GLIBC_VER}.apk \
