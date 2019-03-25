@@ -4,9 +4,9 @@ Dockerfiles and build scripts for generating various Docker Images related to IB
 
 ### Supported packages
 
-* [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk)
-* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre)
-* [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj)
+* [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk/ubuntu)
+* [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre/ubuntu)
+* [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj/ubuntu)
 
 ### Overview
 
@@ -43,9 +43,11 @@ docker and have appropriate entitlement to RHEL. See [this page](https://access.
 
 Docker Images for the following architectures are now available:
 
--   [x86\_64](https://hub.docker.com/_/ibmjava/)
+-   [x86\_64](https://hub.docker.com/r/amd64/ibmjava/)
 -   [ppc64le](https://hub.docker.com/r/ppc64le/ibmjava/)
 -   [s390x](https://hub.docker.com/r/s390x/ibmjava/)
+
+Note that the [official images](https://hub.docker.com/_/ibmjava) and so `docker pull ibmjava` will work seamlessly on all supported arches.
 
 ### How to use this Image
 
