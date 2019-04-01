@@ -19,53 +19,44 @@
 # limitations under the License.
 #
 
-FROM alpine:3.7
+FROM registry.access.redhat.com/rhel7
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
-RUN apk --update add --no-cache --virtual .build-deps curl binutils \
-    && GLIBC_VER="2.29-r0" \
-    && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
-    && GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-8.2.1%2B20180831-1-x86_64.pkg.tar.xz" \
-    && GCC_LIBS_SHA256=e4b39fb1f5957c5aab5c2ce0c46e03d30426f3b94b9992b009d417ff2d56af4d \
-    && curl -Ls https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub \
-    && curl -Ls ${ALPINE_GLIBC_REPO}/${GLIBC_VER}/glibc-${GLIBC_VER}.apk > /tmp/${GLIBC_VER}.apk \
-    && apk add /tmp/${GLIBC_VER}.apk \
-    && curl -Ls ${GCC_LIBS_URL} -o /tmp/gcc-libs.tar.xz \
-    && echo "${GCC_LIBS_SHA256}  /tmp/gcc-libs.tar.xz" | sha256sum -c - \
-    && mkdir /tmp/gcc \
-    && tar -xf /tmp/gcc-libs.tar.xz -C /tmp/gcc \
-    && mv /tmp/gcc/usr/lib/libgcc* /tmp/gcc/usr/lib/libstdc++* /usr/glibc-compat/lib \
-    && strip /usr/glibc-compat/lib/libgcc_s.so.* /usr/glibc-compat/lib/libstdc++.so* \
-    && apk del --purge .build-deps \
-    && apk --update add --no-cache ca-certificates openssl \
-    && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/*
+RUN yum makecache fast \
+    && yum update -y \
+    && yum -y install openssl wget ca-certificates \
+    && yum clean packages \
+    && yum clean headers \
+    && yum clean all \
+    && rm -rf /var/cache/yum \
+    && rm -rf /var/tmp/yum-*
+
 
 ENV JAVA_VERSION 1.8.0_sr5fp31
 
 RUN set -eux; \
-    apk --no-cache add --virtual .build-deps wget; \
-    ARCH="$(apk --print-arch)"; \
+    ARCH="$(arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='950c6a4d40d9d73a65f9f995f07add4d95315937fae9c11ec97a75369dc6a834'; \
-         YML_FILE='jre/linux/x86_64/index.yml'; \
+         ESUM='81dd952a9e00ebbaf91fe33544b7b023bf9446e352c9e22e63ec41a3c375e0ba'; \
+         YML_FILE='sdk/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='b31a5404181008a761631991827539f9c7c8140702393051c62300c648cc1af6'; \
-         YML_FILE='jre/linux/i386/index.yml'; \
+         ESUM='ce25f618aa536af52972a40ee91975d11385aa92b8cf8fc26cedd43b48276e6d'; \
+         YML_FILE='sdk/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='1b669fe7429619c0b1dc278168e23fad9785881a64a8041f091e56a9c361bc54'; \
-         YML_FILE='jre/linux/ppc64le/index.yml'; \
+         ESUM='cb7c40da9c0f78f3a200a426e54c6c2889d9726854cdc6c540562589e815c581'; \
+         YML_FILE='sdk/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='3552696fb870f7777cf5ab3317e756eef3720729483b6dc9c8ccf3e7482ab6cb'; \
-         YML_FILE='jre/linux/s390/index.yml'; \
+         ESUM='21b526cd5bf2b5570e83bdc9f03e93ea1fce5b42358001bea1fd8a05c97b032c'; \
+         YML_FILE='sdk/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='b10ec022a1af888a778d2cfb446c3f1b8c8d949f4c79c9072f530a65533b6cda'; \
-         YML_FILE='jre/linux/s390x/index.yml'; \
+         ESUM='22445ef768af621d817dcc3a76e772588b827e28256f7db7d5574f146b13e31a'; \
+         YML_FILE='sdk/linux/s390x/index.yml'; \
          ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
@@ -85,9 +76,8 @@ RUN set -eux; \
     /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
-    rm -f /tmp/ibm-java.bin; \
-    apk del .build-deps;
+    rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/jre/bin:$PATH \
+    PATH=/opt/ibm/java/bin:$PATH \
     IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
