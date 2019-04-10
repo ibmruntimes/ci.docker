@@ -21,7 +21,7 @@ version="8"
 package="jre sdk sfj"
 tools="maven"
 arches="i386 ppc64le s390 s390x x86_64"
-osver="ubuntu alpine rhel"
+osver="ubuntu alpine rhel ubi-min"
 
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
@@ -113,6 +113,14 @@ print_rhel_os() {
 	EOI
 }
 
+# Print the supported UBI Minimal OS
+print_ubi-min_os() {
+	cat >> $1 <<-EOI
+	FROM registry.access.redhat.com/ubi7-dev-preview/ubi-minimal
+
+	EOI
+}
+
 # Print the maintainer
 print_maint() {
 	cat >> $1 <<-EOI
@@ -170,6 +178,16 @@ RUN yum makecache fast \
     && yum clean all \
     && rm -rf /var/cache/yum \
     && rm -rf /var/tmp/yum-*
+
+EOI
+}
+
+# Select the ubi-min OS packages
+print_ubi-min_pkg() {
+	cat >> $1 <<'EOI'
+
+RUN microdnf install openssl wget ca-certificates gzip tar && \
+    microdnf update; microdnf clean all
 
 EOI
 }
@@ -305,6 +323,19 @@ EOI
 	print_java_install ${file} ${srcpkg} ${dstpkg};
 }
 
+# Print the main RUN command that installs Java on ubi-min.
+print_ubi-min_java_install() {
+	srcpkg=$2
+	dstpkg=$3
+	shasums="${srcpkg}"_"${ver}"_sums
+	cat >> $1 <<'EOI'
+RUN set -eux; \
+    ARCH="$(arch)"; \
+    case "${ARCH}" in \
+EOI
+	print_java_install ${file} ${srcpkg} ${dstpkg};
+}
+
 print_java_env() {
 	if [ "${pack}" == "sdk" ]; then
 		if [ "${ver}" == "8" ]; then
@@ -355,6 +386,8 @@ elif [ "${os}" == "alpine" ]; then
 		print_alpine_java_install ${file} ${srcpkg} ${dstpkg};
 elif [ "${os}" == "rhel" ]; then
 		print_rhel_java_install ${file} ${srcpkg} ${dstpkg};
+elif [ "${os}" == "ubi-min" ]; then
+		print_ubi-min_java_install ${file} ${srcpkg} ${dstpkg};
 fi
 	print_java_env ${file};
 }
@@ -392,6 +425,18 @@ generate_rhel() {
 	print_rhel_os ${file};
 	print_maint ${file};
 	print_rhel_pkg ${file};
+	generate_java ${file};
+	echo "done"
+}
+
+generate_ubi-min() {
+	file=$1
+	mkdir -p `dirname ${file}` 2>/dev/null
+	echo -n "Writing ${file}..."
+	print_legal ${file};
+	print_ubi-min_os ${file};
+	print_maint ${file};
+	print_ubi-min_pkg ${file};
 	generate_java ${file};
 	echo "done"
 }
@@ -450,6 +495,8 @@ do
 				generate_alpine ${file}
 			elif [ "${os}" == "rhel" ]; then
 				generate_rhel ${file}
+			elif [ "${os}" == "ubi-min" ]; then
+				generate_ubi-min ${file}
 			fi
 		done
 	done
