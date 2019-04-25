@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi7-dev-preview/ubi-minimal
+FROM registry.access.redhat.com/ubi7/ubi-minimal
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
