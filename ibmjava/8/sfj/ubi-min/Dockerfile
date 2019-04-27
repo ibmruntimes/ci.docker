@@ -27,29 +27,29 @@ RUN microdnf install openssl wget ca-certificates gzip tar && \
     microdnf update; microdnf clean all
 
 
-ENV JAVA_VERSION 1.8.0_sr5fp31
+ENV JAVA_VERSION 1.8.0_sr5fp35
 
 RUN set -eux; \
     ARCH="$(arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='3eb7ddd1ad561dac947c9c0b6a934f754135f117226d057b4b9089bf1e6f9294'; \
+         ESUM='e5fb36cb4aaf54ea2e5b6c7bae0e55bde773822ca3bfa3dce4b94184ff32a2a0'; \
          YML_FILE='sfj/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='451198482dec4be1c937b4964cb79ce41371636b9b8cf6341f0199784d090703'; \
+         ESUM='c90d04586aab52f7477ef06c367ce5ea05174fab003df3786cb81fc13e5debca'; \
          YML_FILE='sfj/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='2391946144755b9d80ec3b516e87a26047f296076410f452bc0c4cdf17a68e47'; \
+         ESUM='b452c027274e42c2210c77c2a4cd8c4cc81e20897fa1868c2a6dd1f14ac0fb61'; \
          YML_FILE='sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='9abbd8edf703c28c064362d6c953db658baefb9ec73562d9a0d554b71c5b4882'; \
+         ESUM='0a1876d8b793d80fdb3441540e5b4fc66465434edd0f18fb45c46221438f139d'; \
          YML_FILE='sfj/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='9db32da5204c5e53bd7a1344af9a919dd46cf82f40707e86e9c65ff902b40d01'; \
+         ESUM='398a17be01dec0159404645dba7f4df269d0dd64fcaadd027d1087542437a31c'; \
          YML_FILE='sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
