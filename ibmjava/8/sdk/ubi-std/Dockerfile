@@ -19,11 +19,11 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi7/ubi-minimal
+FROM registry.access.redhat.com/ubi7/ubi
 
 
-RUN microdnf install openssl wget ca-certificates gzip tar \
-    && microdnf update; microdnf clean all
+RUN yum install -y wget openssl ca-certificates gzip tar \
+    && yum update; yum clean all
 
 LABEL author="Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)" \
     name="IBM JAVA" \
@@ -37,7 +37,6 @@ LABEL author="Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)" \
 ENV JAVA_VERSION 1.8.0_sr5fp37
 
 RUN set -eux; \
-    microdnf -y install shadow-utils; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
@@ -73,8 +72,6 @@ RUN set -eux; \
     rm -f /tmp/index.yml; \
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
-    microdnf -y remove shadow-utils; \
-    microdnf clean all; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
