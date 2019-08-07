@@ -21,7 +21,7 @@ version="8"
 package="jre sdk sfj"
 tools="maven"
 arches="i386 ppc64le s390 s390x x86_64"
-osver="ubuntu alpine rhel ubi-std ubi-min"
+osver="ubuntu alpine rhel ubi ubi-min"
 
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
@@ -122,7 +122,7 @@ print_ubi-min_os() {
 }
 
 # Print the supported UBI Minimal OS
-print_ubi-std_os() {
+print_ubi_os() {
 	cat >> $1 <<-EOI
 	FROM registry.access.redhat.com/ubi7/ubi
 
@@ -200,8 +200,8 @@ RUN microdnf install openssl wget ca-certificates gzip tar \
 EOI
 }
 
-# Select the ubi-std OS packages
-print_ubi-std_pkg() {
+# Select the ubi OS packages
+print_ubi_pkg() {
 	cat >> $1 <<'EOI'
 
 RUN yum install -y wget openssl ca-certificates gzip tar \
@@ -217,9 +217,9 @@ print_env() {
 	jverinfo=${shasums}[version]
 	eval jver=\${$jverinfo}
 
-	if [ "${os}" == "ubi-min" -o "${os}" == "ubi-std" ]; then
+	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" ]; then
 		cat >> $1 <<-EOI
-LABEL author="Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)" \\
+LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \\
     name="IBM JAVA" \\
     vendor="IBM" \\
     version=${jver} \ 
@@ -239,7 +239,7 @@ EOI
 # OS independent portion (Works for UBI, Alpine and Ubuntu)
 # For Java 9 we use jlink to derive the JRE and the SFJ images.
 print_java_install() {
-	if [ "${os}" == "ubi-std" -o "${os}" == "ubi-min" ]; then
+	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
 		cat >> $1 <<-EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
@@ -305,15 +305,15 @@ EOI
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
 EOI
-	if [ "${os}" == "ubi-std" ]; then
+	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
 		cat >> $1 <<'EOI'
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
+    chown -R 1001:0 /opt/ibm/java; \
 EOI
-	elif [ "${os}" == "ubi-min" ]; then
+	fi
+	if [ "${os}" == "ubi-min" ]; then
 	        cat >> $1 <<'EOI'
-    mkdir -p /licenses; \
-    cp /opt/ibm/java/license_en.txt /licenses; \
     microdnf -y remove shadow-utils; \
     microdnf clean all; \
 EOI
@@ -405,8 +405,8 @@ EOI
 	print_java_install ${file} ${srcpkg} ${dstpkg};
 }
 
-# Print the main RUN command that installs Java on ubi-std.
-print_ubi-std_java_install() {
+# Print the main RUN command that installs Java on ubi.
+print_ubi_java_install() {
 	srcpkg=$2
 	dstpkg=$3
 	shasums="${srcpkg}"_"${ver}"_sums
@@ -477,8 +477,8 @@ elif [ "${os}" == "alpine" ]; then
 		print_alpine_java_install ${file} ${srcpkg} ${dstpkg};
 elif [ "${os}" == "rhel" ]; then
 		print_rhel_java_install ${file} ${srcpkg} ${dstpkg};
-elif [ "${os}" == "ubi-std" ]; then
-		print_ubi-std_java_install ${file} ${srcpkg} ${dstpkg};
+elif [ "${os}" == "ubi" ]; then
+		print_ubi_java_install ${file} ${srcpkg} ${dstpkg};
 elif [ "${os}" == "ubi-min" ]; then
 		print_ubi-min_java_install ${file} ${srcpkg} ${dstpkg};
 fi
@@ -522,13 +522,13 @@ generate_rhel() {
 	echo "done"
 }
 
-generate_ubi-std() {
+generate_ubi() {
 	file=$1
 	mkdir -p `dirname ${file}` 2>/dev/null
 	echo -n "Writing ${file}..."
 	print_legal ${file};
-	print_ubi-std_os ${file};
-	print_ubi-std_pkg ${file};
+	print_ubi_os ${file};
+	print_ubi_pkg ${file};
 	generate_java ${file};
 	print_user ${file};
 	echo "done"
@@ -600,8 +600,8 @@ do
 				generate_alpine ${file}
 			elif [ "${os}" == "rhel" ]; then
 				generate_rhel ${file}
-			elif [ "${os}" == "ubi-std" ]; then
-				generate_ubi-std ${file}
+			elif [ "${os}" == "ubi" ]; then
+				generate_ubi ${file}
 			elif [ "${os}" == "ubi-min" ]; then
 				generate_ubi-min ${file}
 			fi

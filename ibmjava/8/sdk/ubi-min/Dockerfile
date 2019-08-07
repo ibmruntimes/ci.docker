@@ -25,7 +25,7 @@ FROM registry.access.redhat.com/ubi7/ubi-minimal
 RUN microdnf install openssl wget ca-certificates gzip tar \
     && microdnf update; microdnf clean all
 
-LABEL author="Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)" \
+LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \
     name="IBM JAVA" \
     vendor="IBM" \
     version=1.8.0_sr5fp37 \ 
@@ -73,6 +73,7 @@ RUN set -eux; \
     rm -f /tmp/index.yml; \
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
+    chown -R 1001:0 /opt/ibm/java; \
     microdnf -y remove shadow-utils; \
     microdnf clean all; \
     rm -f /tmp/ibm-java.bin;
