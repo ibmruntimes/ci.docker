@@ -19,11 +19,11 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi7/ubi-minimal
+FROM registry.access.redhat.com/ubi7/ubi
 
 
-RUN microdnf install openssl wget ca-certificates gzip tar \
-    && microdnf update; microdnf clean all
+RUN yum install -y wget openssl ca-certificates gzip tar \
+    && yum update; yum clean all
 
 LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \
     name="IBM JAVA" \
@@ -37,21 +37,20 @@ LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>"
 ENV JAVA_VERSION 1.8.0_sr5fp37
 
 RUN set -eux; \
-    microdnf -y install shadow-utils; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='ecf405742550ddf33b02bedded451fcf95e2cca8316891e89269e562e22215c9'; \
-         YML_FILE='jre/linux/x86_64/index.yml'; \
+         ESUM='b4119384a4e6657d6967725d855499a0ed1b03af487cbee63e809388b7fad46e'; \
+         YML_FILE='sfj/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='15fb5183e61b001b4a841f0d74380d0fce2a95236035f7f68c1ccf8fe9eabc0c'; \
-         YML_FILE='jre/linux/ppc64le/index.yml'; \
+         ESUM='612a25f5ea02f47721e9ac60a2ff083a1615c372b8cd936fa9d625b292580bb1'; \
+         YML_FILE='sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='8a7152789d5246779a53b020b98c05ac3451d6b8ccfbc93266c213624c415a16'; \
-         YML_FILE='jre/linux/s390x/index.yml'; \
+         ESUM='54515ce170ca0cc0d96d491a310baad1f83957a8aa5e07fda7454dd7887266dd'; \
+         YML_FILE='sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
@@ -74,8 +73,6 @@ RUN set -eux; \
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
     chown -R 1001:0 /opt/ibm/java; \
-    microdnf -y remove shadow-utils; \
-    microdnf clean all; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
