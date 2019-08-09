@@ -21,32 +21,33 @@
 
 FROM registry.access.redhat.com/ubi7/ubi-minimal
 
-MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
-RUN microdnf install openssl wget ca-certificates gzip tar && \
-    microdnf update; microdnf clean all
+RUN microdnf install openssl wget ca-certificates gzip tar \
+    && microdnf update; microdnf clean all
 
+LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \
+    name="IBM JAVA" \
+    vendor="IBM" \
+    version=1.8.0_sr5fp37 \ 
+    release=8 \
+    run="docker run --rm -ti <image_name:tag> /bin/bash" \
+    summary="Image for IBM JAVA with UBI as the base image" \
+    description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
 ENV JAVA_VERSION 1.8.0_sr5fp37
 
 RUN set -eux; \
-    ARCH="$(arch)"; \
+    microdnf -y install shadow-utils; \
+    useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
+    ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
          ESUM='51f6600dcc51c238bd4fbed73521e225094d7afa9afa2c8fb35ea78519a71930'; \
          YML_FILE='sdk/linux/x86_64/index.yml'; \
          ;; \
-       i386) \
-         ESUM='76e4ed81419b96240fbd44fdc5874f982a5c984842313e370cdc4ca177ac3bff'; \
-         YML_FILE='sdk/linux/i386/index.yml'; \
-         ;; \
        ppc64el|ppc64le) \
          ESUM='3d1260fc9c3251bd36ee4fac9848edecedf5aba5d6b3356695c125a94123e4d9'; \
          YML_FILE='sdk/linux/ppc64le/index.yml'; \
-         ;; \
-       s390) \
-         ESUM='0e62a3787b7286df33cb66edad878ede0362565879511ad517052a88cada6ad2'; \
-         YML_FILE='sdk/linux/s390/index.yml'; \
          ;; \
        s390x) \
          ESUM='e782ed9911c64425d1247ecb8432c7ff0aaafe35b9df41952f45daec436de988'; \
@@ -70,8 +71,15 @@ RUN set -eux; \
     /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
+    mkdir -p /licenses; \
+    cp /opt/ibm/java/license_en.txt /licenses; \
+    chown -R 1001:0 /opt/ibm/java; \
+    microdnf -y remove shadow-utils; \
+    microdnf clean all; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/bin:$PATH \
     IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
+
+USER 1001
