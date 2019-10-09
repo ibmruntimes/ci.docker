@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM alpine:3.7
+FROM alpine:3.10
 
 MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
 
