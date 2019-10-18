@@ -65,7 +65,7 @@ declare -A sdk_9_sums=(
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016, 2018
+	# (C) Copyright IBM Corporation 2016, 2019
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -92,7 +92,7 @@ print_legal() {
 # Print the supported Ubuntu OS
 print_ubuntu_os() {
 	cat >> $1 <<-EOI
-	FROM ubuntu:16.04
+	FROM ubuntu:18.04
 
 	EOI
 }
@@ -100,7 +100,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.7
+	FROM alpine:3.10
 
 	EOI
 }
@@ -116,7 +116,7 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi7/ubi-minimal
+	FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 	EOI
 }
@@ -124,7 +124,7 @@ print_ubi-min_os() {
 # Print the supported UBI Minimal OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi7/ubi
+	FROM registry.access.redhat.com/ubi8/ubi
 
 	EOI
 }
@@ -132,7 +132,7 @@ print_ubi_os() {
 # Print the maintainer
 print_maint() {
 	cat >> $1 <<-EOI
-	MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
+	MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 	EOI
 }
 
@@ -154,7 +154,7 @@ print_alpine_pkg() {
 COPY sgerrand.rsa.pub /etc/apk/keys
 
 RUN apk add --no-cache --virtual .build-deps curl binutils \
-    && GLIBC_VER="2.29-r0" \
+    && GLIBC_VER="2.30-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-8.2.1%2B20180831-1-x86_64.pkg.tar.xz" \
     && GCC_LIBS_SHA256=e4b39fb1f5957c5aab5c2ce0c46e03d30426f3b94b9992b009d417ff2d56af4d \
@@ -219,7 +219,7 @@ print_env() {
 
 	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" ]; then
 		cat >> $1 <<-EOI
-LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \\
+LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \\
     name="IBM JAVA" \\
     vendor="IBM" \\
     version=${jver} \ 

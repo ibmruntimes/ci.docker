@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016, 2018
+# (C) Copyright IBM Corporation 2016, 2019
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -19,9 +19,9 @@
 # limitations under the License.
 #
 
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
-MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
+MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \

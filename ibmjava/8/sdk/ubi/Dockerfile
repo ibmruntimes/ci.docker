@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016, 2018
+# (C) Copyright IBM Corporation 2016, 2019
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -19,13 +19,13 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi7/ubi
+FROM registry.access.redhat.com/ubi8/ubi
 
 
 RUN yum install -y wget openssl ca-certificates gzip tar \
     && yum update; yum clean all
 
-LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \
+LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
     name="IBM JAVA" \
     vendor="IBM" \
     version=1.8.0_sr5fp41 \ 
