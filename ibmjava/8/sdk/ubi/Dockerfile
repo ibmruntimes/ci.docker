@@ -28,28 +28,28 @@ RUN yum install -y wget openssl ca-certificates gzip tar \
 LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=1.8.0_sr5fp40 \ 
+    version=1.8.0_sr5fp41 \ 
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 1.8.0_sr5fp40
+ENV JAVA_VERSION 1.8.0_sr5fp41
 
 RUN set -eux; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='bc53faf476655e565f965dab3db37f9258bfc16bb8c5352c93d43d53860b79d3'; \
+         ESUM='6545147d99ed83124eb6f0091b262d97089ba41b2c8c7d8adc7836836af29658'; \
          YML_FILE='sdk/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='d70cf419442a446aa85eb09740a79386a80e962c790057371f5f07ddc7ef3ad5'; \
+         ESUM='c625e54e80dd3e743dca0507708bcaee3435cfb7d1efc5960299449a4693a60b'; \
          YML_FILE='sdk/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='a42335e8633fc35214410402891de40773cfb75f451c59c689bf5abd3c78576a'; \
+         ESUM='cd99fbfc86e3236d0de885890652ce0f5b7e4194a157aff6c8619b600fe0a934'; \
          YML_FILE='sdk/linux/s390x/index.yml'; \
          ;; \
        *) \
