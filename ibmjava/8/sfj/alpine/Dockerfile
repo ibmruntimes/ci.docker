@@ -44,30 +44,30 @@ RUN apk add --no-cache --virtual .build-deps curl binutils \
     && apk add --no-cache ca-certificates openssl \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/* /tmp/*.pub
 
-ENV JAVA_VERSION 1.8.0_sr6fp5
+ENV JAVA_VERSION 1.8.0_sr6fp6
 
 RUN set -eux; \
     apk --no-cache add --virtual .build-deps wget; \
     ARCH="$(apk --print-arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='bf7a6a9901ffab156683981546e75574f987973e03e839bb7249b918e314c4d8'; \
+         ESUM='ffb63fdc83eb7fbf77966e8939ffabfba2838d0cd3c31ef2039e429fc6c32e08'; \
          YML_FILE='sfj/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='d5982516f4e06468956ab89e084843c01ef08c3ed8e40378d33ebb586c92e9ce'; \
+         ESUM='05760e27bf84719ea57f4e6606c7517a47aa035784c64007aa9419ff713f45e3'; \
          YML_FILE='sfj/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='c7d5cd7aa38879f88eda3e15ab6c1e76a5523522952b143cc2e9d971ef7876ed'; \
+         ESUM='79cdddb40485c292996adbde2a5033be2984ae8536655f59afccdc0b67874bbf'; \
          YML_FILE='sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='a1ada0e17749fc87e187654e4b5a985c804397c00e4c3754494ec558d34ff738'; \
+         ESUM='f1f26da49fae25257539a550521981e996e325eead18919c2240e88a8f50b74e'; \
          YML_FILE='sfj/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='429b0046251ca3c8ea663ee7fca4e07e35cbefb681977471e4bf5082590be160'; \
+         ESUM='6b94b8c3299995d78a0524f091f49c9d33bf093dcec99f85d41b2456185cf331'; \
          YML_FILE='sfj/linux/s390x/index.yml'; \
          ;; \
        *) \

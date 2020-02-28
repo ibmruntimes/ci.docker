@@ -28,13 +28,13 @@ RUN microdnf install openssl wget ca-certificates gzip tar \
 LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=1.8.0_sr6fp5 \ 
+    version=1.8.0_sr6fp6 \ 
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 1.8.0_sr6fp5
+ENV JAVA_VERSION 1.8.0_sr6fp6
 
 RUN set -eux; \
     microdnf -y install shadow-utils; \
@@ -42,15 +42,15 @@ RUN set -eux; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='bf7a6a9901ffab156683981546e75574f987973e03e839bb7249b918e314c4d8'; \
+         ESUM='ffb63fdc83eb7fbf77966e8939ffabfba2838d0cd3c31ef2039e429fc6c32e08'; \
          YML_FILE='sfj/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='c7d5cd7aa38879f88eda3e15ab6c1e76a5523522952b143cc2e9d971ef7876ed'; \
+         ESUM='79cdddb40485c292996adbde2a5033be2984ae8536655f59afccdc0b67874bbf'; \
          YML_FILE='sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='429b0046251ca3c8ea663ee7fca4e07e35cbefb681977471e4bf5082590be160'; \
+         ESUM='6b94b8c3299995d78a0524f091f49c9d33bf093dcec99f85d41b2456185cf331'; \
          YML_FILE='sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
