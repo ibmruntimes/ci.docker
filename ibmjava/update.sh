@@ -26,30 +26,30 @@ osver="ubuntu alpine rhel ubi ubi-min"
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
 declare -A jre_8_sums=(
-	[version]="1.8.0_sr5fp41"
-	[i386]="8f15496d333f601df999de95a83a3a7e589eaf3c582cb066f4b34cf6d59c7a20"
-	[ppc64le]="c32cd64fd82f8b3be051094f49351151dea6a6e11c593f74da28ddc500932624"
-	[s390]="128c354bc9ee576a19ee08b447688703b367c583cd77e12e95d2d0fc68086269"
-	[s390x]="bf2c0813b2de59151ea7715d8da91f0d0a32dedb74b58c3f2b84f84e7085df18"
-	[x86_64]="2fcaca3c9836220fc2b5a53f957d095fe2a4cdd8cff081da5c0fe8a4e7245f7c"
+	[version]="1.8.0_sr6fp7"
+	[i386]="87fd95f9b1e6839a4746947ea80b133a411933eda0de57fa098d3517a85cd405"
+	[ppc64le]="16eed75415a4de36958cd73866ae0968cc0f5ce998989db7374b98a822998a6d"
+	[s390]="972349ea96a5fe00d709bc84f3f15c62b46496c4bd97f3f2ab1728f77330db16"
+	[s390x]="3ab6992d5322bdbf6a84d4284727a941f8af8bd5a7702511879839b1bebcd784"
+	[x86_64]="53636011c60cd5d2d04059f632390314fa5a91a3f0b15ef2326f253f3360ad9c"
 )
 
 declare -A sdk_8_sums=(
-	[version]="1.8.0_sr5fp41"
-	[i386]="1aaf206c6eeb9d6501b4006c081fb2cf30f6d2ef2ce5568ba04e2ac42e897f77"
-	[ppc64le]="c625e54e80dd3e743dca0507708bcaee3435cfb7d1efc5960299449a4693a60b"
-	[s390]="38e07d464b89ae594dd049e89bc04fe0c6adce0e65dba926fc26f27c0cb93b94"
-	[s390x]="cd99fbfc86e3236d0de885890652ce0f5b7e4194a157aff6c8619b600fe0a934"
-	[x86_64]="6545147d99ed83124eb6f0091b262d97089ba41b2c8c7d8adc7836836af29658"
+	[version]="1.8.0_sr6fp7"
+	[i386]="94ca02a6bb52e0ef335d234aeb0f626200a0c44988e1d175a9bebefb5303c976"
+	[ppc64le]="9ede76a597af28c7f10c6f8a68788cc2dcd39fdab178c9bac56df8b3766ac717"
+	[s390]="04f0561bad3772669ed51ce8859f8ba41dee29015caca4ae5a5d1c4db86b2c09"
+	[s390x]="a9b9d0bd2ee86fa8a51733da49ade862e9b83e6812463307743bd5de75236636"
+	[x86_64]="3da063eb0142fd317ae8d2b72f07bcde1c3a4909c107f3fd39c297749f603ef9"
 )
 
 declare -A sfj_8_sums=(
-	[version]="1.8.0_sr5fp41"
-	[i386]="8560ddf237e14154ba3a7bbc8552038db5b12f4ca68136b5db2774851229308d"
-	[ppc64le]="07896e5226841a54e6d1f28c44516135a1d1eace1b0b603af3227209b0402d6e"
-	[s390]="1547e8261c65ef1ef4ffa11dfe61ac5f7e7c5974418e2947d44c7e38e4c022fc"
-	[s390x]="2aca7845df7fb33327a3a46e28880526fdb16cf33b16127ba1330a59683bad27"
-	[x86_64]="8d791449cd7a3075bb98e15ee03aa9f223e3df41b13af5426f91b08cf8e6c705"
+	[version]="1.8.0_sr6fp7"
+	[i386]="3259e0cd732628d2ff9be4ba55a4f019662f7b0da5280eda25e2f298741e95df"
+	[ppc64le]="36c8b5493de641455efb39955533582dc0c97f3d6042aaab81423b94daf6d499"
+	[s390]="026b950c484d1d0642995eec2e4063dee9d6a86a4393f154b92a0a3d3419752d"
+	[s390x]="11a3d46a3ea113cf4f90aba60282f9bd2ec625d49c14c16dc489fc65468ba9a4"
+	[x86_64]="23950b13e577972af3ff0b80ff42503393b331f3863ed121a5b759d542f48e0d"
 )
 
 # Version 9 sums [DO NO EDIT THIS LINE]
@@ -65,7 +65,7 @@ declare -A sdk_9_sums=(
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016, 2018
+	# (C) Copyright IBM Corporation 2016, 2019
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -92,7 +92,7 @@ print_legal() {
 # Print the supported Ubuntu OS
 print_ubuntu_os() {
 	cat >> $1 <<-EOI
-	FROM ubuntu:16.04
+	FROM ubuntu:18.04
 
 	EOI
 }
@@ -100,7 +100,7 @@ print_ubuntu_os() {
 # Print the supported Alpine OS
 print_alpine_os() {
 	cat >> $1 <<-EOI
-	FROM alpine:3.7
+	FROM alpine:3.10
 
 	EOI
 }
@@ -116,7 +116,7 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi7/ubi-minimal
+	FROM registry.access.redhat.com/ubi8/ubi-minimal
 
 	EOI
 }
@@ -124,7 +124,7 @@ print_ubi-min_os() {
 # Print the supported UBI Minimal OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi7/ubi
+	FROM registry.access.redhat.com/ubi8/ubi
 
 	EOI
 }
@@ -132,7 +132,7 @@ print_ubi_os() {
 # Print the maintainer
 print_maint() {
 	cat >> $1 <<-EOI
-	MAINTAINER Dinakar Guniguntala <dinakar.g@in.ibm.com> (@dinogun)
+	MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 	EOI
 }
 
@@ -154,7 +154,7 @@ print_alpine_pkg() {
 COPY sgerrand.rsa.pub /etc/apk/keys
 
 RUN apk add --no-cache --virtual .build-deps curl binutils \
-    && GLIBC_VER="2.29-r0" \
+    && GLIBC_VER="2.30-r0" \
     && ALPINE_GLIBC_REPO="https://github.com/sgerrand/alpine-pkg-glibc/releases/download" \
     && GCC_LIBS_URL="https://archive.archlinux.org/packages/g/gcc-libs/gcc-libs-8.2.1%2B20180831-1-x86_64.pkg.tar.xz" \
     && GCC_LIBS_SHA256=e4b39fb1f5957c5aab5c2ce0c46e03d30426f3b94b9992b009d417ff2d56af4d \
@@ -219,7 +219,7 @@ print_env() {
 
 	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" ]; then
 		cat >> $1 <<-EOI
-LABEL org.opencontainers.image.authors="Vidya Subramanyam <vidyas16@in.ibm.com>" \\
+LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \\
     name="IBM JAVA" \\
     vendor="IBM" \\
     version=${jver} \ 
