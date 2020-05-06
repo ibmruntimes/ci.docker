@@ -1,3 +1,0 @@
-
-plot 'data' using 1:($2>0:$2:0/0) title 'y>0', \
-             '' using 1:($2<0?-$2:0/0) title 'y<0'
