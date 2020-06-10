@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM alpine:3.10
+FROM alpine:3.12
 
 MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 
