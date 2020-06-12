@@ -1,4 +1,4 @@
-EADME.mdDK, Java™ Technology Edition and Docker [![Build Status](https://travis-ci.org/ibmruntimes/ci.docker.svg?branch=master)](https://travis-ci.org/ibmruntimes/ci.docker)
+# IBM® SDK, Java™ Technology Edition and Docker [![Build Status](https://travis-ci.org/ibmruntimes/ci.docker.svg?branch=master)](https://travis-ci.org/ibmruntimes/ci.docker)
 
 Dockerfiles and build scripts for generating various Docker Images related to IBM® SDK, Java™ Technology Edition.
 
