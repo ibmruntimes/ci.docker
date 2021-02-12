@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 
