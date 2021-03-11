@@ -33,29 +33,29 @@ RUN yum makecache fast \
     && rm -rf /var/tmp/yum-*
 
 
-ENV JAVA_VERSION 1.8.0_sr6fp25
+ENV JAVA_VERSION 1.8.0_sr6fp26
 
 RUN set -eux; \
     ARCH="$(arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='c613955f0130f9e637806f71660c6308e37e2e9abd8456e8216bc7de9eb9ea54'; \
+         ESUM='efa4b1b4f163133043eb99d1b276311201fc37bb60bfde051fd06c78cada038b'; \
          YML_FILE='jre/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='4778c7f8a899544ab7ace0777c909b25c9bfcb1ced326fac7dd7feface308e5e'; \
+         ESUM='1f16f54b16bb978772c5ace5769a05233ba4a58de0e23d0542b0c0e55f95dd63'; \
          YML_FILE='jre/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='cc69a3c2baadcaf23fa0dd3d334d98406a1df0e5a0899ea16b7185807adb6f66'; \
+         ESUM='40b61a9bd4727d5dc1573ab69b1f973ffa14bf18f396a244f7263f7782173c98'; \
          YML_FILE='jre/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='2d15b35966d94c86227f32f90e9fe2ffdea76e1c355cb12276097318dfdf2841'; \
+         ESUM='4f52f3044658a232f2d8e77a275d1e95a6de90a6bf1e63a3ea6d7a87fa576d87'; \
          YML_FILE='jre/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='683164578e9c4b0e6a3b6d2c56fc4b68f4a07f0c4183b522cdae4dbca8f4e092'; \
+         ESUM='024b7c4691233016fff56bc9656e4979b283abbbe5751ddd98917944eaabdb10'; \
          YML_FILE='jre/linux/s390x/index.yml'; \
          ;; \
        *) \
