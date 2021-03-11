@@ -26,30 +26,30 @@ osver="ubuntu alpine rhel ubi ubi-min"
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
 declare -A jre_8_sums=(
-	[version]="1.8.0_sr6fp25"
-	[i386]="4778c7f8a899544ab7ace0777c909b25c9bfcb1ced326fac7dd7feface308e5e"
-	[ppc64le]="cc69a3c2baadcaf23fa0dd3d334d98406a1df0e5a0899ea16b7185807adb6f66"
-	[s390]="2d15b35966d94c86227f32f90e9fe2ffdea76e1c355cb12276097318dfdf2841"
-	[s390x]="683164578e9c4b0e6a3b6d2c56fc4b68f4a07f0c4183b522cdae4dbca8f4e092"
-	[x86_64]="c613955f0130f9e637806f71660c6308e37e2e9abd8456e8216bc7de9eb9ea54"
+	[version]="1.8.0_sr6fp26"
+	[i386]="1f16f54b16bb978772c5ace5769a05233ba4a58de0e23d0542b0c0e55f95dd63"
+	[ppc64le]="40b61a9bd4727d5dc1573ab69b1f973ffa14bf18f396a244f7263f7782173c98"
+	[s390]="4f52f3044658a232f2d8e77a275d1e95a6de90a6bf1e63a3ea6d7a87fa576d87"
+	[s390x]="024b7c4691233016fff56bc9656e4979b283abbbe5751ddd98917944eaabdb10"
+	[x86_64]="efa4b1b4f163133043eb99d1b276311201fc37bb60bfde051fd06c78cada038b"
 )
 
 declare -A sdk_8_sums=(
-	[version]="1.8.0_sr6fp25"
-	[i386]="aedc0bf42ad9dac10e789c8fb8984250d338cbe111683c75c3b5b87f36a9f40a"
-	[ppc64le]="f0db52030e38d18d087138c7eea628975af034e381afda101b35d568e0a81230"
-	[s390]="fb4cfdab31d39f060d32a9aa349ae4bd5e12e76164ab938d476e6fe864af7776"
-	[s390x]="9357f54317ad62ea4223edcb2d0ca44dbdc153877b6ef077f21fbf462b8288f5"
-	[x86_64]="066ce6f0b3fe7f9c84e41b4e63f36e83928f7166f7805633741b95dbfd4a1871"
+	[version]="1.8.0_sr6fp26"
+	[i386]="dfe87d34c40cd0c23dc4b7ee47c85f84e26d21ff75476b234998bb9132379659"
+	[ppc64le]="bbc55934ec867290cd9307422beae48e5032dfabb7cb496bed6e47b7ab3f90be"
+	[s390]="a1ed2722f283a3f3eb0a71f23354b0b4d2761865e759a3bf7f89297e17c20e6f"
+	[s390x]="c2ddf185daafacd0b50f3e4e593d613b2e9b70d66b88a8da6ee313181376aef6"
+	[x86_64]="c51b7afed4911a4eefdf02c44ee440de726a5a605c5507cc50d4795394b418c2"
 )
 
 declare -A sfj_8_sums=(
-	[version]="1.8.0_sr6fp25"
-	[i386]="30b441dfe3b7aed59b79d8691254ffe55a94f5f63252e391acce5eacacd78b54"
-	[ppc64le]="949e84ece359b09412a6a43b78fcc91b1bf605321db6e9bb19cfc7eb727eb270"
-	[s390]="ff1b146367ae61869e342fb6b73c40ad966f199f854bb301ede6d06743f20b14"
-	[s390x]="6893eb2913f25c593e4a9d8249e53f0287b4b210f22b331a9eebd6927fcec286"
-	[x86_64]="3188a3690c66210b1c2e40cd7dd30f09fd2ed359a37097ff252f28f13035678e"
+	[version]="1.8.0_sr6fp26"
+	[i386]="774e609279f76e63ba68789cc35b7872de7bcdc398a3952c2867a04b7be971be"
+	[ppc64le]="dafdc0888f82fec91ccca6ac9f7c64b1a7693ce500e4a012428e86fd1c91ea24"
+	[s390]="c4e25ff5f9ff05c5f3133a362ecef71e7d9d8c9f20196aecca99b4c5842decba"
+	[s390x]="15e9a31c55023197969fdf294e75bd0f977fe71c096f8f35099556a9bb30017c"
+	[x86_64]="dc011120ce576b5a74e4ec69f6a28852c7190d31d562cc1b7af60dd764e70922"
 )
 
 # Version 9 sums [DO NO EDIT THIS LINE]
@@ -116,7 +116,7 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi-minimal:8.2
+	FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
 
 	EOI
 }
@@ -124,7 +124,7 @@ print_ubi-min_os() {
 # Print the supported UBI Minimal OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi:8.2
+	FROM registry.access.redhat.com/ubi8/ubi:8.3
 
 	EOI
 }
