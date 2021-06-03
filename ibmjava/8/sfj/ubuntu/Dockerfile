@@ -27,29 +27,29 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 1.8.0_sr6fp30
+ENV JAVA_VERSION 1.8.0_sr6fp31
 
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='7fd642bb37d6859e32775742b886fbb68dc0c22e27db90572d78978c43a65532'; \
+         ESUM='459e3c990073af4ccbc7b774b94e495c9a1ab93884fc102b9078450afde345e2'; \
          YML_FILE='sfj/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='1d44c1fe42336cab994267589d9be742c79b1937fb204662dc7bc22b41e74253'; \
+         ESUM='b750f58b7623eb184602172122040128d534e3442e2b299670124f5be91cd0db'; \
          YML_FILE='sfj/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='065b7d2be5d6744767e49b2116bf261e11396e1eba80dc838796f10b1627e95b'; \
+         ESUM='81a3e97371ce2fc85e2e07ad1498c9152a81bfe7d57fe074cd29ecc8df120f86'; \
          YML_FILE='sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='30c1d89cef9c6ea061ad013f2ec3621d51a7dc7e268884d7c3be9b0056ea5e05'; \
+         ESUM='8511e455579014b94a9d8fca686b2bd25391c1ff985cad7320206987b8d4178e'; \
          YML_FILE='sfj/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='2564a4ef1ba37a0ffe1098c598ac49e0b98661ca2c2198ea6349a2d437fd354d'; \
+         ESUM='a4857271dfb8db4eb910dc14561789439a4777b8fe1c61a57112592398e6b95e'; \
          YML_FILE='sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
