@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
 
 
 RUN microdnf install openssl wget ca-certificates gzip tar \

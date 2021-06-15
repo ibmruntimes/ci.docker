@@ -116,7 +116,7 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi-minimal:8.3
+	FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
 
 	EOI
 }
@@ -124,7 +124,7 @@ print_ubi-min_os() {
 # Print the supported UBI Minimal OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi:8.3
+	FROM registry.access.redhat.com/ubi8/ubi:8.4
 
 	EOI
 }
