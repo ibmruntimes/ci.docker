@@ -1,0 +1,6 @@
+java version "11.0.11" 2021-04-20
+Java(TM) SE Runtime Environment 11.0.11.0-IBM (build 11.0.11+9)
+Eclipse OpenJ9 VM 11.0.11.0-IBM (build openj9-0.26.0, JRE 11 Linux amd64-64-Bit Compressed References 20210421_60 (JIT enabled, AOT enabled)
+OpenJ9   - b4cc246d9
+OMR      - 162e6f729
+JCL      - 9110d0b174 based on jdk-11.0.11+9)
