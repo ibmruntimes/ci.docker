@@ -7,10 +7,10 @@ Dockerfiles and build scripts for generating various Docker Images related to IB
 * [IBM® SDK, Java™ Technology Edition, Version 8, SDK package](8/sdk/ubuntu)
 * [IBM® SDK, Java™ Technology Edition, Version 8, JRE package](8/jre/ubuntu)
 * [IBM® SDK, Java™ Technology Edition, Version 8, SFJ package](8/sfj/ubuntu)
-
+* [IBM® SDK, Java™ Technology Edition, Version 11, JDK package](11/jdk/ubuntu)
 ### Overview
 
-The images in this repository contain IBM® SDK, Java™ Technology Edition version 1.8.0\_sr6fp31(8.0-6.31). See [what's new](http://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.lnx.80.doc/diag/preface/changes_80/changes.html). See the license section for restrictions that relate to the use of this image. For more information about IBM® SDK, Java™ Technology Edition and API documentation, see the [IBM Knowledge Center](http://www.ibm.com/support/knowledgecenter/SSYKE2/welcome_javasdk_family.html). For tutorials, recipes, and Java usage in Bluemix, see [IBM developerWorks](http://www.ibm.com/developerworks/java).
+The images in this repository contain IBM® SDK, Java™ Technology Edition version 1.8.0\_sr6fp31(8.0-6.31) and 11.0.11.0. See [what's new 80](http://www.ibm.com/support/knowledgecenter/en/SSYKE2_8.0.0/com.ibm.java.lnx.80.doc/diag/preface/changes_80/changes.html). See the license section for restrictions that relate to the use of this image. For more information about IBM® SDK, Java™ Technology Edition and API documentation, see the [IBM Knowledge Center](http://www.ibm.com/support/knowledgecenter/SSYKE2/welcome_javasdk_family.html). For tutorials, recipes, and Java usage in Bluemix, see [IBM developerWorks](http://www.ibm.com/developerworks/java).
 
 Java and all Java-based trademarks and logos are trademarks or registered trademarks of Oracle and/or its affiliates.
 
@@ -122,9 +122,9 @@ The Dockerfiles and associated scripts are licensed under the [Apache License 2.
 
 Licenses for the products installed within the images:
 
--	IBM® SDK, Java™ Technology Edition: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PMAA-A3Z8P2&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+8.0&l=en).
+-	IBM® SDK, Java™ Technology Edition, version 8: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PMAA-A3Z8P2&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+8.0&l=en).
 
-
+-       IBM® SDK, Java™ Technology Edition, version 11: [International License Agreement for Non-Warranted Programs](http://www14.software.ibm.com/cgi-bin/weblap/lap.pl?la_formnum=&li_formnum=L-PARM-BMVULC&title=IBM%AE+SDK%2C+Java%99+Technology+Edition%2C+Version+11.0&l=en).
 #### Issues
 
 For issues relating specifically to this Docker image, please use the [GitHub issue tracker](https://github.com/ibmruntimes/ci.docker/issues).

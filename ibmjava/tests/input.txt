@@ -4,3 +4,4 @@ ibmjava:8-jre-alpine  ../8/jre/alpine
 ibmjava:8-jre         ../8/jre/ubuntu
 ibmjava:8-sdk-alpine  ../8/sdk/alpine
 ibmjava:8-sdk         ../8/sdk/ubuntu
+ibmjava:11-jdk        ../11/jdk/ubuntu
