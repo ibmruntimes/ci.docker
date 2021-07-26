@@ -19,17 +19,25 @@
 # limitations under the License.
 #
 
-FROM ubuntu:20.04
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
 
-MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends wget ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+RUN microdnf install openssl wget ca-certificates gzip tar \
+    && microdnf update; microdnf clean all
+
+LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
+    name="IBM JAVA" \
+    vendor="IBM" \
+    version=11.0.11.0     release=11 \
+    run="docker run --rm -ti <image_name:tag> /bin/bash" \
+    summary="Image for IBM JAVA with UBI as the base image" \
+    description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 ENV JAVA_VERSION 11.0.11.0
 
 RUN set -eux; \
-    ARCH="$(dpkg --print-architecture)"; \
+    microdnf -y install shadow-utils; \
+    useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
+    ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
          ESUM='037363b1dd35d7b6a67137baf1c73589b4f7b4e177d40394897726ad6056babd'; \
@@ -62,8 +70,15 @@ RUN set -eux; \
     mv /opt/ibm/jdk-11* /opt/ibm/java; \
     rm -f /tmp/response.properties; \
     rm -f /tmp/index.yml; \
+    mkdir -p /licenses; \
+    cp /opt/ibm/java/legal/java.base/license/license_en.txt /licenses; \
+    chown -R 1001:0 /opt/ibm/java; \
+    microdnf -y remove shadow-utils; \
+    microdnf clean all; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java \
     PATH=/opt/ibm/java/bin:$PATH \
     IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
+
+USER 1001

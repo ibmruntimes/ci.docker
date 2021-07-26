@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# (C) Copyright IBM Corporation 2016, 2019
+# (C) Copyright IBM Corporation 2021
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ set -eo pipefail
 version="11"
 package="jdk"
 arches="ppcle s390x x86_64"
-osver="ubuntu"
+osver="ubuntu ubi ubi-min"
 
 # sha256sum for the various versions, packages and arches
 # Version 11 sums [DO NO EDIT THIS LINE]
@@ -34,7 +34,7 @@ declare -A jdk_11_sums=(
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016, 2019
+	# (C) Copyright IBM Corporation 2021
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update_jdk11.sh"
@@ -207,7 +207,7 @@ EOI
 	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
 		cat >> $1 <<'EOI'
     mkdir -p /licenses; \
-    cp /opt/ibm/java/license_en.txt /licenses; \
+    cp /opt/ibm/java/legal/java.base/license/license_en.txt /licenses; \
     chown -R 1001:0 /opt/ibm/java; \
 EOI
 	fi
