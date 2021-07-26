@@ -20,7 +20,7 @@ set -eo pipefail
 version="11"
 package="jdk"
 arches="ppcle s390x x86_64"
-osver="ubuntu"
+osver="ubuntu ubi ubi-min"
 
 # sha256sum for the various versions, packages and arches
 # Version 11 sums [DO NO EDIT THIS LINE]
@@ -207,7 +207,7 @@ EOI
 	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
 		cat >> $1 <<'EOI'
     mkdir -p /licenses; \
-    cp /opt/ibm/java/license_en.txt /licenses; \
+    cp /opt/ibm/java/legal/java.base/license/license_en.txt /licenses; \
     chown -R 1001:0 /opt/ibm/java; \
 EOI
 	fi
