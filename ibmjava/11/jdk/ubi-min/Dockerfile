@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016, 2019
+# (C) Copyright IBM Corporation 2021
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update_jdk11.sh"
