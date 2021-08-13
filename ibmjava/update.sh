@@ -26,30 +26,30 @@ osver="ubuntu alpine rhel ubi ubi-min"
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
 declare -A jre_8_sums=(
-	[version]="1.8.0_sr6fp31"
-	[i386]="95bf8be233306b046150b949d2a8b9ce604eb6f4a090aaa7bf54152181fcdc06"
-	[ppc64le]="b6a57eff545b75f6fe164c0e96eab56d1a889ae7574e205230f84175b50f6c03"
-	[s390]="2b2b73eef781996e570670a2dec541778647a2afb37b516c9a750e7857fc90aa"
-	[s390x]="70da4d42a8181e7a13ca63320acf856315b993f35222e34fa50032a270d472d4"
-	[x86_64]="ed09900a0219b40ddfa06098118a701b8633dcf12588e13ff8b7d810ef2769dc"
+	[version]="8.0.6.35"
+	[i386]="d744258a04be78f4d97210a2c161c27597ec81c47601352fbf2806ec2e65e221"
+	[ppc64le]="216db2e766718bf6c752ef1f453a339c9eabec2a57e9570a56a933d2059761ed"
+	[s390]="ef91c6d29f6387193b86a73ad07f95c3c765b667e45e82486f73a7a7d0d8507c"
+	[s390x]="ee70074a97f36a39f655009d69f4e5de17e3ca6c7fedc6f1cefa6dcec9668373"
+	[x86_64]="7c12c8fb9be1e2db061f24accfdf94644efcf3e2a8c9054e713c2970b03ab174"
 )
 
 declare -A sdk_8_sums=(
-	[version]="1.8.0_sr6fp31"
-	[i386]="dcf59f47f74e6ab9b9b1b36f17f31ce9ae800a54d3f8911ee4380a5f128071d7"
-	[ppc64le]="124006e81d5fb148face2142ff7b6155c62876c6f819844d2d34d8d174a0efe7"
-	[s390]="46e8263da8b7cd80b780f5a9dbdab4f0000c32907af1ecbfe58edfc3068810e7"
-	[s390x]="73fb5069d838eeeecbb801c4a8a03180a96e724dad79ef1b441be36ee8d53195"
-	[x86_64]="ebb0fd9e7e49b541663ea152a4c28b4d85c458fb00a35e407bfd922fea418fae"
+	[version]="8.0.6.35"
+	[i386]="2c1363167aa22f6b20f7c5d5a10bef06563a8405835b9e894eaf2fc2c966eca0"
+	[ppc64le]="f8a837860f8a3142c95b78eb1d9cf36bcb4c633ebde3293dca453ab2cdbd0dc2"
+	[s390]="421e69d2307c0c8ab0f75fc0a32332f083286f46d4c4ac1742aaf12d7ae0dd99"
+	[s390x]="0dd9fbfe0aa12167d1ad6a482ba1493058440d379bcd0c7d1a18d3b44bcecca5"
+	[x86_64]="7dfc22f7c3ba656e33af1728d2f87e854cfc2616f153b3c8310a9d3ed89cd484"
 )
 
 declare -A sfj_8_sums=(
-	[version]="1.8.0_sr6fp31"
-	[i386]="b750f58b7623eb184602172122040128d534e3442e2b299670124f5be91cd0db"
-	[ppc64le]="81a3e97371ce2fc85e2e07ad1498c9152a81bfe7d57fe074cd29ecc8df120f86"
-	[s390]="8511e455579014b94a9d8fca686b2bd25391c1ff985cad7320206987b8d4178e"
-	[s390x]="a4857271dfb8db4eb910dc14561789439a4777b8fe1c61a57112592398e6b95e"
-	[x86_64]="459e3c990073af4ccbc7b774b94e495c9a1ab93884fc102b9078450afde345e2"
+	[version]="8.0.6.35"
+	[i386]="59ada28d2bd89365f0eaf259cf587b9e9605c8407394e2945f84e574b94e0134"
+	[ppc64le]="5e8adf7a5064549f06eb864dfea1d94a1e7fd96f1a971b8575b02593a15cb0c4"
+	[s390]="98f091cf8228282f0b116ea8958129290f659ac360cf05f606ac3dfef3548a85"
+	[s390x]="201faefc1f6b47d045889ff1610f70d09fdb07d1d4aa062cba8b32d41cd233b4"
+	[x86_64]="d9ad4dd78cde42b44a0e9ba91d6b85fb134b56fb30ef0009153cfba54778978e"
 )
 
 # Version 9 sums [DO NO EDIT THIS LINE]
@@ -243,15 +243,15 @@ print_java_install() {
 		cat >> $1 <<-EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/x86_64/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/x86_64/index.yml'; \\
          ;; \\
        ppc64el|ppc64le) \\
          ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/ppc64le/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/ppc64le/index.yml'; \\
          ;; \\
        s390x) \\
          ESUM='$(sarray=${shasums}[s390x]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/s390x/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/s390x/index.yml'; \\
          ;; \\
        *) \\
          echo "Unsupported arch: \${ARCH}"; \\
@@ -264,23 +264,23 @@ EOI
 		cat >> $1 <<-EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/x86_64/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/x86_64/index.yml'; \\
          ;; \\
        i386) \\
          ESUM='$(sarray=${shasums}[i386]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/i386/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/i386/index.yml'; \\
          ;; \\
        ppc64el|ppc64le) \\
          ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/ppc64le/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/ppc64le/index.yml'; \\
          ;; \\
        s390) \\
          ESUM='$(sarray=${shasums}[s390]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/s390/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/s390/index.yml'; \\
          ;; \\
        s390x) \\
          ESUM='$(sarray=${shasums}[s390x]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='${srcpkg}/linux/s390x/index.yml'; \\
+         YML_FILE='8.0/${srcpkg}/linux/s390x/index.yml'; \\
          ;; \\
        *) \\
          echo "Unsupported arch: \${ARCH}"; \\

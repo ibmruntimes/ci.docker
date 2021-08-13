@@ -23,7 +23,7 @@ arches="x86_64"
 function gen_index() {
 	ifile=$1
 	ofile=$2
-	cat $ifile | grep -e "^1." -e "uri:" | \
+	cat $ifile | grep -e "^8." -e "uri:" | \
 	awk 'BEGIN { printf "---\n" }
 		 {
 		   if (match($1, "uri:") != 0) {
@@ -38,7 +38,7 @@ for pack in $packages
 do
 	for arch in $arches
 	do
-		ofile=$pack/linux/$arch/index.yml
+		ofile=8.0/$pack/linux/$arch/index.yml
 		echo -n "Writing $ofile..."
 		mkdir -p `dirname $ofile` 2>/dev/null
 		wget -q -O index-tmp.yml $dhe_meta/$ofile

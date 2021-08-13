@@ -68,17 +68,17 @@ shift $(($OPTIND-1))
 function get_full_version_from_meta_info() {
 	meta_dir="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"
 	echo -n "Downloading the latest index.yml files..."
-	wget -q -e robots=off --cut-dirs=7 --user-agent=Mozilla/5.0 --reject="index.html*" --no-parent --recursive --relative --level=4 $meta_dir
+	wget -q -e robots=off --cut-dirs=7 --user-agent=Mozilla/5.0 --reject="index.html*" --no-parent --recursive --relative --level=5 $meta_dir
 	echo "done"
 	# Look for the latest entry in the x86_64 sdk index.yml for the major version provided
-	yml_file="public.dhe.ibm.com/meta/sdk/linux/x86_64/index.yml"
-	export full_version=`awk -F":" '{ print $1 }' $yml_file | grep -e "^1.$version" | sort -V | tail -1`
+	yml_file="public.dhe.ibm.com/meta/8.0/sdk/linux/x86_64/index.yml"
+	export full_version=`awk -F":" '{ print $1 }' $yml_file | grep -e "^$version" | sort -V | tail -1`
 	echo "Latest full version for major version $version is: $full_version"
 }
 
 function get_shasums() {
 	echo -n "Locating the shasums for version: $full_version..."
-	find . -name "index.yml" -exec cat {} \; | 
+	find . -type f -path '*/8.0/*' -name "index.yml" -exec cat {} \; | 
 			grep -A 2 "$full_version" | 
 			awk '{ 
 					if (match($1, "uri:") > 0) { 
@@ -118,7 +118,7 @@ function match_shasums() {
 	do
 		for arch in $arches
 		do
-			yml_file="public.dhe.ibm.com/meta/$pkg/linux/$arch/index.yml"
+			yml_file="public.dhe.ibm.com/meta/8.0/$pkg/linux/$arch/index.yml"
 			pack_url=`grep -A 1 "$full_version" $yml_file | grep "uri:" | awk '{ print $2 }'`
 			rm -f ibm-java.bin
 			echo -n "Downloading $pkg for $arch..."
