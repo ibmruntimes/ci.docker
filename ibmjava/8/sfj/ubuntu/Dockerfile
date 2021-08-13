@@ -27,30 +27,30 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 1.8.0_sr6fp31
+ENV JAVA_VERSION 8.0.6.35
 
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='459e3c990073af4ccbc7b774b94e495c9a1ab93884fc102b9078450afde345e2'; \
-         YML_FILE='sfj/linux/x86_64/index.yml'; \
+         ESUM='d9ad4dd78cde42b44a0e9ba91d6b85fb134b56fb30ef0009153cfba54778978e'; \
+         YML_FILE='8.0/sfj/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='b750f58b7623eb184602172122040128d534e3442e2b299670124f5be91cd0db'; \
-         YML_FILE='sfj/linux/i386/index.yml'; \
+         ESUM='59ada28d2bd89365f0eaf259cf587b9e9605c8407394e2945f84e574b94e0134'; \
+         YML_FILE='8.0/sfj/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='81a3e97371ce2fc85e2e07ad1498c9152a81bfe7d57fe074cd29ecc8df120f86'; \
-         YML_FILE='sfj/linux/ppc64le/index.yml'; \
+         ESUM='5e8adf7a5064549f06eb864dfea1d94a1e7fd96f1a971b8575b02593a15cb0c4'; \
+         YML_FILE='8.0/sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='8511e455579014b94a9d8fca686b2bd25391c1ff985cad7320206987b8d4178e'; \
-         YML_FILE='sfj/linux/s390/index.yml'; \
+         ESUM='98f091cf8228282f0b116ea8958129290f659ac360cf05f606ac3dfef3548a85'; \
+         YML_FILE='8.0/sfj/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='a4857271dfb8db4eb910dc14561789439a4777b8fe1c61a57112592398e6b95e'; \
-         YML_FILE='sfj/linux/s390x/index.yml'; \
+         ESUM='201faefc1f6b47d045889ff1610f70d09fdb07d1d4aa062cba8b32d41cd233b4'; \
+         YML_FILE='8.0/sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \

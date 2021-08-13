@@ -33,30 +33,30 @@ RUN yum makecache fast \
     && rm -rf /var/tmp/yum-*
 
 
-ENV JAVA_VERSION 1.8.0_sr6fp31
+ENV JAVA_VERSION 8.0.6.35
 
 RUN set -eux; \
     ARCH="$(arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='ed09900a0219b40ddfa06098118a701b8633dcf12588e13ff8b7d810ef2769dc'; \
-         YML_FILE='jre/linux/x86_64/index.yml'; \
+         ESUM='7c12c8fb9be1e2db061f24accfdf94644efcf3e2a8c9054e713c2970b03ab174'; \
+         YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
          ;; \
        i386) \
-         ESUM='95bf8be233306b046150b949d2a8b9ce604eb6f4a090aaa7bf54152181fcdc06'; \
-         YML_FILE='jre/linux/i386/index.yml'; \
+         ESUM='d744258a04be78f4d97210a2c161c27597ec81c47601352fbf2806ec2e65e221'; \
+         YML_FILE='8.0/jre/linux/i386/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='b6a57eff545b75f6fe164c0e96eab56d1a889ae7574e205230f84175b50f6c03'; \
-         YML_FILE='jre/linux/ppc64le/index.yml'; \
+         ESUM='216db2e766718bf6c752ef1f453a339c9eabec2a57e9570a56a933d2059761ed'; \
+         YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='2b2b73eef781996e570670a2dec541778647a2afb37b516c9a750e7857fc90aa'; \
-         YML_FILE='jre/linux/s390/index.yml'; \
+         ESUM='ef91c6d29f6387193b86a73ad07f95c3c765b667e45e82486f73a7a7d0d8507c'; \
+         YML_FILE='8.0/jre/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='70da4d42a8181e7a13ca63320acf856315b993f35222e34fa50032a270d472d4'; \
-         YML_FILE='jre/linux/s390x/index.yml'; \
+         ESUM='ee70074a97f36a39f655009d69f4e5de17e3ca6c7fedc6f1cefa6dcec9668373'; \
+         YML_FILE='8.0/jre/linux/s390x/index.yml'; \
          ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
