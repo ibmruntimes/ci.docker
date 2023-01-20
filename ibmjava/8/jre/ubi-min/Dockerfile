@@ -45,14 +45,6 @@ RUN set -eux; \
          ESUM='4abf605bdffc703f48c506177ee874da9498a4ee5ef322bfb9b4170b097bf2a8'; \
          YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
          ;; \
-       ppc64el|ppc64le) \
-         ESUM='052efe7ee98f17af3f027c11b9ef57edd136bf9431b8264a790d48cce905fffd'; \
-         YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
-         ;; \
-       s390x) \
-         ESUM='bea07ae6d8d56ad7ae2d4937bed352d39622d364be848a036b111fdf15e50cab'; \
-         YML_FILE='8.0/jre/linux/s390x/index.yml'; \
-         ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
          exit 1; \
