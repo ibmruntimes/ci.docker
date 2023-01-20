@@ -245,14 +245,6 @@ print_java_install() {
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
          YML_FILE='8.0/${srcpkg}/linux/x86_64/index.yml'; \\
          ;; \\
-       ppc64el|ppc64le) \\
-         ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='8.0/${srcpkg}/linux/ppc64le/index.yml'; \\
-         ;; \\
-       s390x) \\
-         ESUM='$(sarray=${shasums}[s390x]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='8.0/${srcpkg}/linux/s390x/index.yml'; \\
-         ;; \\
        *) \\
          echo "Unsupported arch: \${ARCH}"; \\
          exit 1; \\
@@ -265,10 +257,6 @@ EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
          YML_FILE='8.0/${srcpkg}/linux/x86_64/index.yml'; \\
-         ;; \\
-       i386) \\
-         ESUM='$(sarray=${shasums}[i386]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='8.0/${srcpkg}/linux/i386/index.yml'; \\
          ;; \\
        ppc64el|ppc64le) \\
          ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\

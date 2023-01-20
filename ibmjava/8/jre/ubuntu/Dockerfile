@@ -36,10 +36,6 @@ RUN set -eux; \
          ESUM='4abf605bdffc703f48c506177ee874da9498a4ee5ef322bfb9b4170b097bf2a8'; \
          YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
          ;; \
-       i386) \
-         ESUM='225a8406e9a3134eb8674206caa131a7d5f528de96797a7a0cf69e292465d205'; \
-         YML_FILE='8.0/jre/linux/i386/index.yml'; \
-         ;; \
        ppc64el|ppc64le) \
          ESUM='052efe7ee98f17af3f027c11b9ef57edd136bf9431b8264a790d48cce905fffd'; \
          YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
