@@ -37,7 +37,6 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
 ENV JAVA_VERSION 8.0.7.20
 
 RUN set -eux; \
-    useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
@@ -64,11 +63,8 @@ RUN set -eux; \
     rm -f /tmp/index.yml; \
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
-    chown -R 1001:0 /opt/ibm/java; \
     rm -f /tmp/ibm-java.bin;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH \
     IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
-
-USER 1001
