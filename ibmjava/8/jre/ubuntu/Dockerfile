@@ -19,7 +19,7 @@
 # limitations under the License.
 #
 
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 MAINTAINER Jayashree Gopi <jayasg12@in.ibm.com> (@jayasg12)
 
@@ -27,29 +27,25 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-ENV JAVA_VERSION 8.0.7.20
+ENV JAVA_VERSION 8.0.8.0
 
 RUN set -eux; \
     ARCH="$(dpkg --print-architecture)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='4abf605bdffc703f48c506177ee874da9498a4ee5ef322bfb9b4170b097bf2a8'; \
+         ESUM='39cf0ebeda2461c0ee81636d745643713a37863d729784c46a48b4eded4717fb'; \
          YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
          ;; \
-       i386) \
-         ESUM='225a8406e9a3134eb8674206caa131a7d5f528de96797a7a0cf69e292465d205'; \
-         YML_FILE='8.0/jre/linux/i386/index.yml'; \
-         ;; \
        ppc64el|ppc64le) \
-         ESUM='052efe7ee98f17af3f027c11b9ef57edd136bf9431b8264a790d48cce905fffd'; \
+         ESUM='bef3e93e4b1025e8350492fed0f6a5a743a2d35fbacdb7820cc539d24c891a4e'; \
          YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='47384a0933d2a60b0126eeb49c44be66124320f70355cd09a238a830906819ff'; \
+         ESUM='87d22ee3d2e20faa9854044aa46bf6be5d39f8ceb9ccf91574c7518f2535dfcb'; \
          YML_FILE='8.0/jre/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='bea07ae6d8d56ad7ae2d4937bed352d39622d364be848a036b111fdf15e50cab'; \
+         ESUM='227ada7516542c170a920bc78a416c1dc492cba4321a23f42bd7e640ddc890e5'; \
          YML_FILE='8.0/jre/linux/s390x/index.yml'; \
          ;; \
        *) \

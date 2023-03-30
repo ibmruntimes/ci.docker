@@ -33,7 +33,8 @@ update="y"
 machine=`uname -m`
 case $machine in
 x86_64)
-	arches="i386 x86_64"
+	arches="x86_64"
+##	arches="i386 x86_64"
 	;;
 s390x)
 	arches="s390x"
