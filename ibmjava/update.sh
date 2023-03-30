@@ -20,7 +20,7 @@ set -eo pipefail
 version="8"
 package="jre sdk sfj"
 tools="maven"
-arches="i386 ppc64le s390 s390x x86_64"
+arches="ppc64le s390 s390x x86_64"
 osver="ubuntu alpine rhel ubi ubi-min"
 
 # sha256sum for the various versions, packages and arches
@@ -265,10 +265,6 @@ EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
          YML_FILE='8.0/${srcpkg}/linux/x86_64/index.yml'; \\
-         ;; \\
-       i386) \\
-         ESUM='$(sarray=${shasums}[i386]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='8.0/${srcpkg}/linux/i386/index.yml'; \\
          ;; \\
        ppc64el|ppc64le) \\
          ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\
