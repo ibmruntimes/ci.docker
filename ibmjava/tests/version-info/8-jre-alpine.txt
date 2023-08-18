@@ -1,7 +1,7 @@
-java version "1.8.0_371"
-Java(TM) SE Runtime Environment (build 8.0.8.6 - pxa6480sr8fp6-20230601_01(SR8 FP6))
-IBM J9 VM (build 2.9, JRE 1.8.0 Linux amd64-64-Bit Compressed References 20230529_51985 (JIT enabled, AOT enabled)
-OpenJ9   - 884d27c
-OMR      - ce9522f
-IBM      - b7435ac)
-JCL - 20230329_01 based on Oracle jdk8u371-b11
+java version "1.8.0_381"
+Java(TM) SE Runtime Environment (build 8.0.8.11 - pxa6480sr8fp11-20230901_01(SR8 FP11))
+IBM J9 VM (build 2.9, JRE 1.8.0 Linux amd64-64-Bit Compressed References 20230817_56476 (JIT enabled, AOT enabled)
+OpenJ9   - c425e1c
+OMR      - e712c65
+IBM      - 696e9df)
+JCL - 20230811_01 based on Oracle jdk8u381-b09

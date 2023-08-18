@@ -1,6 +1,4 @@
 ---
-8.0.7.16: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.7.16/linux/x86_64/ibm-java-jre-8.0-7.16-x86_64-archive.bin
-8.0.7.20: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.7.20/linux/x86_64/ibm-java-jre-8.0-7.20-x86_64-archive.bin
-8.0.8.0: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.8.0/linux/x86_64/ibm-java-jre-8.0-8.0-x86_64-archive.bin
-8.0.8.5: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.8.5/linux/x86_64/ibm-java-jre-8.0-8.5-x86_64-archive.bin
 8.0.8.6: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.8.6/linux/x86_64/ibm-java-jre-8.0-8.6-x86_64-archive.bin
+8.0.8.10: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.8.10/linux/x86_64/ibm-java-jre-8.0-8.10-x86_64-archive.bin
+8.0.8.11: https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/8.0.8.11/linux/x86_64/ibm-java-jre-8.0-8.11-x86_64-archive.bin
