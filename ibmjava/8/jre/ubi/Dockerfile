@@ -28,29 +28,21 @@ RUN yum install -y wget openssl ca-certificates gzip tar \
 LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=8.0.8.15 \ 
+    version=8.0.8.20 \ 
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 8.0.8.15
+ENV JAVA_VERSION 8.0.8.20
 
 RUN set -eux; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='1dc53734a8eda994550cb6d12943006e8e92b2df07bd1cb2a4fe0043d0d70da5'; \
+         ESUM='a5245fa2b6c500d9ca470b1ca36c88b8968d8e80956e439f4b09cad6dd5be132'; \
          YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
-         ;; \
-       ppc64el|ppc64le) \
-         ESUM='4729ace6e5a07e3d6709388aa9a17fc5cbc0ac2279e212cef6af72b7a508773d'; \
-         YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
-         ;; \
-       s390x) \
-         ESUM='2520441c3c7d5c15679b597148069666fbd096f7a005cbe255f5d1dd0c2b45da'; \
-         YML_FILE='8.0/jre/linux/s390x/index.yml'; \
          ;; \
        *) \
          echo "Unsupported arch: ${ARCH}"; \
@@ -60,20 +52,15 @@ RUN set -eux; \
     BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"; \
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
     JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
-    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin ${JAVA_URL}; \
-    echo "${ESUM}  /tmp/ibm-java.bin" | sha256sum -c -; \
-    echo "INSTALLER_UI=silent" > /tmp/response.properties; \
-    echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties; \
-    echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties; \
-    mkdir -p /opt/ibm; \
-    chmod +x /tmp/ibm-java.bin; \
-    /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
-    rm -f /tmp/response.properties; \
+    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.tgz ${JAVA_URL}; \
+    echo "${ESUM}  /tmp/ibm-java.tgz" | sha256sum -c -; \
+    mkdir -p /opt/ibm/java; \
+    tar -xf /tmp/ibm-java.tgz -C /opt/ibm/java --strip-components=1; \
     rm -f /tmp/index.yml; \
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
     chown -R 1001:0 /opt/ibm/java; \
-    rm -f /tmp/ibm-java.bin;
+    rm -f /tmp/ibm-java.tgz;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/jre/bin:$PATH \
