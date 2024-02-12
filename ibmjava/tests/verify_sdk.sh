@@ -121,15 +121,15 @@ function match_shasums() {
 		do
 			yml_file="public.dhe.ibm.com/meta/8.0/$pkg/linux/$arch/index.yml"
 			pack_url=`grep -A 1 "$full_version" $yml_file | grep "uri:" | awk '{ print $2 }'`
-			rm -f ibm-java.bin
+			rm -f ibm-java.tgz
+			mkdir -p ./java-test
 			echo -n "Downloading $pkg for $arch..."
-			wget -q -O ibm-java.bin $pack_url
+			wget -q -O ibm-java.tgz $pack_url
 			echo "done"
 			ESUM=`grep -A 6 "$pkg" shasums-$full_version.txt | grep $arch | awk -F '"' '{ print $2 }'`
-			echo "$ESUM  ibm-java.bin" | sha256sum -c -
+			echo "$ESUM  ibm-java.tgz" | sha256sum -c -
 			echo -n "Installing $pkg for $arch..."
-			chmod +x ibm-java.bin
-			./ibm-java.bin -i silent -f response.properties
+			tar -xf ibm-java.tgz -C ./java-test/ --strip-components=1; \
 			echo "done"
 			echo
 			if [ "$arch" == "x86_64" ]; then
@@ -181,5 +181,5 @@ if [ "$var_bump" == "Y" ]; then
 	update_yml
 fi
 # clean up
-rm -rf ibm-java.bin java-test public.dhe.ibm.com response.properties
+rm -rf ibm-java.tgz java-test public.dhe.ibm.com response.properties
 popd >/dev/null

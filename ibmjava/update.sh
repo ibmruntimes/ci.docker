@@ -26,30 +26,30 @@ osver="ubuntu alpine rhel ubi ubi-min"
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
 declare -A jre_8_sums=(
-	[version]="8.0.8.15"
-	[i386]="cf22b535557b56b61a8461f2663949185f81e79c2e481eb3ad37018f76fde79b"
-	[ppc64le]="4729ace6e5a07e3d6709388aa9a17fc5cbc0ac2279e212cef6af72b7a508773d"
-	[s390]="63e421501c7954bc0d8a5a772593b9b2f74c2c9d93e123775d7439f5761575ff"
-	[s390x]="2520441c3c7d5c15679b597148069666fbd096f7a005cbe255f5d1dd0c2b45da"
-	[x86_64]="1dc53734a8eda994550cb6d12943006e8e92b2df07bd1cb2a4fe0043d0d70da5"
+	[version]="8.0.8.20"
+	[i386]="2f12b1e6b9b39c66972c563acd39083387fbbfca05f0792fd5b2d104669efd5c"
+	[ppc64le]="db0f736f644a137218a452a039160a57b752fa338eb78e131948950750a226dc"
+	[s390]="c2826f490be3b6e34d71e6e1e20e35c7afe200693bce2139873a78cdd00547f7"
+	[s390x]="4270b39c020b3830d0cd8b42f8b7f066b781375fd907d88843fb53c980dfb431"
+	[x86_64]="a5245fa2b6c500d9ca470b1ca36c88b8968d8e80956e439f4b09cad6dd5be132"
 )
 
 declare -A sdk_8_sums=(
-	[version]="8.0.8.15"
-	[i386]="d3163ea2e78fb53f31ecaf21dc6d9e130c6182a844ae89006884559f525e26e1"
-	[ppc64le]="e99e4ec913d12721a55c4dbb92436fc6648f92201d0c8b4a2b386a53e69e4cc3"
-	[s390]="0a63c32364621f11ebfd40a8d42b5226e6740d8e8814f2e6ac10c9c82a677360"
-	[s390x]="9e43e3720c1dbdb57e1a4eb235b15d53bad228ab8be856aa055d8aa1f1158655"
-	[x86_64]="7ccef7b1efc09c73b9afc68ba3f8012a554cf2eff0d60655ffb7dafe3c3f562a"
+	[version]="8.0.8.20"
+	[i386]="18ca6cb99b96f4fd8ac41c939c7ba75e7a5df1082e83c22989d2c336bee37d6d"
+	[ppc64le]="eb3b880f1b6a19bd418b9e8cefefc13455c9e205f17c78a0169b0d376d1e594e"
+	[s390]="645eac2657371e4cb55e437a5835e80a29be66e64603698a4db0c8c92558c753"
+	[s390x]="bebd9e9f5334339a32b69e1293368afee2c606ec01dcafeccb3a18c5667236bc"
+	[x86_64]="b1f62bdb0a919da6b5a8db56d6dc6df4c019e7d099df59ea6b35df4b3e7b21ab"
 )
 
 declare -A sfj_8_sums=(
-	[version]="8.0.8.15"
-	[i386]="14b60c7cc00ecf447b937fc30faece4236de76e19d2291d9e1016d72e241cfc8"
-	[ppc64le]="2374333392f57392aa2c6f688f3ba24004b8c12f3a7008a2a18ba9162e091a29"
-	[s390]="f6009d492ac5f8dd5a51f6a6717ac36b47b26fbec53d931ad651b2078c4a23b8"
-	[s390x]="7f7f2891f14b662369b4a2edb55da09b5d37a7099ed193bb765e2cba8c7d8e9a"
-	[x86_64]="e29101d0d3ccb9c91989fe87f557595f4feea873b56cbb40780ed3cc14bc57d1"
+	[version]="8.0.8.20"
+	[i386]="10f82cb48f6f6272366bfebe625665ca80383c20438b86717c7795e00d8d9817"
+	[ppc64le]="a4d6bdb8dcf011f327b48012306348924e83ed4de5bc0ca4afc16ef94b48eb74"
+	[s390]="6b6c31fcbbf22b579bb00203a2c643a444fe99f8b48b1b089249fd3ff16402ce"
+	[s390x]="116dd00607ea28327b2b1b1fa77e341d9da693706f1ab93dfbfdb24c352063ec"
+	[x86_64]="c8055351ef6f0e475c934a1aed1d8cb8aa5c493d58dccaa9b6e9b10b58d7865f"
 )
 
 # Version 9 sums [DO NO EDIT THIS LINE]
@@ -290,15 +290,10 @@ EOI
 	cat >> $1 <<'EOI'
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
     JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
-    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin ${JAVA_URL}; \
-    echo "${ESUM}  /tmp/ibm-java.bin" | sha256sum -c -; \
-    echo "INSTALLER_UI=silent" > /tmp/response.properties; \
-    echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties; \
-    echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties; \
-    mkdir -p /opt/ibm; \
-    chmod +x /tmp/ibm-java.bin; \
-    /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
-    rm -f /tmp/response.properties; \
+    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.tgz ${JAVA_URL}; \
+    echo "${ESUM}  /tmp/ibm-java.tgz" | sha256sum -c -; \
+    mkdir -p /opt/ibm/java; \
+    tar -xf /tmp/ibm-java.tgz -C /opt/ibm/java --strip-components=1; \
     rm -f /tmp/index.yml; \
 EOI
 	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
@@ -318,7 +313,7 @@ EOI
 	# For Java 9 JRE, use jlink with the java.se.ee aggregator module.
 	if [ "${ver}" == "9" ]; then
 		if [ "${dstpkg}" == "jre" ]; then
-			JCMD="rm -f /tmp/ibm-java.bin; \\
+			JCMD="rm -f /tmp/ibm-java.tgz; \\
     cd /opt/ibm; \\
     ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.se.ee --output jre; \\
     rm -rf java/*; \\
@@ -326,18 +321,18 @@ EOI
 
 		# For Java 9 SFJ, use jlink with sfj-exclude.txt.
 		elif [ "${dstpkg}" == "sfj" ]; then
-			JCMD="rm -f /tmp/ibm-java.bin; \\
+			JCMD="rm -f /tmp/ibm-java.tgz; \\
     cd /opt/ibm; \\
     ./java/bin/jlink -G --module-path ./java/jmods --add-modules java.activation,java.base,java.compiler,java.datatransfer,java.desktop,java.instrument,java.logging,java.management,java.naming,java.prefs,java.rmi,java.security.jgss,java.security.sasl,java.sql,java.xml.crypto,java.xml,com.ibm.management --exclude-files=@/tmp/sfj-exclude.txt --output jre; \\
     rm -rf java/* /tmp/sfj-exclude.txt; \\
     mv jre java;"
 		else
-			JCMD="rm -f /tmp/ibm-java.bin;"
+			JCMD="rm -f /tmp/ibm-java.tgz;"
 		fi
 
 	# For other Java versions, nothing to be done.
 	else
-		JCMD="rm -f /tmp/ibm-java.bin;"
+		JCMD="rm -f /tmp/ibm-java.tgz;"
 	fi
 
 	cat >> $1 <<EOI

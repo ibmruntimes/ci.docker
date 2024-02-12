@@ -44,26 +44,26 @@ RUN apk add --no-cache --virtual .build-deps curl binutils \
     && apk add --no-cache ca-certificates openssl \
     && rm -rf /tmp/${GLIBC_VER}.apk /tmp/gcc /tmp/gcc-libs.tar.xz /var/cache/apk/* /tmp/*.pub
 
-ENV JAVA_VERSION 8.0.8.15
+ENV JAVA_VERSION 8.0.8.20
 
 RUN set -eux; \
     apk --no-cache add --virtual .build-deps wget; \
     ARCH="$(apk --print-arch)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='7ccef7b1efc09c73b9afc68ba3f8012a554cf2eff0d60655ffb7dafe3c3f562a'; \
+         ESUM='b1f62bdb0a919da6b5a8db56d6dc6df4c019e7d099df59ea6b35df4b3e7b21ab'; \
          YML_FILE='8.0/sdk/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='e99e4ec913d12721a55c4dbb92436fc6648f92201d0c8b4a2b386a53e69e4cc3'; \
+         ESUM='eb3b880f1b6a19bd418b9e8cefefc13455c9e205f17c78a0169b0d376d1e594e'; \
          YML_FILE='8.0/sdk/linux/ppc64le/index.yml'; \
          ;; \
        s390) \
-         ESUM='0a63c32364621f11ebfd40a8d42b5226e6740d8e8814f2e6ac10c9c82a677360'; \
+         ESUM='645eac2657371e4cb55e437a5835e80a29be66e64603698a4db0c8c92558c753'; \
          YML_FILE='8.0/sdk/linux/s390/index.yml'; \
          ;; \
        s390x) \
-         ESUM='9e43e3720c1dbdb57e1a4eb235b15d53bad228ab8be856aa055d8aa1f1158655'; \
+         ESUM='bebd9e9f5334339a32b69e1293368afee2c606ec01dcafeccb3a18c5667236bc'; \
          YML_FILE='8.0/sdk/linux/s390x/index.yml'; \
          ;; \
        *) \
@@ -74,17 +74,12 @@ RUN set -eux; \
     BASE_URL="https://public.dhe.ibm.com/ibmdl/export/pub/systems/cloud/runtimes/java/meta/"; \
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
     JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
-    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.bin ${JAVA_URL}; \
-    echo "${ESUM}  /tmp/ibm-java.bin" | sha256sum -c -; \
-    echo "INSTALLER_UI=silent" > /tmp/response.properties; \
-    echo "USER_INSTALL_DIR=/opt/ibm/java" >> /tmp/response.properties; \
-    echo "LICENSE_ACCEPTED=TRUE" >> /tmp/response.properties; \
-    mkdir -p /opt/ibm; \
-    chmod +x /tmp/ibm-java.bin; \
-    /tmp/ibm-java.bin -i silent -f /tmp/response.properties; \
-    rm -f /tmp/response.properties; \
+    wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.tgz ${JAVA_URL}; \
+    echo "${ESUM}  /tmp/ibm-java.tgz" | sha256sum -c -; \
+    mkdir -p /opt/ibm/java; \
+    tar -xf /tmp/ibm-java.tgz -C /opt/ibm/java --strip-components=1; \
     rm -f /tmp/index.yml; \
-    rm -f /tmp/ibm-java.bin; \
+    rm -f /tmp/ibm-java.tgz; \
     apk del .build-deps;
 
 ENV JAVA_HOME=/opt/ibm/java/jre \
