@@ -222,7 +222,7 @@ print_env() {
 LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \\
     name="IBM JAVA" \\
     vendor="IBM" \\
-    version=${jver} \ 
+    version=${jver} \\
     release=${ver} \\
     run="docker run --rm -ti <image_name:tag> /bin/bash" \\
     summary="Image for IBM JAVA with UBI as the base image" \\
