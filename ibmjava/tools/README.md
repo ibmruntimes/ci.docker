@@ -18,8 +18,8 @@ Need the following setup to be in place on a local host to create/pull the docke
 
 #### ppc64le
 
-* Install Docker. 
-  * Ubuntu 16.04 is recommended. 
+* Install Docker.
+  * Ubuntu 16.04 is recommended.
   ```console
   $ sudo apt-get install docker.io
   ```

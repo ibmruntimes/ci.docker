@@ -191,7 +191,7 @@ function get_source_image() {
 function update_target() {
 	stag=$1
 	ttag=$2
-	
+
 	# Ignore alpine on non x86_64
 	if [[ "$stag" == *alpine ]]; then
 		if [ $machine != "x86_64" ]; then
@@ -199,7 +199,7 @@ function update_target() {
 		fi
 	fi
 
-	# Download the source image with the given tag locally. 
+	# Download the source image with the given tag locally.
 	get_source_image $source_repo $stag
 
 	retag $stag $ttag

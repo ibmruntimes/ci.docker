@@ -1,6 +1,6 @@
 # Pushing a Java Tomcat application built using Maven to IBM Containers on Bluemix.
 
-This consists of an example Java web application based on tomcat that is available on github. The sources are downloaded and built using the IBM Maven Docker image and then packaged with an IBM Java sfj-alpine Docker image. This image is then pushed to IBM Containers on Bluemix. 
+This consists of an example Java web application based on tomcat that is available on github. The sources are downloaded and built using the IBM Maven Docker image and then packaged with an IBM Java sfj-alpine Docker image. This image is then pushed to IBM Containers on Bluemix.
 
 ### Overview
 
