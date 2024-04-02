@@ -78,28 +78,28 @@ function get_full_version_from_meta_info() {
 
 function get_shasums() {
 	echo -n "Locating the shasums for version: $full_version..."
-	find . -name "index.yml" -exec cat {} \; | 
-			grep -A 2 "$full_version" | 
-			awk '{ 
-					if (match($1, "uri:") > 0) { 
-						printf "%s ", $2 
-					} else if (match($1, "sha256sum") > 0) { 
-						printf "%s\n", $2 
-					} 
+	find . -name "index.yml" -exec cat {} \; |
+			grep -A 2 "$full_version" |
+			awk '{
+					if (match($1, "uri:") > 0) {
+						printf "%s ", $2
+					} else if (match($1, "sha256sum") > 0) {
+						printf "%s\n", $2
+					}
 			}' |
 			awk -F"/" '{ print $11,$13,$14 }' |
 			awk '{ printf"%s %s %s %s\n", substr($3, 10, 3), $1, $2, $4 }' | sort |
 			awk 'BEGIN { fver=ENVIRON["full_version"]; mver=ENVIRON["version"]; }
-				{ 
-				if (packages != $1) { 
-					if (NR != 1) { 
-						printf")\n\n" 
-					} 
-					packages=$1; 
+				{
+				if (packages != $1) {
+					if (NR != 1) {
+						printf")\n\n"
+					}
+					packages=$1;
 					printf "declare -A %s_%s_sums=(\n\t[version]=\"%s\"\n\t[%s]=\"%s\"\n", $1, mver, fver, $3, $4
-				} else { 
-					printf"\t[%s]=\"%s\"\n", $3, $4 
-				} 
+				} else {
+					printf"\t[%s]=\"%s\"\n", $3, $4
+				}
 			} END { printf")\n" }' > $sumsfile
 	echo "done"
 
