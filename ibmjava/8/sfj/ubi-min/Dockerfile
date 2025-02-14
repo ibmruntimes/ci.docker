@@ -25,7 +25,8 @@ FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 RUN microdnf install openssl wget ca-certificates gzip tar \
     && microdnf update; microdnf clean all
 
-LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \
+LABEL org.opencontainers.image.authors="Jayashree Gopi" \
+    maintainer="jayasg12@in.ibm.com" \
     name="IBM JAVA" \
     vendor="IBM" \
     version=8.0.8.40 \

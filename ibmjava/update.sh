@@ -219,7 +219,8 @@ print_env() {
 
 	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" ]; then
 		cat >> $1 <<-EOI
-LABEL org.opencontainers.image.authors="Jayashree Gopi <jayasg12@in.ibm.com>" \\
+LABEL org.opencontainers.image.authors="Jayashree Gopi" \\
+    maintainer="jayasg12@in.ibm.com" \\
     name="IBM JAVA" \\
     vendor="IBM" \\
     version=${jver} \\
