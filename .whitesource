@@ -1,0 +1,49 @@
+{
+  "settingsInheritedFrom": "whitesource-config/whitesource-config@master",
+  "scanSettings": {
+    "configMode": "LOCAL",
+    "baseBranches": ["main"],
+    "includePatterns": ["**/Dockerfile"]
+  },
+  "scanSettingsSAST": {
+    "enableScan": true,
+    "enableRemediation": true,
+    "scanPullRequests": true,
+    "incrementalScan": true,
+    "baseBranches": ["main"],
+    "snippetSize": 10
+  },
+  "checkRunSettings": {
+    "vulnerableCheckRunConclusionLevel": "failure",
+    "displayMode": "diff",
+    "useMendCheckNames": true
+  },
+  "checkRunSettingsSAST": {
+    "checkRunConclusionLevel": "failure",
+    "severityThreshold": "HIGH"
+  },
+  "issueSettings": {
+    "minSeverityLevel": "LOW",
+    "issueType": "DEPENDENCY"
+  },
+  "issueSettingsSAST": {
+    "minSeverityLevel": "HIGH",
+    "issueType": "repo"
+  },
+  "remediateSettings": {
+    "workflowRules": {
+      "enabled": true
+    }
+  },
+  "imageSettings":{
+    "imageTracing":{
+      "enableImageTracingPR": true,
+      "addRepositoryCoordinate": true,
+      "addDockerfilePath": true,
+      "addMendIdentifier": true
+     },
+     "workflowRules": {
+      "enabled": false
+    }     
+  }
+}
