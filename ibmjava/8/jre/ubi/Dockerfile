@@ -29,28 +29,28 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi" \
     maintainer="jayasg12@in.ibm.com" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=8.0.8.40 \
+    version=8.0.8.45 \
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 8.0.8.40
+ENV JAVA_VERSION 8.0.8.45
 
 RUN set -eux; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='20797bfcc79f9a5db0b83469f9d2dc90179ca8ef69d300d1a9f461f2e0ad49e2'; \
+         ESUM='06679e59bc2ed91a926de6c2d3b3503d6527f0db5b572e1918fa6ccce64248c3'; \
          YML_FILE='8.0/jre/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='cd5b5435261af9a88e900b7780b79da4faf4b5b5dc573b3eb1106eec11a5f741'; \
+         ESUM='5fe78fcd5e5042d8dab6b049b2bdd0c399538788ca59e54ef29d3fa28ba9a2b1'; \
          YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='6583c6e0bb859988ac10a2135c4700aaf069181d98b0a6d80414a17a6810e6e1'; \
+         ESUM='d2d37a14471206e95564f2ac443f7cdbc984ed7d18275a6775493d0acf28e0b1'; \
          YML_FILE='8.0/jre/linux/s390x/index.yml'; \
          ;; \
        *) \
