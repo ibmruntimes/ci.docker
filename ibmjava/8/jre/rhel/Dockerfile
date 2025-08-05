@@ -46,10 +46,6 @@ RUN set -eux; \
          ESUM='55de3054399a593a8561a9a6a8d4ebb3820acd0309da1974a51db184f4ab88f2'; \
          YML_FILE='8.0/jre/linux/ppc64le/index.yml'; \
          ;; \
-       s390) \
-         ESUM=''; \
-         YML_FILE='8.0/jre/linux/s390/index.yml'; \
-         ;; \
        s390x) \
          ESUM='8094b571b52e9a77a693ca7130fa1267187bced19fcb1ba7a20bf33bb30eca41'; \
          YML_FILE='8.0/jre/linux/s390x/index.yml'; \
