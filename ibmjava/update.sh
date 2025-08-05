@@ -20,7 +20,7 @@ set -eo pipefail
 version="8"
 package="jre sdk sfj"
 tools="maven"
-arches="ppc64le s390 s390x x86_64"
+arches="ppc64le s390x x86_64"
 osver="ubuntu alpine rhel ubi ubi-min"
 
 # sha256sum for the various versions, packages and arches
@@ -54,7 +54,6 @@ declare -A sdk_9_sums=(
 	[version]="1.9.0_ea2"
 	[i386]="5add39cc5ca56b97cf8ce71b9e1a15d19d36864aaed1e0296f50355ba3f34bd5"
 	[ppc64le]="3c0dda9f449a667d12fe5f59a1ec059a90a9dc483fd35eef5ff53dd8b096cdf5"
-	[s390]="8d06af57d8236839f5c403c12dcf4c89e22dd91716a4d26b85c8d92f6d1e2e8b"
 	[s390x]="6e823afa1df83e364381f827f4244bfe29b0ddd58ef0203eb60df9b8c0d123af"
 	[x86_64]="0fe3712b54a93695cf4948d9ae171bf5cef038c0e41b364b4e9eb7cb80a60688"
 )
@@ -267,10 +266,6 @@ EOI
        ppc64el|ppc64le) \\
          ESUM='$(sarray=${shasums}[ppc64le]; eval esum=\${$sarray}; echo ${esum})'; \\
          YML_FILE='8.0/${srcpkg}/linux/ppc64le/index.yml'; \\
-         ;; \\
-       s390) \\
-         ESUM='$(sarray=${shasums}[s390]; eval esum=\${$sarray}; echo ${esum})'; \\
-         YML_FILE='8.0/${srcpkg}/linux/s390/index.yml'; \\
          ;; \\
        s390x) \\
          ESUM='$(sarray=${shasums}[s390x]; eval esum=\${$sarray}; echo ${esum})'; \\
