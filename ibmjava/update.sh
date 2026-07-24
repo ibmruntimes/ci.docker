@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# (C) Copyright IBM Corporation 2016, 2019
+# (C) Copyright IBM Corporation 2016, 2026
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ version="8"
 package="jre sdk sfj"
 tools="maven"
 arches="ppc64le s390x x86_64"
-osver="ubuntu alpine rhel ubi ubi-min"
+osver="ubuntu alpine rhel ubi ubi-min ubi-micro"
 
 # sha256sum for the various versions, packages and arches
 # Version 8 sums [DO NO EDIT THIS LINE]
@@ -61,7 +61,7 @@ declare -A sdk_9_sums=(
 # Generate the common license and copyright header
 print_legal() {
 	cat > $1 <<-EOI
-	# (C) Copyright IBM Corporation 2016, 2019
+	# (C) Copyright IBM Corporation 2016, 2026
 	#
 	# ------------------------------------------------------------------------------
 	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
@@ -112,15 +112,24 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
+	FROM registry.access.redhat.com/ubi10/ubi-minimal:latest
 
 	EOI
 }
 
-# Print the supported UBI Minimal OS
+# Print the supported UBI OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi8/ubi:latest
+	FROM registry.access.redhat.com/ubi10/ubi:latest
+
+	EOI
+}
+
+# Print the supported UBI Micro OS (builder stage uses ubi-minimal)
+print_ubi-micro_os() {
+	cat >> $1 <<-EOI
+
+	FROM registry.access.redhat.com/ubi10/ubi-minimal AS builder
 
 	EOI
 }
@@ -190,7 +199,7 @@ EOI
 print_ubi-min_pkg() {
 	cat >> $1 <<'EOI'
 
-RUN microdnf install openssl wget ca-certificates gzip tar \
+RUN microdnf install -y openssl wget ca-certificates gzip tar \
     && microdnf update; microdnf clean all
 
 EOI
@@ -206,6 +215,46 @@ RUN yum install -y wget openssl ca-certificates gzip tar \
 EOI
 }
 
+# Select the ubi-micro OS packages (two RUN blocks)
+# Block 1: install build tools (curl, gzip, tar) into builder itself
+# Block 2: install openssl and ca-certificates into /mnt/rootfs (separate root filesystem)
+print_ubi-micro_pkg() {
+	cat >> $1 <<'EOI'
+RUN microdnf install -y \
+    curl \
+    gzip \
+    tar \
+    && microdnf clean all
+
+RUN microdnf install -y \
+    --installroot /mnt/rootfs \
+    --releasever 10 \
+    --config /etc/dnf/dnf.conf \
+    --noplugins \
+    --setopt=reposdir=/etc/yum.repos.d \
+    --setopt=cachedir=/var/cache/dnf \
+    --setopt=varsdir=/etc/dnf/vars \
+    --setopt=install_weak_deps=0 \
+    --nodocs \
+    openssl \
+    ca-certificates \
+    && microdnf clean all \
+    --installroot /mnt/rootfs \
+    --config /etc/dnf/dnf.conf \
+    --noplugins \
+    --setopt=reposdir=/etc/yum.repos.d \
+    --setopt=cachedir=/var/cache/dnf \
+    --setopt=varsdir=/etc/dnf/vars \
+    && rm -rf \
+    /mnt/rootfs/var/cache/dnf \
+    /mnt/rootfs/var/lib/dnf \
+    /mnt/rootfs/var/log/dnf* \
+    /mnt/rootfs/var/log/hawkey.log \
+    /var/cache/dnf
+
+EOI
+}
+
 # Print the Java version that is being installed here
 print_env() {
 	srcpkg=$2
@@ -213,8 +262,8 @@ print_env() {
 	jverinfo=${shasums}[version]
 	eval jver=\${$jverinfo}
 
-	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" ]; then
-		cat >> $1 <<-EOI
+	if [ "${os}" == "ubi-min" -o "${os}" == "ubi" -o "${os}" == "ubi-micro" ]; then
+        cat >> $1 <<-EOI
 LABEL org.opencontainers.image.authors="Jayashree Gopi" \\
     maintainer="jayasg12@in.ibm.com" \\
     name="IBM JAVA" \\
@@ -222,7 +271,7 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi" \\
     version=${jver} \\
     release=${ver} \\
     run="docker run --rm -ti <image_name:tag> /bin/bash" \\
-    summary="Image for IBM JAVA with UBI as the base image" \\
+    summary="Image for IBM JAVA with UBI 10 Micro as the base image" \\
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 EOI
 	fi
@@ -236,7 +285,7 @@ EOI
 # OS independent portion (Works for UBI, Alpine and Ubuntu)
 # For Java 9 we use jlink to derive the JRE and the SFJ images.
 print_java_install() {
-	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
+	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" -o "${os}" == "ubi-micro" ]; then
 		cat >> $1 <<-EOI
        amd64|x86_64) \\
          ESUM='$(sarray=${shasums}[x86_64]; eval esum=\${$sarray}; echo ${esum})'; \\
@@ -280,7 +329,19 @@ EOI
 EOI
 	fi
 
-	cat >> $1 <<'EOI'
+	# ubi-micro uses curl instead of wget
+	if [ "${os}" == "ubi-micro" ]; then
+		cat >> $1 <<'EOI'
+    curl -sL -A "UA_IBM_JAVA_Docker" -o /tmp/index.yml "${BASE_URL}/${YML_FILE}" && \
+    JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
+    curl -sL -A "UA_IBM_JAVA_Docker" -o /tmp/ibm-java.tgz "${JAVA_URL}" && \
+    echo "${ESUM}  /tmp/ibm-java.tgz" | sha256sum -c -; \
+    mkdir -p /opt/ibm/java; \
+    tar -xf /tmp/ibm-java.tgz -C /opt/ibm/java --strip-components=1; \
+    rm -f /tmp/index.yml; \
+EOI
+	else
+		cat >> $1 <<'EOI'
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/index.yml ${BASE_URL}/${YML_FILE}; \
     JAVA_URL=$(sed -n '/^'${JAVA_VERSION}:'/{n;s/\s*uri:\s//p}'< /tmp/index.yml); \
     wget -q -U UA_IBM_JAVA_Docker -O /tmp/ibm-java.tgz ${JAVA_URL}; \
@@ -289,14 +350,16 @@ EOI
     tar -xf /tmp/ibm-java.tgz -C /opt/ibm/java --strip-components=1; \
     rm -f /tmp/index.yml; \
 EOI
-	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" ]; then
+	fi
+
+	if [ "${os}" == "ubi" -o "${os}" == "ubi-min" -o "${os}" == "ubi-micro" ]; then
 		cat >> $1 <<'EOI'
     mkdir -p /licenses; \
     cp /opt/ibm/java/license_en.txt /licenses; \
     chown -R 1001:0 /opt/ibm/java; \
 EOI
 	fi
-	if [ "${os}" == "ubi-min" ]; then
+	if [ "${os}" == "ubi-min" -o "${os}" == "ubi-micro" ]; then
 	        cat >> $1 <<'EOI'
     microdnf -y remove shadow-utils; \
     microdnf clean all; \
@@ -403,6 +466,34 @@ EOI
 	print_java_install ${file} ${srcpkg} ${dstpkg};
 }
 
+# Print the main RUN command that installs Java on ubi-micro.
+print_ubi-micro_java_install() {
+	srcpkg=$2
+	dstpkg=$3
+	shasums="${srcpkg}"_"${ver}"_sums
+	cat >> $1 <<'EOI'
+RUN set -eux; \
+    microdnf -y install shadow-utils; \
+    useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
+    ARCH="$(uname -m)"; \
+    case "${ARCH}" in \
+EOI
+	print_java_install ${file} ${srcpkg} ${dstpkg};
+}
+
+# Print the final stage for ubi-micro
+# Uses /mnt/rootfs (pre-populated with openssl/ca-certs) instead of individual COPY lines
+print_ubi-micro_final_stage() {
+	cat >> $1 <<'EOI'
+
+FROM registry.access.redhat.com/ubi10/ubi-micro
+
+COPY --from=builder /mnt/rootfs /
+COPY --from=builder /opt/ibm/java /opt/ibm/java
+COPY --from=builder /licenses /licenses
+EOI
+}
+
 print_java_env() {
 	if [ "${pack}" == "sdk" ]; then
 		if [ "${ver}" == "8" ]; then
@@ -465,8 +556,13 @@ elif [ "${os}" == "ubi" ]; then
 		print_ubi_java_install ${file} ${srcpkg} ${dstpkg};
 elif [ "${os}" == "ubi-min" ]; then
 		print_ubi-min_java_install ${file} ${srcpkg} ${dstpkg};
+elif [ "${os}" == "ubi-micro" ]; then
+		print_ubi-micro_java_install ${file} ${srcpkg} ${dstpkg};
 fi
-	print_java_env ${file};
+
+if [ "${os}" != "ubi-micro" ]; then
+		print_java_env ${file};
+fi
 }
 
 generate_ubuntu() {
@@ -530,6 +626,20 @@ generate_ubi-min() {
 	echo "done"
 }
 
+generate_ubi-micro() {
+	file=$1
+	mkdir -p `dirname ${file}` 2>/dev/null
+	echo -n "Writing ${file}..."
+	print_legal ${file};
+	print_ubi-micro_os ${file};
+	print_ubi-micro_pkg ${file};
+	generate_java ${file};
+	print_ubi-micro_final_stage ${file};
+	print_java_env ${file};
+	print_user ${file};
+	echo "done"
+}
+
 # Print the ibmjava image version
 print_java() {
 	cat >> $1 <<-EOI
@@ -588,6 +698,8 @@ do
 				generate_ubi ${file}
 			elif [ "${os}" == "ubi-min" ]; then
 				generate_ubi-min ${file}
+			elif [ "${os}" == "ubi-micro" ]; then
+				generate_ubi-micro ${file}
 			fi
 		done
 	done
