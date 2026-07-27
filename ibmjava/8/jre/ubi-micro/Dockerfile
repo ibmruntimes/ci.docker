@@ -1,4 +1,4 @@
-# (C) Copyright IBM Corporation 2016, 2026
+# (C) Copyright IBM Corporation 2026
 #
 # ------------------------------------------------------------------------------
 #               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"

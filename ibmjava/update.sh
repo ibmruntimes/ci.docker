@@ -85,6 +85,33 @@ print_legal() {
 	EOI
 }
 
+# Generate the license and copyright header for ubi-micro
+print_legal_ubi-micro() {
+	cat > $1 <<-EOI
+	# (C) Copyright IBM Corporation 2026
+	#
+	# ------------------------------------------------------------------------------
+	#               NOTE: THIS DOCKERFILE IS GENERATED VIA "update.sh"
+	#
+	#                       PLEASE DO NOT EDIT IT DIRECTLY.
+	# ------------------------------------------------------------------------------
+	#
+	# Licensed under the Apache License, Version 2.0 (the "License");
+	# you may not use this file except in compliance with the License.
+	# You may obtain a copy of the License at
+	#
+	#      http://www.apache.org/licenses/LICENSE-2.0
+	#
+	# Unless required by applicable law or agreed to in writing, software
+	# distributed under the License is distributed on an "AS IS" BASIS,
+	# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+	# See the License for the specific language governing permissions and
+	# limitations under the License.
+	#
+
+	EOI
+}
+
 # Print the supported Ubuntu OS
 print_ubuntu_os() {
 	cat >> $1 <<-EOI
@@ -112,7 +139,7 @@ print_rhel_os() {
 # Print the supported UBI Minimal OS
 print_ubi-min_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi10/ubi-minimal:latest
+	FROM registry.access.redhat.com/ubi8/ubi-minimal:latest
 
 	EOI
 }
@@ -120,7 +147,7 @@ print_ubi-min_os() {
 # Print the supported UBI OS
 print_ubi_os() {
 	cat >> $1 <<-EOI
-	FROM registry.access.redhat.com/ubi10/ubi:latest
+	FROM registry.access.redhat.com/ubi8/ubi:latest
 
 	EOI
 }
@@ -630,7 +657,7 @@ generate_ubi-micro() {
 	file=$1
 	mkdir -p `dirname ${file}` 2>/dev/null
 	echo -n "Writing ${file}..."
-	print_legal ${file};
+        print_legal_ubi-micro ${file};	
 	print_ubi-micro_os ${file};
 	print_ubi-micro_pkg ${file};
 	generate_java ${file};
