@@ -29,13 +29,13 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi" \
     maintainer="jayasg12@in.ibm.com" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=8.0.8.65 \
+    version=8.0.8.70 \
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 8.0.8.65
+ENV JAVA_VERSION 8.0.8.70
 
 RUN set -eux; \
     microdnf -y install shadow-utils; \
@@ -43,15 +43,15 @@ RUN set -eux; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='a21f423374e941588c9d22e69cc011821558d044ba6a30c27eeb333535ed30be'; \
+         ESUM='9294b4d1c8f648dc59c1237d7e5fd4c2a3236e29fb79f83e34c1de1c03522eaa'; \
          YML_FILE='8.0/sfj/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='e85af7337f10d424e2660093dc3fc9d04e8c7e018eaa353a49e4dfa6902dd31d'; \
+         ESUM='82a74387fe138a7f79260fb5a52fda243d1f875bf2955209d55db9952d60135e'; \
          YML_FILE='8.0/sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='bd360b8ccf462c9537dd214c9cc5920b93145b44fe05d3b49e214d01d79cfb5c'; \
+         ESUM='a5512b6afa58e9a086713de9ef2ab42e80b1541eba51a32a76833b56ed508922'; \
          YML_FILE='8.0/sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
