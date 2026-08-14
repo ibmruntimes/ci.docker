@@ -53,6 +53,8 @@ RUN microdnf install -y \
     /mnt/rootfs/var/log/hawkey.log \
     /var/cache/dnf
 
+ENV JAVA_VERSION 8.0.8.70
+
 RUN set -eux; \
     microdnf -y install shadow-utils; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
