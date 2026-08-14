@@ -19,7 +19,6 @@
 # limitations under the License.
 #
 
-
 FROM registry.access.redhat.com/ubi10/ubi-minimal AS builder
 
 RUN microdnf install -y \
@@ -53,16 +52,6 @@ RUN microdnf install -y \
     /mnt/rootfs/var/log/dnf* \
     /mnt/rootfs/var/log/hawkey.log \
     /var/cache/dnf
-
-LABEL org.opencontainers.image.authors="Jayashree Gopi" \
-    maintainer="jayasg12@in.ibm.com" \
-    name="IBM JAVA" \
-    vendor="IBM" \
-    version=8.0.8.70 \
-    release=8 \
-    run="docker run --rm -ti <image_name:tag> /bin/bash" \
-    summary="Image for IBM JAVA with UBI 10 Micro as the base image" \
-    description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
 ENV JAVA_VERSION 8.0.8.70
 
@@ -112,5 +101,15 @@ COPY --from=builder /licenses /licenses
 ENV JAVA_HOME=/opt/ibm/java/jre \
     PATH=/opt/ibm/java/bin:$PATH \
     IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
+
+LABEL org.opencontainers.image.authors="Jayashree Gopi" \
+    maintainer="jayasg12@in.ibm.com" \
+    name="IBM JAVA" \
+    vendor="IBM" \
+    version=8.0.8.70 \
+    release=8 \
+    run="docker run --rm -ti <image_name:tag> /bin/bash" \
+    summary="Image for IBM JAVA with UBI 10 Micro as the base image" \
+    description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
 USER 1001
