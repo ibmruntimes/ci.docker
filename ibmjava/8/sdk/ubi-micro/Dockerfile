@@ -53,8 +53,6 @@ RUN microdnf install -y \
     /mnt/rootfs/var/log/hawkey.log \
     /var/cache/dnf
 
-ENV JAVA_VERSION 8.0.8.70
-
 RUN set -eux; \
     microdnf -y install shadow-utils; \
     useradd -u 1001 -r -g 0 -s /usr/sbin/nologin default; \
@@ -94,14 +92,6 @@ RUN set -eux; \
 
 FROM registry.access.redhat.com/ubi10/ubi-micro
 
-COPY --from=builder /mnt/rootfs /
-COPY --from=builder /opt/ibm/java /opt/ibm/java
-COPY --from=builder /licenses /licenses
-
-ENV JAVA_HOME=/opt/ibm/java/jre \
-    PATH=/opt/ibm/java/bin:$PATH \
-    IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
-
 LABEL org.opencontainers.image.authors="Jayashree Gopi" \
     maintainer="jayasg12@in.ibm.com" \
     name="IBM JAVA" \
@@ -110,6 +100,16 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi" \
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI 10 Micro as the base image" \
-    description="This image contains the IBM JAVA with Red Hat UBI as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
+    description="This image contains the IBM JAVA with Red Hat UBI 10 MICRO as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
+
+ENV JAVA_VERSION 8.0.8.70
+
+COPY --from=builder /mnt/rootfs /
+COPY --from=builder /opt/ibm/java /opt/ibm/java
+COPY --from=builder /licenses /licenses
+
+ENV JAVA_HOME=/opt/ibm/java/jre \
+    PATH=/opt/ibm/java/bin:$PATH \
+    IBM_JAVA_OPTIONS="-XX:+UseContainerSupport"
 
 USER 1001
