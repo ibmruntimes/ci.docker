@@ -53,7 +53,7 @@ RUN microdnf install -y \
     /mnt/rootfs/var/log/hawkey.log \
     /var/cache/dnf
 
-ENV JAVA_VERSION 8.0.8.70
+ENV JAVA_VERSION 8.0.8.71
 
 RUN set -eux; \
     microdnf -y install shadow-utils; \
@@ -61,15 +61,15 @@ RUN set -eux; \
     ARCH="$(uname -m)"; \
     case "${ARCH}" in \
        amd64|x86_64) \
-         ESUM='9294b4d1c8f648dc59c1237d7e5fd4c2a3236e29fb79f83e34c1de1c03522eaa'; \
+         ESUM='a09e3e5c55a839b5a19a55de76db0ff4db474173da91d20d06a1409896a1c23a'; \
          YML_FILE='8.0/sfj/linux/x86_64/index.yml'; \
          ;; \
        ppc64el|ppc64le) \
-         ESUM='82a74387fe138a7f79260fb5a52fda243d1f875bf2955209d55db9952d60135e'; \
+         ESUM='87f8fd11be1217a752d579948df4a15ecd9f8d82c5bc687ddfe97904e2311369'; \
          YML_FILE='8.0/sfj/linux/ppc64le/index.yml'; \
          ;; \
        s390x) \
-         ESUM='a5512b6afa58e9a086713de9ef2ab42e80b1541eba51a32a76833b56ed508922'; \
+         ESUM='ca078c1f555989d1f467d2bcf6fd44644087c3b4f5d3f559233f42871ccf2f37'; \
          YML_FILE='8.0/sfj/linux/s390x/index.yml'; \
          ;; \
        *) \
@@ -98,13 +98,13 @@ LABEL org.opencontainers.image.authors="Jayashree Gopi" \
     maintainer="jayasg12@in.ibm.com" \
     name="IBM JAVA" \
     vendor="IBM" \
-    version=8.0.8.70 \
+    version=8.0.8.71 \
     release=8 \
     run="docker run --rm -ti <image_name:tag> /bin/bash" \
     summary="Image for IBM JAVA with UBI 10 Micro as the base image" \
     description="This image contains the IBM JAVA with Red Hat UBI 10 MICRO as the base OS.  For more information on this image please see https://github.com/ibmruntimes/ci.docker/blob/master/README.md"
 
-ENV JAVA_VERSION 8.0.8.70
+ENV JAVA_VERSION 8.0.8.71
 
 COPY --from=builder /mnt/rootfs /
 COPY --from=builder /opt/ibm/java /opt/ibm/java
